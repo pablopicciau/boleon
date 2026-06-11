@@ -12,14 +12,17 @@ export const locales: Locale[] = ['it', 'en', 'es', 'fr', 'zh', 'hi', 'ar'];
 export const defaultLocale: Locale = 'it';
 export const secondaryLocales = locales.filter((l) => l !== defaultLocale);
 
-export const localeMeta: Record<Locale, { label: string; dir: 'ltr' | 'rtl'; lang: string }> = {
-  it: { label: 'Italiano', dir: 'ltr', lang: 'it' },
-  en: { label: 'English', dir: 'ltr', lang: 'en' },
-  es: { label: 'Español', dir: 'ltr', lang: 'es' },
-  fr: { label: 'Français', dir: 'ltr', lang: 'fr' },
-  zh: { label: '中文', dir: 'ltr', lang: 'zh-Hans' },
-  hi: { label: 'हिन्दी', dir: 'ltr', lang: 'hi' },
-  ar: { label: 'العربية', dir: 'rtl', lang: 'ar' },
+export const localeMeta: Record<
+  Locale,
+  { label: string; dir: 'ltr' | 'rtl'; lang: string; og: string }
+> = {
+  it: { label: 'Italiano', dir: 'ltr', lang: 'it', og: 'it_IT' },
+  en: { label: 'English', dir: 'ltr', lang: 'en', og: 'en_US' },
+  es: { label: 'Español', dir: 'ltr', lang: 'es', og: 'es_ES' },
+  fr: { label: 'Français', dir: 'ltr', lang: 'fr', og: 'fr_FR' },
+  zh: { label: '中文', dir: 'ltr', lang: 'zh-Hans', og: 'zh_CN' },
+  hi: { label: 'हिन्दी', dir: 'ltr', lang: 'hi', og: 'hi_IN' },
+  ar: { label: 'العربية', dir: 'rtl', lang: 'ar', og: 'ar_AR' },
 };
 
 const dictionaries: Record<Locale, Dict> = { it, en, es, fr, zh, hi, ar };

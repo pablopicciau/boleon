@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import settings from '../../content/settings.json';
 import { isAvailable, maxQty, type Artwork } from '../../lib/artworks';
 import {
   formatPrice,
@@ -22,9 +23,40 @@ const max = maxQty(artwork);
 const isPrint = artwork.data.kind === 'print';
 const description = pickLocalized(artwork.data.descriptions, locale);
 const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
+
+const site = Astro.site ?? new URL('https://boleon.pages.dev');
+const canonical = new URL(Astro.url.pathname, site);
+const cover = artwork.data.images[0];
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'VisualArtwork',
+  name: artwork.data.title,
+  url: canonical.href,
+  image: artwork.data.images.map((img) => new URL(img.src, site).href),
+  ...(description ? { description } : {}),
+  creator: { '@type': 'Person', name: settings.artistName },
+  dateCreated: String(artwork.data.year),
+  ...(artwork.data.technique ? { artMedium: artwork.data.technique } : {}),
+  ...(artwork.data.dimensions ? { size: artwork.data.dimensions } : {}),
+  artEdition: isPrint ? (artwork.data.editionSize ?? undefined) : 1,
+  offers: {
+    '@type': 'Offer',
+    price: artwork.data.price,
+    priceCurrency: 'EUR',
+    availability: available ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
+    url: canonical.href,
+  },
+};
 ---
 
-<Base locale={locale} title={artwork.data.title} description={description}>
+<Base
+  locale={locale}
+  title={artwork.data.title}
+  description={description}
+  ogImage={cover.src}
+  ogType="product"
+  schema={schema}
+>
   <a
     href={localizePath(locale, '/')}
     class="mb-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase opacity-60 transition hover:opacity-100"

@@ -1,22 +1,48 @@
 ---
+import '@fontsource-variable/cormorant';
 import '../styles/global.css';
 import settings from '../content/settings.json';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
-import { localeMeta, localizePath, pickLocalized, useTranslations, type Locale } from '../i18n';
+import {
+  defaultLocale,
+  localeMeta,
+  locales,
+  localizePath,
+  pickLocalized,
+  switchLocalePath,
+  useTranslations,
+  type Locale,
+} from '../i18n';
 
 interface Props {
   locale: Locale;
   title?: string;
   description?: string;
+  /** Immagine per le anteprime social (percorso relativo o assoluto). */
+  ogImage?: string;
+  ogType?: 'website' | 'article' | 'product';
+  /** Dati strutturati schema.org (JSON-LD) per motori di ricerca e AI. */
+  schema?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { locale, title, description } = Astro.props;
+const { locale, title, description, ogImage, ogType = 'website', schema } = Astro.props;
 const t = useTranslations(locale);
 const meta = localeMeta[locale];
 const pageTitle = title ? `${title} — ${settings.artistName}` : `${settings.artistName} — ${pickLocalized(settings.taglines, locale)}`;
 const pageDescription = description || pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);
 const year = new Date().getFullYear();
+
+const site = Astro.site ?? new URL('https://boleon.pages.dev');
+const currentPath = Astro.url.pathname;
+const canonical = new URL(currentPath, site);
+const alternates = locales.map((l) => ({
+  locale: l,
+  hreflang: localeMeta[l].lang,
+  href: new URL(switchLocalePath(currentPath, locale, l), site),
+}));
+const xDefault = new URL(switchLocalePath(currentPath, locale, defaultLocale), site);
+const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
 ---
 
 <!doctype html>
@@ -28,6 +54,28 @@ const year = new Date().getFullYear();
     <meta name="description" content={pageDescription} />
     <meta name="generator" content={Astro.generator} />
     <title>{pageTitle}</title>
+
+    <link rel="canonical" href={canonical} />
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content={settings.artistName} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={meta.og} />
+    {alternates
+      .filter((alt) => alt.locale !== locale)
+      .map((alt) => <meta property="og:locale:alternate" content={localeMeta[alt.locale].og} />)}
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
+    {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
+
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
   <body class="flex min-h-screen flex-col antialiased">
     <header class="sticky top-0 z-40 border-b border-neutral-200 bg-paper/90 backdrop-blur">

@@ -4,6 +4,8 @@
   --color-ink: #1a1a1a;
   --color-paper: #fcfbf9;
   --color-accent: #9b2226;
+  /* Cormorant: serif da galleria per titoli e prezzi (caricato in Base.astro) */
+  --font-serif: 'Cormorant Variable', ui-serif, Georgia, 'Times New Roman', serif;
 }
 
 html {
@@ -13,6 +15,17 @@ html {
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+::selection {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
 }
 
 /* PhotoSwipe must sit above the sticky header */

@@ -22,6 +22,8 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - Carrello in `localStorage` (`src/scripts/cart.ts`), nessun backend per il carrello.
 - **7 lingue**: italiano default senza prefisso URL; `/en`, `/es`, `/fr`, `/zh`, `/hi`, `/ar` (arabo con layout RTL). Dizionari UI in `src/i18n/`; le descrizioni opere si traducono da Keystatic, con fallback sull'italiano se una lingua è vuota.
 - Opere di tipo **originale** (pezzo unico, flag "venduta") o **stampa/edizione** (tiratura + copie disponibili; a 0 copie risulta esaurita).
+- **SEO/AI**: sitemap multilingua (`@astrojs/sitemap`), `robots.txt` e `llms.txt` generati dinamicamente (`src/pages/robots.txt.ts` e `llms.txt.ts`, sempre allineati al catalogo), JSON-LD (`WebSite`+`Person` in home, `VisualArtwork`+`Offer` sulle opere), canonical/hreflang/Open Graph in `Base.astro`. L'URL base viene da `PUBLIC_SITE_URL` a build time (fallback `boleon.pages.dev`): quando si collega il dominio, impostarla su Cloudflare.
+- **Tipografia**: Cormorant Variable (`@fontsource-variable/cormorant`) come font serif per titoli e prezzi, importato in `Base.astro`.
 - Gestione vendite **manuale**: dopo la notifica email l'artista aggiorna venduta/copie da Keystatic.
 
 ## Comandi
