@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ArtworkCard from '../ArtworkCard.astro';
+import settings from '../../content/settings.json';
+import { sortArtworks } from '../../lib/artworks';
+import { pickLocalized, useTranslations, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const artworks = sortArtworks(await getCollection('artworks'));
+const featured = artworks.filter((a) => a.data.featured);
+const tagline = pickLocalized(settings.taglines, locale);
+---
+
+<Base locale={locale}>
+  <section class="py-10 text-center sm:py-16">
+    <h1 class="font-serif text-4xl font-medium tracking-[0.25em] uppercase sm:text-6xl">
+      {settings.artistName}
+    </h1>
+    {tagline && <p class="mx-auto mt-5 max-w-xl text-base opacity-60 sm:text-lg">{tagline}</p>}
+  </section>
+
+  {
+    featured.length > 0 && (
+      <section class="mt-6">
+        <h2 class="mb-6 text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+          {t('home.featured')}
+        </h2>
+        <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          {featured.map((artwork) => (
+            <ArtworkCard artwork={artwork} locale={locale} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="mt-16">
+    <h2 class="mb-6 text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+      {t('home.allWorks')}
+    </h2>
+    <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {artworks.map((artwork) => <ArtworkCard artwork={artwork} locale={locale} />)}
+    </div>
+  </section>
+</Base>

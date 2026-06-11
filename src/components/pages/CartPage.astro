@@ -1,0 +1,196 @@
+---
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { isAvailable, maxQty } from '../../lib/artworks';
+import { localeMeta, localizePath, useTranslations, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const artworks = await getCollection('artworks');
+const catalog: Record<
+  string,
+  { title: string; price: number; max: number; thumb: string; url: string }
+> = {};
+for (const artwork of artworks) {
+  if (!isAvailable(artwork)) continue;
+  const thumb = await getImage({ src: artwork.data.images[0], width: 240 });
+  catalog[artwork.id] = {
+    title: artwork.data.title,
+    price: artwork.data.price,
+    max: Math.min(maxQty(artwork), 10),
+    thumb: thumb.src,
+    url: localizePath(locale, `/opere/${artwork.id}`),
+  };
+}
+
+const clientData = {
+  catalog,
+  locale,
+  lang: localeMeta[locale].lang,
+  labels: {
+    remove: t('cart.remove'),
+    quantity: t('artwork.quantity'),
+    checkout: t('cart.checkout'),
+    processing: t('cart.processing'),
+    error: t('cart.error'),
+    unavailable: t('cart.unavailable'),
+  },
+};
+---
+
+<Base locale={locale} title={t('cart.title')}>
+  <h1 class="font-serif text-3xl sm:text-4xl">{t('cart.title')}</h1>
+
+  <p data-cart-notice class="mt-6 hidden border border-amber-300 bg-amber-50 px-4 py-3 text-sm"></p>
+
+  <div data-cart-empty class="mt-10 hidden">
+    <p class="opacity-70">{t('cart.empty')}</p>
+    <a
+      href={localizePath(locale, '/')}
+      class="mt-6 inline-block bg-ink px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-accent"
+    >
+      {t('cart.continueShopping')}
+    </a>
+  </div>
+
+  <div data-cart-content class="mt-10 hidden">
+    <ul data-cart-items class="divide-y divide-neutral-200 border-y border-neutral-200"></ul>
+
+    <div class="mt-8 flex flex-col items-end gap-4">
+      <p class="text-lg">
+        <span class="opacity-60">{t('cart.total')}:</span>
+        <span data-cart-total class="ms-2 font-serif text-2xl"></span>
+      </p>
+      <p class="text-xs opacity-50">{t('cart.shippingNote')}</p>
+      <button
+        data-checkout
+        class="cursor-pointer bg-ink px-10 py-3.5 text-sm tracking-widest text-white uppercase transition hover:bg-accent disabled:cursor-wait disabled:opacity-50"
+      >
+        {t('cart.checkout')}
+      </button>
+      <p data-checkout-error class="hidden text-sm text-accent"></p>
+    </div>
+  </div>
+
+  <script type="application/json" id="cart-data" set:html={JSON.stringify(clientData)} />
+</Base>
+
+<script>
+  import { getCart, setQty, removeFromCart, pruneCart } from '../../scripts/cart';
+
+  type Catalog = Record<
+    string,
+    { title: string; price: number; max: number; thumb: string; url: string }
+  >;
+  const data = JSON.parse(document.getElementById('cart-data')!.textContent!) as {
+    catalog: Catalog;
+    locale: string;
+    lang: string;
+    labels: Record<string, string>;
+  };
+
+  const fmt = new Intl.NumberFormat(data.lang, {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+  });
+
+  const elEmpty = document.querySelector<HTMLElement>('[data-cart-empty]')!;
+  const elContent = document.querySelector<HTMLElement>('[data-cart-content]')!;
+  const elItems = document.querySelector<HTMLElement>('[data-cart-items]')!;
+  const elTotal = document.querySelector<HTMLElement>('[data-cart-total]')!;
+  const elNotice = document.querySelector<HTMLElement>('[data-cart-notice]')!;
+  const elCheckout = document.querySelector<HTMLButtonElement>('[data-checkout]')!;
+  const elError = document.querySelector<HTMLElement>('[data-checkout-error]')!;
+
+  // Remove items no longer purchasable (sold meanwhile / deleted)
+  if (pruneCart(new Set(Object.keys(data.catalog)))) {
+    elNotice.textContent = data.labels.unavailable;
+    elNotice.classList.remove('hidden');
+  }
+
+  function render() {
+    const items = getCart();
+    elEmpty.classList.toggle('hidden', items.length > 0);
+    elContent.classList.toggle('hidden', items.length === 0);
+    if (items.length === 0) return;
+
+    elItems.innerHTML = '';
+    let total = 0;
+    for (const item of items) {
+      const art = data.catalog[item.slug];
+      if (!art) continue;
+      const qty = Math.min(item.qty, art.max);
+      total += art.price * qty;
+
+      const li = document.createElement('li');
+      li.className = 'flex items-center gap-4 py-5';
+
+      const qtyControl =
+        art.max > 1
+          ? `<label class="flex items-center gap-2 text-sm"><span class="opacity-60">${data.labels.quantity}</span>
+             <select data-row-qty class="border border-neutral-300 bg-white px-2 py-1.5">
+               ${Array.from({ length: art.max }, (_, i) => `<option value="${i + 1}" ${i + 1 === qty ? 'selected' : ''}>${i + 1}</option>`).join('')}
+             </select></label>`
+          : '';
+
+      li.innerHTML = `
+        <a href="${art.url}" class="block w-20 shrink-0 bg-neutral-100">
+          <img src="${art.thumb}" alt="" class="aspect-square w-full object-cover" />
+        </a>
+        <div class="min-w-0 flex-1">
+          <a href="${art.url}" class="font-serif text-lg leading-snug hover:underline">${art.title}</a>
+          <p class="mt-1 text-sm opacity-60">${fmt.format(art.price)}</p>
+          <div class="mt-2 flex items-center gap-4">
+            ${qtyControl}
+            <button data-row-remove class="cursor-pointer text-xs tracking-widest uppercase opacity-50 transition hover:text-accent hover:opacity-100">${data.labels.remove}</button>
+          </div>
+        </div>
+        <p class="shrink-0 text-end">${fmt.format(art.price * qty)}</p>`;
+
+      li.querySelector('[data-row-qty]')?.addEventListener('change', (e) => {
+        setQty(item.slug, parseInt((e.target as HTMLSelectElement).value, 10), art.max);
+        render();
+      });
+      li.querySelector('[data-row-remove]')!.addEventListener('click', () => {
+        removeFromCart(item.slug);
+        render();
+      });
+
+      elItems.appendChild(li);
+    }
+    elTotal.textContent = fmt.format(total);
+  }
+
+  elCheckout.addEventListener('click', async () => {
+    const items = getCart();
+    if (items.length === 0) return;
+    elCheckout.disabled = true;
+    const originalLabel = elCheckout.textContent;
+    elCheckout.textContent = data.labels.processing;
+    elError.classList.add('hidden');
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items, locale: data.locale }),
+      });
+      const body = await res.json();
+      if (!res.ok || !body.url) throw new Error(body.error || 'checkout_failed');
+      window.location.href = body.url;
+    } catch {
+      elError.textContent = data.labels.error;
+      elError.classList.remove('hidden');
+      elCheckout.disabled = false;
+      elCheckout.textContent = originalLabel;
+    }
+  });
+
+  render();
+</script>

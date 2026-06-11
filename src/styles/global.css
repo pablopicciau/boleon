@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-ink: #1a1a1a;
+  --color-paper: #fcfbf9;
+  --color-accent: #9b2226;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/* PhotoSwipe must sit above the sticky header */
+.pswp {
+  z-index: 100;
+}

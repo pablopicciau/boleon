@@ -1,0 +1,45 @@
+---
+import { Image } from 'astro:assets';
+import { isAvailable, type Artwork } from '../lib/artworks';
+import { formatPrice, localizePath, useTranslations, type Locale } from '../i18n';
+
+interface Props {
+  artwork: Artwork;
+  locale: Locale;
+}
+
+const { artwork, locale } = Astro.props;
+const t = useTranslations(locale);
+const available = isAvailable(artwork);
+const cover = artwork.data.images[0];
+const href = localizePath(locale, `/opere/${artwork.id}`);
+---
+
+<a href={href} class="group block">
+  <div class="relative overflow-hidden bg-neutral-100">
+    <Image
+      src={cover}
+      alt={artwork.data.title}
+      width={800}
+      class="aspect-4/5 w-full object-cover transition duration-500 group-hover:scale-[1.03]"
+    />
+    {
+      !available && (
+        <span class="absolute top-3 start-3 bg-ink px-2.5 py-1 text-[0.65rem] tracking-widest text-white uppercase">
+          {artwork.data.kind === 'original' ? t('artwork.sold') : t('artwork.soldOut')}
+        </span>
+      )
+    }
+  </div>
+  <div class="mt-3 flex items-baseline justify-between gap-3">
+    <h3 class="font-serif text-lg leading-snug">
+      {artwork.data.title}<span class="ms-2 text-sm font-normal opacity-50">{artwork.data.year}</span>
+    </h3>
+    <p class="shrink-0 text-sm opacity-80">
+      {available ? formatPrice(artwork.data.price, locale) : t(artwork.data.kind === 'original' ? 'artwork.sold' : 'artwork.soldOut')}
+    </p>
+  </div>
+  <p class="text-xs opacity-50">
+    {artwork.data.kind === 'print' ? t('artwork.print') : t('artwork.original')}
+  </p>
+</a>

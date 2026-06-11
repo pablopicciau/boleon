@@ -1,0 +1,54 @@
+---
+import { locales, localeMeta, switchLocalePath, useTranslations, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const currentPath = Astro.url.pathname;
+---
+
+<details class="group relative" data-lang-switcher>
+  <summary
+    class="flex cursor-pointer list-none items-center gap-1 text-xs tracking-widest uppercase opacity-70 transition hover:opacity-100 [&::-webkit-details-marker]:hidden"
+    aria-label={t('lang.label')}
+  >
+    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3Z"></path>
+    </svg>
+    {localeMeta[locale].label}
+    <span class="text-[0.6rem] transition group-open:rotate-180">▾</span>
+  </summary>
+  <ul
+    class="absolute end-0 z-50 mt-2 min-w-36 border border-neutral-200 bg-white py-1 shadow-lg"
+  >
+    {
+      locales.map((l) => (
+        <li>
+          <a
+            href={switchLocalePath(currentPath, locale, l)}
+            lang={localeMeta[l].lang}
+            class:list={[
+              'block px-4 py-2 text-sm transition hover:bg-neutral-100',
+              l === locale && 'font-semibold',
+            ]}
+          >
+            {localeMeta[l].label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</details>
+
+<script>
+  // Close the dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll('[data-lang-switcher][open]').forEach((d) => {
+      if (!d.contains(e.target as Node)) d.removeAttribute('open');
+    });
+  });
+</script>

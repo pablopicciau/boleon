@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import { localizePath, useTranslations, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+  kind: 'success' | 'cancelled';
+}
+
+const { locale, kind } = Astro.props;
+const t = useTranslations(locale);
+const title = t(kind === 'success' ? 'success.title' : 'cancelled.title');
+const message = t(kind === 'success' ? 'success.message' : 'cancelled.message');
+const backLabel = t(kind === 'success' ? 'success.back' : 'cancelled.back');
+const backHref = localizePath(locale, kind === 'success' ? '/' : '/carrello');
+---
+
+<Base locale={locale} title={title}>
+  <div class="mx-auto max-w-xl py-16 text-center">
+    <h1 class="font-serif text-4xl">{title}</h1>
+    <p class="mt-6 leading-relaxed opacity-70">{message}</p>
+    <a
+      href={backHref}
+      class="mt-10 inline-block bg-ink px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-accent"
+    >
+      {backLabel}
+    </a>
+  </div>
+
+  {
+    /* Payment completed: empty the cart (same storage key/event as scripts/cart.ts) */
+    kind === 'success' && (
+      <script is:inline>
+        localStorage.setItem('boleon-cart', '[]');
+        window.dispatchEvent(new CustomEvent('cart:updated', { detail: { count: 0 } }));
+      </script>
+    )
+  }
+</Base>

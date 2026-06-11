@@ -1,0 +1,181 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { isAvailable, maxQty, type Artwork } from '../../lib/artworks';
+import {
+  formatPrice,
+  localizePath,
+  pickLocalized,
+  useTranslations,
+  type Locale,
+} from '../../i18n';
+
+interface Props {
+  locale: Locale;
+  artwork: Artwork;
+}
+
+const { locale, artwork } = Astro.props;
+const t = useTranslations(locale);
+const available = isAvailable(artwork);
+const max = maxQty(artwork);
+const isPrint = artwork.data.kind === 'print';
+const description = pickLocalized(artwork.data.descriptions, locale);
+const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
+---
+
+<Base locale={locale} title={artwork.data.title} description={description}>
+  <a
+    href={localizePath(locale, '/')}
+    class="mb-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase opacity-60 transition hover:opacity-100"
+  >
+    <span class="rtl:rotate-180">←</span>
+    {t('artwork.backToWorks')}
+  </a>
+
+  <div class="grid gap-10 lg:grid-cols-5">
+    <div class="lg:col-span-3">
+      <div id="artwork-gallery" class="flex flex-col gap-4">
+        {
+          artwork.data.images.map((img, i) => (
+            <a
+              href={img.src}
+              data-pswp-width={img.width}
+              data-pswp-height={img.height}
+              target="_blank"
+              rel="noreferrer"
+              class="block cursor-zoom-in bg-neutral-100"
+            >
+              <Image
+                src={img}
+                alt={`${artwork.data.title}${i > 0 ? ` (${i + 1})` : ''}`}
+                width={1100}
+                class="w-full"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            </a>
+          ))
+        }
+      </div>
+      <p class="mt-3 text-xs opacity-50">{t('artwork.zoomHint')}</p>
+    </div>
+
+    <div class="lg:col-span-2">
+      <h1 class="font-serif text-3xl leading-tight sm:text-4xl">{artwork.data.title}</h1>
+      <p class="mt-2 text-sm tracking-widest uppercase opacity-60">
+        {isPrint ? t('artwork.print') : t('artwork.original')}
+      </p>
+
+      <dl class="mt-8 space-y-3 border-y border-neutral-200 py-6 text-sm">
+        <div class="flex justify-between gap-4">
+          <dt class="opacity-60">{t('artwork.year')}</dt>
+          <dd>{artwork.data.year}</dd>
+        </div>
+        {
+          artwork.data.technique && (
+            <div class="flex justify-between gap-4">
+              <dt class="opacity-60">{t('artwork.technique')}</dt>
+              <dd class="text-end">{artwork.data.technique}</dd>
+            </div>
+          )
+        }
+        {
+          artwork.data.dimensions && (
+            <div class="flex justify-between gap-4">
+              <dt class="opacity-60">{t('artwork.dimensions')}</dt>
+              <dd>{artwork.data.dimensions}</dd>
+            </div>
+          )
+        }
+        {
+          isPrint && artwork.data.editionSize && (
+            <div class="flex justify-between gap-4">
+              <dt class="opacity-60">{t('artwork.editionOf', { n: artwork.data.editionSize })}</dt>
+              <dd>{available ? t('artwork.remaining', { n: artwork.data.stock ?? 0 }) : t('artwork.soldOut')}</dd>
+            </div>
+          )
+        }
+      </dl>
+
+      <div class="mt-8">
+        <p class="font-serif text-3xl">
+          {available ? formatPrice(artwork.data.price, locale) : unavailableLabel}
+        </p>
+
+        {
+          available ? (
+            <div class="mt-6 flex flex-wrap items-center gap-4">
+              {isPrint && max > 1 && (
+                <label class="flex items-center gap-2 text-sm">
+                  <span class="opacity-60">{t('artwork.quantity')}</span>
+                  <select
+                    data-qty-input
+                    class="border border-neutral-300 bg-white px-3 py-2.5"
+                  >
+                    {Array.from({ length: Math.min(max, 10) }, (_, i) => (
+                      <option value={i + 1}>{i + 1}</option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              <button
+                data-add-to-cart
+                data-slug={artwork.id}
+                data-max={max}
+                data-label={t('artwork.addToCart')}
+                data-added-label={t('artwork.addedToCart')}
+                class="cursor-pointer bg-ink px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-accent"
+              >
+                {t('artwork.addToCart')}
+              </button>
+            </div>
+          ) : (
+            <p class="mt-4 inline-block bg-neutral-200 px-4 py-2 text-xs tracking-widest uppercase">
+              {unavailableLabel}
+            </p>
+          )
+        }
+      </div>
+
+      {
+        description && (
+          <div class="mt-10">
+            <h2 class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+              {t('artwork.description')}
+            </h2>
+            <p class="mt-3 leading-relaxed whitespace-pre-line opacity-80">{description}</p>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</Base>
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+  import 'photoswipe/style.css';
+  import { addToCart } from '../../scripts/cart';
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#artwork-gallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe'),
+    wheelToZoom: true,
+    initialZoomLevel: 'fit',
+    secondaryZoomLevel: 2.5,
+    maxZoomLevel: 8,
+  });
+  lightbox.init();
+
+  document.querySelectorAll<HTMLButtonElement>('[data-add-to-cart]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const qtyInput = document.querySelector<HTMLSelectElement>('[data-qty-input]');
+      const qty = qtyInput ? parseInt(qtyInput.value, 10) : 1;
+      addToCart(btn.dataset.slug!, qty, parseInt(btn.dataset.max!, 10));
+      btn.textContent = btn.dataset.addedLabel!;
+      setTimeout(() => {
+        btn.textContent = btn.dataset.label!;
+      }, 1800);
+    });
+  });
+</script>

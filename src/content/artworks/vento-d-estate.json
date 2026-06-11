@@ -1,0 +1,21 @@
+{
+  "title": "Vento d'estate",
+  "year": 2025,
+  "technique": "Olio su lino",
+  "dimensions": "60 × 90 cm",
+  "kind": "original",
+  "price": 1450,
+  "sold": false,
+  "editionSize": null,
+  "stock": null,
+  "featured": true,
+  "sortOrder": 5,
+  "images": [
+    "../../assets/artworks/vento-d-estate/cover.svg",
+    "../../assets/artworks/vento-d-estate/dettaglio.svg"
+  ],
+  "descriptions": {
+    "it": "Gialli accesi e verdi giovani: il movimento del vento in un pomeriggio di luglio, fissato in pennellate lunghe e leggere. La seconda immagine mostra un dettaglio della superficie.",
+    "en": "Bright yellows and young greens: the movement of wind on a July afternoon, captured in long, light brushstrokes. The second image shows a detail of the surface."
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "title": "Terra rossa",
+  "year": 2022,
+  "technique": "Olio su tela",
+  "dimensions": "100 × 140 cm",
+  "kind": "original",
+  "price": 2200,
+  "sold": true,
+  "editionSize": null,
+  "stock": null,
+  "featured": false,
+  "sortOrder": 4,
+  "images": ["../../assets/artworks/terra-rossa/cover.svg"],
+  "descriptions": {
+    "it": "Un grande paesaggio orizzontale dedicato alla terra del sud: rossi e aranci bruciati si rincorrono in campiture dense, quasi tattili.",
+    "en": "A large horizontal landscape dedicated to southern soil: burnt reds and oranges chase each other across dense, almost tactile fields of colour."
+  }
+}
