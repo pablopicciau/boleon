@@ -9,7 +9,7 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - Sito **completo e funzionante** ma **non ancora online**: manca il deploy su Cloudflare Pages (istruzioni nel README).
 - Le 8 opere in `src/content/artworks/` sono **segnaposto** (SVG generati da `scripts/`): vanno sostituite con foto reali via Keystatic.
 - Chiavi Stripe/Resend non ancora configurate (vedi `.env.example`).
-- Branch di lavoro: `claude/artist-static-site-vt93u2`.
+- L'utente ha già un dominio da collegare al sito (Cloudflare Pages → Custom domains).
 
 ## Stack e decisioni prese
 
@@ -47,4 +47,4 @@ Node >= 22.12. Per provare il checkout in locale: copiare `.env.example` in `.en
 - Testi UI: mai hardcodare stringhe nelle pagine — aggiungerle a tutti i 7 dizionari in `src/i18n/`.
 - Nuove pagine: creare la versione italiana in `src/pages/` e il wrapper in `src/pages/[lang]/`, con il corpo condiviso in `src/components/pages/`.
 - Prima di committare: `npm run build` deve passare senza errori.
-- Commit e push sul branch indicato dalla sessione; **non** aprire PR se non richiesto.
+- **Git (richiesta esplicita dell'utente)**: un solo branch, `main` — niente branch di lavoro né PR. Committare e pushare su `main` ogni volta che si completa una modifica, senza aspettare fine sessione.
