@@ -5,6 +5,8 @@ export const zh: Dict = {
   'nav.cart': '购物车',
   'home.featured': '精选作品',
   'home.allWorks': '全部作品',
+  'hero.invite': '原作与限量版画，全球配送。',
+  'hero.cta': '探索作品',
   'artwork.technique': '技法',
   'artwork.dimensions': '尺寸',
   'artwork.year': '年份',

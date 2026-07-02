@@ -5,6 +5,8 @@ export const fr: Dict = {
   'nav.cart': 'Panier',
   'home.featured': 'À la une',
   'home.allWorks': 'Toutes les œuvres',
+  'hero.invite': 'Œuvres originales et tirages en édition limitée, expédiés dans le monde entier.',
+  'hero.cta': 'Découvrir les œuvres',
   'artwork.technique': 'Technique',
   'artwork.dimensions': 'Dimensions',
   'artwork.year': 'Année',

@@ -5,6 +5,8 @@ export const en: Dict = {
   'nav.cart': 'Cart',
   'home.featured': 'Featured',
   'home.allWorks': 'All works',
+  'hero.invite': 'Originals and limited edition prints, shipped worldwide.',
+  'hero.cta': 'Discover the works',
   'artwork.technique': 'Technique',
   'artwork.dimensions': 'Dimensions',
   'artwork.year': 'Year',

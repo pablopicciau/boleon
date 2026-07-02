@@ -5,6 +5,8 @@ export const hi: Dict = {
   'nav.cart': 'कार्ट',
   'home.featured': 'विशेष कृतियाँ',
   'home.allWorks': 'सभी कृतियाँ',
+  'hero.invite': 'मूल कृतियाँ और सीमित संस्करण प्रिंट, दुनिया भर में शिपिंग।',
+  'hero.cta': 'कृतियाँ देखें',
   'artwork.technique': 'तकनीक',
   'artwork.dimensions': 'आयाम',
   'artwork.year': 'वर्ष',

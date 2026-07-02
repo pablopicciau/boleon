@@ -5,6 +5,8 @@ export const es: Dict = {
   'nav.cart': 'Carrito',
   'home.featured': 'Destacadas',
   'home.allWorks': 'Todas las obras',
+  'hero.invite': 'Obras originales y grabados de edición limitada, con envío a todo el mundo.',
+  'hero.cta': 'Descubre las obras',
   'artwork.technique': 'Técnica',
   'artwork.dimensions': 'Dimensiones',
   'artwork.year': 'Año',

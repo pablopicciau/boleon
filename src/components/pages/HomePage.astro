@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ArtworkCard from '../ArtworkCard.astro';
+import HeroSpotlight from '../HeroSpotlight.astro';
 import settings from '../../content/settings.json';
 import { sortArtworks } from '../../lib/artworks';
 import { pickLocalized, useTranslations, type Locale } from '../../i18n';
@@ -17,6 +18,11 @@ const featured = artworks.filter((a) => a.data.featured);
 const tagline = pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);
 const description = [tagline, bio].filter(Boolean).join(' — ');
+
+// Immagini della hero spotlight: base scura + opera rivelata dal cursore.
+// Quando arrivano le foto reali, basta cambiare questi due riferimenti.
+const heroBase = artworks.find((a) => a.id === 'notturno-n-3') ?? artworks[0];
+const heroReveal = artworks.find((a) => a.id === 'vento-d-estate') ?? artworks[1] ?? artworks[0];
 
 const site = Astro.site ?? new URL('https://boleon.pages.dev');
 const sameAs = [settings.instagram, settings.facebook].filter(Boolean);
@@ -43,23 +49,15 @@ const schema = [
 ---
 
 <Base locale={locale} description={description} schema={schema}>
-  <section class="py-14 text-center sm:py-24">
-    <h1 class="font-serif text-5xl font-light tracking-[0.3em] uppercase sm:text-7xl">
-      {settings.artistName}
-    </h1>
-    {
-      tagline && (
-        <p class="mx-auto mt-6 max-w-xl text-base font-light tracking-wide opacity-60 sm:text-lg">
-          {tagline}
-        </p>
-      )
-    }
-    <span class="mx-auto mt-10 block h-px w-16 bg-ink/20" aria-hidden="true"></span>
-  </section>
+  <HeroSpotlight
+    locale={locale}
+    base={heroBase.data.images[0]}
+    reveal={heroReveal.data.images[0]}
+  />
 
   {
     featured.length > 0 && (
-      <section class="mt-6">
+      <section id="opere" class="mt-16 scroll-mt-24">
         <h2 class="mb-8 text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
           {t('home.featured')}
         </h2>
@@ -72,7 +70,7 @@ const schema = [
     )
   }
 
-  <section class="mt-20">
+  <section id={featured.length === 0 ? 'opere' : undefined} class="mt-20 scroll-mt-24">
     <h2 class="mb-8 text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
       {t('home.allWorks')}
     </h2>

@@ -3,6 +3,8 @@ export const it = {
   'nav.cart': 'Carrello',
   'home.featured': 'In evidenza',
   'home.allWorks': 'Tutte le opere',
+  'hero.invite': 'Originali e stampe in edizione limitata, spedite in tutto il mondo.',
+  'hero.cta': 'Scopri le opere',
   'artwork.technique': 'Tecnica',
   'artwork.dimensions': 'Dimensioni',
   'artwork.year': 'Anno',

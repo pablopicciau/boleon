@@ -5,6 +5,8 @@ export const ar: Dict = {
   'nav.cart': 'سلة التسوق',
   'home.featured': 'أعمال مميزة',
   'home.allWorks': 'جميع الأعمال',
+  'hero.invite': 'أعمال أصلية ومطبوعات بإصدار محدود، تُشحن إلى جميع أنحاء العالم.',
+  'hero.cta': 'اكتشف الأعمال',
   'artwork.technique': 'التقنية',
   'artwork.dimensions': 'الأبعاد',
   'artwork.year': 'السنة',

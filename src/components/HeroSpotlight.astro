@@ -1,0 +1,126 @@
+---
+import { getImage } from 'astro:assets';
+import settings from '../content/settings.json';
+import { pickLocalized, useTranslations, type Locale } from '../i18n';
+
+/**
+ * Hero a schermo intero con "spotlight" che segue il cursore e rivela
+ * una seconda opera attraverso una maschera circolare morbida.
+ * Le immagini si cambiano da HomePage (props base/reveal).
+ */
+interface Props {
+  locale: Locale;
+  base: ImageMetadata;
+  reveal: ImageMetadata;
+}
+
+const { locale, base, reveal } = Astro.props;
+const t = useTranslations(locale);
+const tagline = pickLocalized(settings.taglines, locale);
+const bio = pickLocalized(settings.bios, locale);
+
+const baseImg = await getImage({ src: base, width: 1600 });
+const revealImg = await getImage({ src: reveal, width: 1600 });
+
+// Maschera iniziale al centro, prima che il puntatore si muova.
+const initialMask =
+  'radial-gradient(circle 260px at 50% 45%, rgb(0 0 0) 0%, rgb(0 0 0) 40%, rgb(0 0 0 / 0.75) 60%, rgb(0 0 0 / 0.4) 75%, rgb(0 0 0 / 0.12) 88%, transparent 100%)';
+---
+
+<section
+  id="spotlight-hero"
+  class="relative left-1/2 w-screen -translate-x-1/2 -mt-10 overflow-hidden bg-black"
+  style="height: calc(100dvh - 73px); min-height: 480px;"
+>
+  <div
+    class="hero-zoom absolute inset-0 z-10 bg-black bg-cover bg-center bg-no-repeat"
+    style={`background-image: url('${baseImg.src}')`}
+  >
+  </div>
+  <div class="absolute inset-0 z-20 bg-black/25" aria-hidden="true"></div>
+  <div
+    data-hero-reveal
+    class="pointer-events-none absolute inset-0 z-30 bg-cover bg-center bg-no-repeat"
+    style={`background-image: url('${revealImg.src}'); mask-image: ${initialMask}; -webkit-mask-image: ${initialMask}; mask-size: 100% 100%; -webkit-mask-size: 100% 100%;`}
+  >
+  </div>
+
+  <div class="pointer-events-none absolute top-[16%] right-0 left-0 z-50 flex flex-col items-center px-5 text-center">
+    <h1 class="leading-[0.95] text-white">
+      <span
+        class="hero-anim hero-reveal block font-serif text-6xl font-medium italic sm:text-8xl"
+        style="letter-spacing: 0.02em; animation-delay: 0.25s;"
+      >
+        {settings.artistName}
+      </span>
+      {
+        tagline && (
+          <span
+            class="hero-anim hero-reveal mt-4 block text-base font-light tracking-wide text-white/85 sm:text-xl"
+            style="animation-delay: 0.42s;"
+          >
+            {tagline}
+          </span>
+        )
+      }
+    </h1>
+  </div>
+
+  {
+    bio && (
+      <div class="hero-anim hero-fade absolute bottom-14 start-10 z-50 hidden max-w-[280px] sm:block" style="animation-delay: 0.7s;">
+        <p class="text-sm leading-relaxed text-white/80">{bio}</p>
+      </div>
+    )
+  }
+
+  <div
+    class="hero-anim hero-fade absolute start-5 end-5 bottom-10 z-50 flex max-w-full flex-col items-start gap-4 sm:start-auto sm:end-10 sm:bottom-24 sm:max-w-[280px]"
+    style="animation-delay: 0.85s;"
+  >
+    <p class="text-xs leading-relaxed text-white/80 sm:text-sm">{t('hero.invite')}</p>
+    <a
+      href="#opere"
+      class="rounded-full bg-accent px-7 py-3 text-sm font-medium tracking-wide text-white uppercase transition-all hover:scale-[1.03] hover:bg-[#7d1b1f] hover:shadow-lg hover:shadow-accent/30 active:scale-95"
+    >
+      {t('hero.cta')}
+    </a>
+  </div>
+</section>
+
+<script>
+  const section = document.getElementById('spotlight-hero');
+  const reveal = section?.querySelector<HTMLElement>('[data-hero-reveal]');
+
+  if (section && reveal) {
+    const R = 260;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rect = () => section.getBoundingClientRect();
+    const raw = { x: rect().width / 2, y: rect().height * 0.45 };
+    const pos = { ...raw };
+
+    const apply = () => {
+      const g = `radial-gradient(circle ${R}px at ${pos.x}px ${pos.y}px, rgb(0 0 0) 0%, rgb(0 0 0) 40%, rgb(0 0 0 / 0.75) 60%, rgb(0 0 0 / 0.4) 75%, rgb(0 0 0 / 0.12) 88%, transparent 100%)`;
+      reveal.style.maskImage = g;
+      reveal.style.webkitMaskImage = g;
+    };
+
+    section.addEventListener('pointermove', (e) => {
+      const r = rect();
+      raw.x = e.clientX - r.left;
+      raw.y = e.clientY - r.top;
+    });
+
+    if (reduced) {
+      apply();
+    } else {
+      const tick = () => {
+        pos.x += (raw.x - pos.x) * 0.1;
+        pos.y += (raw.y - pos.y) * 0.1;
+        apply();
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+  }
+</script>
