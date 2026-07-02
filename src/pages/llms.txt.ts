@@ -8,7 +8,7 @@ export const prerender = true;
 // llms.txt: riassunto del sito in markdown per gli assistenti AI (https://llmstxt.org).
 // Generato dal catalogo a ogni build, quindi sempre allineato a opere, prezzi e disponibilità.
 export const GET: APIRoute = async ({ site }) => {
-  const base = site ?? new URL('https://boleon.pages.dev');
+  const base = site ?? new URL('https://boleon.it');
   const artworks = sortArtworks(await getCollection('artworks'));
 
   const lines = artworks.map((a) => {

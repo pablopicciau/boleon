@@ -7,9 +7,9 @@ import keystatic from '@keystatic/astro';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-// Quando il dominio definitivo è collegato, basta impostare PUBLIC_SITE_URL
-// nelle variabili di build di Cloudflare: sitemap, canonical e llms.txt si aggiornano da soli.
-const site = process.env.PUBLIC_SITE_URL || 'https://boleon.pages.dev';
+// Dominio definitivo del sito. Si può comunque sovrascrivere con la variabile
+// PUBLIC_SITE_URL nelle build di Cloudflare (es. per un dominio diverso).
+const site = process.env.PUBLIC_SITE_URL || 'https://boleon.it';
 
 // https://astro.build/config
 export default defineConfig({

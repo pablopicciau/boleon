@@ -24,7 +24,7 @@ const isPrint = artwork.data.kind === 'print';
 const description = pickLocalized(artwork.data.descriptions, locale);
 const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
 
-const site = Astro.site ?? new URL('https://boleon.pages.dev');
+const site = Astro.site ?? new URL('https://boleon.it');
 const canonical = new URL(Astro.url.pathname, site);
 const cover = artwork.data.images[0];
 const schema = {

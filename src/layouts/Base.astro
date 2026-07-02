@@ -33,7 +33,7 @@ const pageDescription = description || pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);
 const year = new Date().getFullYear();
 
-const site = Astro.site ?? new URL('https://boleon.pages.dev');
+const site = Astro.site ?? new URL('https://boleon.it');
 const currentPath = Astro.url.pathname;
 const canonical = new URL(currentPath, site);
 const alternates = locales.map((l) => ({

@@ -4,7 +4,7 @@ export const prerender = true;
 
 // Crawler benvenuti, inclusi quelli delle AI; esclusi solo admin e API.
 export const GET: APIRoute = ({ site }) => {
-  const base = site ?? new URL('https://boleon.pages.dev');
+  const base = site ?? new URL('https://boleon.it');
   const body = `User-agent: *
 Allow: /
 Disallow: /keystatic
