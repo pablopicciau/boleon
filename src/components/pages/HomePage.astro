@@ -4,6 +4,8 @@ import Base from '../../layouts/Base.astro';
 import ArtworkCard from '../ArtworkCard.astro';
 import HeroSpotlight from '../HeroSpotlight.astro';
 import settings from '../../content/settings.json';
+import heroSpenta from '../../assets/quadri/hero-spenta.jpg';
+import heroColori from '../../assets/quadri/opera-03.jpg';
 import { sortArtworks } from '../../lib/artworks';
 import { pickLocalized, useTranslations, type Locale } from '../../i18n';
 
@@ -19,10 +21,8 @@ const tagline = pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);
 const description = [tagline, bio].filter(Boolean).join(' — ');
 
-// Immagini della hero spotlight: base scura + opera rivelata dal cursore.
-// Quando arrivano le foto reali, basta cambiare questi due riferimenti.
-const heroBase = artworks.find((a) => a.id === 'notturno-n-3') ?? artworks[0];
-const heroReveal = artworks.find((a) => a.id === 'vento-d-estate') ?? artworks[1] ?? artworks[0];
+// Hero spotlight: la stessa opera in versione "spenta" e a colori pieni —
+// il cerchio di luce che segue il cursore le restituisce il colore.
 
 const site = Astro.site ?? new URL('https://boleon.pages.dev');
 const sameAs = [settings.instagram, settings.facebook].filter(Boolean);
@@ -49,11 +49,7 @@ const schema = [
 ---
 
 <Base locale={locale} description={description} schema={schema}>
-  <HeroSpotlight
-    locale={locale}
-    base={heroBase.data.images[0]}
-    reveal={heroReveal.data.images[0]}
-  />
+  <HeroSpotlight locale={locale} base={heroSpenta} reveal={heroColori} />
 
   {
     featured.length > 0 && (

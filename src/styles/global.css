@@ -3,7 +3,8 @@
 @theme {
   --color-ink: #1a1a1a;
   --color-paper: #fcfbf9;
-  --color-accent: #9b2226;
+  /* Bordeaux campionato dalle pennellate dei quadri dell'artista */
+  --color-accent: #8f2b45;
   /* Cormorant: serif da galleria per titoli e prezzi (caricato in Base.astro) */
   --font-serif: 'Cormorant Variable', ui-serif, Georgia, 'Times New Roman', serif;
 }
