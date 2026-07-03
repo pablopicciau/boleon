@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import settings from '../content/settings.json';
-import { isAvailable, sortArtworks } from '../lib/artworks';
+import { availablePrintSizes, isBaseAvailable, sortArtworks } from '../lib/artworks';
 
 export const prerender = true;
 
@@ -13,13 +13,17 @@ export const GET: APIRoute = async ({ site }) => {
 
   const lines = artworks.map((a) => {
     const url = new URL(`/opere/${a.id}`, base).href;
-    const status = isAvailable(a)
+    const baseStatus = isBaseAvailable(a)
       ? a.data.kind === 'original'
-        ? `available, €${a.data.price}`
+        ? `original available, €${a.data.price}`
         : `available, €${a.data.price}, edition of ${a.data.editionSize}, ${a.data.stock} left`
       : a.data.kind === 'original'
-        ? 'sold'
+        ? 'original sold'
         : 'sold out';
+    const prints = availablePrintSizes(a)
+      .map((p) => `${p.size} €${p.price} (${p.stock} left)`)
+      .join(', ');
+    const status = prints ? `${baseStatus}; fine art prints: ${prints}` : baseStatus;
     const desc = a.data.descriptions.en || a.data.descriptions.it || '';
     const details = [
       `${a.data.year}`,

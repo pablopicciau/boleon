@@ -66,6 +66,31 @@ export default config({
           label: 'Copie disponibili',
           description: 'Solo per le stampe: aggiorna dopo ogni vendita.',
         }),
+        printSizes: fields.array(
+          fields.object({
+            size: fields.text({
+              label: 'Formato',
+              description: 'Es. "30 × 40 cm"',
+              validation: { isRequired: true },
+            }),
+            price: fields.number({
+              label: 'Prezzo (EUR)',
+              validation: { isRequired: true, min: 1 },
+            }),
+            stock: fields.integer({
+              label: 'Copie disponibili',
+              description: 'A 0 il formato risulta esaurito.',
+              defaultValue: 0,
+            }),
+          }),
+          {
+            label: 'Stampe in vari formati',
+            description:
+              'Opzionale: formati in cui l’opera è ordinabile come stampa, oltre all’eventuale originale.',
+            itemLabel: (props) =>
+              `${props.fields.size.value || 'Formato'} — ${props.fields.price.value ?? '?'} €`,
+          }
+        ),
         featured: fields.checkbox({
           label: 'In evidenza',
           description: 'Mostra l’opera nella sezione in evidenza della home.',

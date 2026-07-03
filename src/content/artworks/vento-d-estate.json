@@ -17,5 +17,17 @@
   "descriptions": {
     "it": "Gialli accesi e verdi giovani: il movimento del vento in un pomeriggio di luglio, fissato in pennellate lunghe e leggere. La seconda immagine mostra un dettaglio della superficie.",
     "en": "Bright yellows and young greens: the movement of wind on a July afternoon, captured in long, light brushstrokes. The second image shows a detail of the surface."
-  }
+  },
+  "printSizes": [
+    {
+      "size": "30 × 45 cm",
+      "price": 90,
+      "stock": 10
+    },
+    {
+      "size": "50 × 75 cm",
+      "price": 180,
+      "stock": 5
+    }
+  ]
 }

@@ -3,6 +3,15 @@ import type { Dict } from './it';
 export const ar: Dict = {
   'nav.works': 'الأعمال',
   'nav.cart': 'سلة التسوق',
+  'nav.contact': 'تواصل',
+  'contact.title': 'تواصل مع الفنان',
+  'contact.intro':
+    'لمعلومات عن الأعمال أو طلبات خاصة أو أي سؤال، راسلني: أرد شخصيًا على كل رسالة.',
+  'contact.write': 'راسل الفنان',
+  'artwork.prints': 'طباعة فنية فاخرة · اختر المقاس',
+  'artwork.size': 'المقاس',
+  'artwork.from': 'ابتداءً من {price}',
+  'artwork.askInfo': 'اطلب معلومات',
   'home.featured': 'أعمال مميزة',
   'home.allWorks': 'جميع الأعمال',
   'hero.invite': 'أعمال أصلية ومطبوعات بإصدار محدود، تُشحن إلى جميع أنحاء العالم.',

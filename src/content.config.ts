@@ -30,6 +30,16 @@ const artworks = defineCollection({
       sortOrder: z.number().default(0),
       images: z.array(image()).min(1),
       descriptions: localized,
+      // Stampe dell'opera ordinabili in vari formati (opzionale, si affianca all'originale)
+      printSizes: z
+        .array(
+          z.object({
+            size: z.string(),
+            price: z.number(),
+            stock: z.number().default(0),
+          })
+        )
+        .default([]),
     }),
 });
 

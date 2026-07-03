@@ -2,7 +2,14 @@
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import settings from '../../content/settings.json';
-import { isAvailable, maxQty, type Artwork } from '../../lib/artworks';
+import {
+  availablePrintSizes,
+  catalogEntries,
+  isBaseAvailable,
+  maxQty,
+  PRINT_ID_SEPARATOR,
+  type Artwork,
+} from '../../lib/artworks';
 import {
   formatPrice,
   localizePath,
@@ -18,15 +25,20 @@ interface Props {
 
 const { locale, artwork } = Astro.props;
 const t = useTranslations(locale);
-const available = isAvailable(artwork);
+const available = isBaseAvailable(artwork);
 const max = maxQty(artwork);
 const isPrint = artwork.data.kind === 'print';
 const description = pickLocalized(artwork.data.descriptions, locale);
 const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
+const printSizes = availablePrintSizes(artwork);
+const askInfoHref = settings.contactEmail
+  ? `mailto:${settings.contactEmail}?subject=${encodeURIComponent(`${artwork.data.title} — ${t('artwork.askInfo')}`)}`
+  : null;
 
 const site = Astro.site ?? new URL('https://boleon.it');
 const canonical = new URL(Astro.url.pathname, site);
 const cover = artwork.data.images[0];
+const entries = catalogEntries(artwork);
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'VisualArtwork',
@@ -39,13 +51,25 @@ const schema = {
   ...(artwork.data.technique ? { artMedium: artwork.data.technique } : {}),
   ...(artwork.data.dimensions ? { size: artwork.data.dimensions } : {}),
   artEdition: isPrint ? (artwork.data.editionSize ?? undefined) : 1,
-  offers: {
-    '@type': 'Offer',
-    price: artwork.data.price,
-    priceCurrency: 'EUR',
-    availability: available ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
-    url: canonical.href,
-  },
+  offers: entries.length
+    ? entries.map((e) => ({
+        '@type': 'Offer',
+        name:
+          e.variant.kind === 'print'
+            ? `${artwork.data.title} — fine art print ${e.variant.size}`
+            : artwork.data.title,
+        price: e.price,
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/InStock',
+        url: canonical.href,
+      }))
+    : {
+        '@type': 'Offer',
+        price: artwork.data.price,
+        priceCurrency: 'EUR',
+        availability: 'https://schema.org/SoldOut',
+        url: canonical.href,
+      },
 };
 ---
 
@@ -170,6 +194,54 @@ const schema = {
       </div>
 
       {
+        printSizes.length > 0 && (
+          <div class="mt-10 border-t border-neutral-200 pt-8">
+            <h2 class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+              {t('artwork.prints')}
+            </h2>
+            <div class="mt-4 flex flex-wrap items-end gap-4">
+              <label class="flex flex-col gap-2 text-sm">
+                <span class="opacity-60">{t('artwork.size')}</span>
+                <select data-print-size class="border border-neutral-300 bg-white px-3 py-2.5">
+                  {printSizes.map((p) => (
+                    <option value={p.size} data-price={p.price} data-max={Math.min(p.stock, 10)}>
+                      {p.size} — {formatPrice(p.price, locale)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label class="flex flex-col gap-2 text-sm">
+                <span class="opacity-60">{t('artwork.quantity')}</span>
+                <select data-print-qty class="border border-neutral-300 bg-white px-3 py-2.5"
+                ></select>
+              </label>
+              <button
+                data-add-print
+                data-slug-base={artwork.id}
+                data-separator={PRINT_ID_SEPARATOR}
+                data-label={t('artwork.addToCart')}
+                data-added-label={t('artwork.addedToCart')}
+                class="cursor-pointer bg-ink px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-accent"
+              >
+                {t('artwork.addToCart')}
+              </button>
+            </div>
+          </div>
+        )
+      }
+
+      {
+        askInfoHref && (
+          <a
+            href={askInfoHref}
+            class="mt-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase opacity-60 underline-offset-4 transition hover:opacity-100 hover:underline"
+          >
+            ✉ {t('artwork.askInfo')}
+          </a>
+        )
+      }
+
+      {
         description && (
           <div class="mt-10">
             <h2 class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
@@ -210,4 +282,31 @@ const schema = {
       }, 1800);
     });
   });
+
+  // Stampe in vari formati: il selettore aggiorna le quantità disponibili
+  const sizeSelect = document.querySelector<HTMLSelectElement>('[data-print-size]');
+  const qtySelect = document.querySelector<HTMLSelectElement>('[data-print-qty]');
+  const printBtn = document.querySelector<HTMLButtonElement>('[data-add-print]');
+  if (sizeSelect && qtySelect && printBtn) {
+    const currentMax = () =>
+      parseInt(sizeSelect.selectedOptions[0]?.dataset.max ?? '1', 10) || 1;
+    const rebuildQty = () => {
+      const max = currentMax();
+      qtySelect.innerHTML = Array.from(
+        { length: max },
+        (_, i) => `<option value="${i + 1}">${i + 1}</option>`
+      ).join('');
+    };
+    sizeSelect.addEventListener('change', rebuildQty);
+    rebuildQty();
+
+    printBtn.addEventListener('click', () => {
+      const id = `${printBtn.dataset.slugBase}${printBtn.dataset.separator}${sizeSelect.value}`;
+      addToCart(id, parseInt(qtySelect.value, 10) || 1, currentMax());
+      printBtn.textContent = printBtn.dataset.addedLabel!;
+      setTimeout(() => {
+        printBtn.textContent = printBtn.dataset.label!;
+      }, 1800);
+    });
+  }
 </script>

@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import settings from '../../content/settings.json';
+import { useTranslations, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const mailHref = settings.contactEmail
+  ? `mailto:${settings.contactEmail}?subject=${encodeURIComponent(settings.artistName)}`
+  : null;
+---
+
+<Base locale={locale} title={t('contact.title')} description={t('contact.intro')}>
+  <section class="mx-auto max-w-2xl py-16 text-center sm:py-24">
+    <h1 class="font-serif text-4xl font-medium sm:text-5xl">{t('contact.title')}</h1>
+    <p class="mx-auto mt-6 max-w-prose leading-relaxed opacity-70">{t('contact.intro')}</p>
+
+    {
+      mailHref && (
+        <a
+          href={mailHref}
+          class="mt-10 inline-block rounded-full bg-accent px-10 py-4 text-sm font-medium tracking-widest text-white uppercase transition-all hover:scale-[1.03] hover:bg-[#6f1f33] hover:shadow-lg hover:shadow-accent/30 active:scale-95"
+        >
+          ✉ {t('contact.write')}
+        </a>
+      )
+    }
+    {settings.contactEmail && <p class="mt-5 text-sm opacity-60">{settings.contactEmail}</p>}
+
+    {
+      settings.instagram && (
+        <p class="mt-10">
+          <a
+            href={settings.instagram}
+            rel="noopener"
+            target="_blank"
+            class="text-xs tracking-widest uppercase opacity-60 underline-offset-4 transition hover:opacity-100 hover:underline"
+          >
+            Instagram ↗
+          </a>
+        </p>
+      )
+    }
+  </section>
+</Base>

@@ -94,6 +94,12 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
             {t('nav.works')}
           </a>
           <a
+            href={localizePath(locale, '/contatto')}
+            class="hidden text-xs tracking-widest uppercase opacity-70 transition hover:opacity-100 sm:block"
+          >
+            {t('nav.contact')}
+          </a>
+          <a
             href={localizePath(locale, '/carrello')}
             class="relative flex items-center gap-1.5 text-xs tracking-widest uppercase opacity-70 transition hover:opacity-100"
           >
@@ -131,6 +137,12 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
               </a>
             )
           }
+          <a
+            href={localizePath(locale, '/contatto')}
+            class="mt-2 block text-sm underline-offset-4 hover:underline"
+          >
+            {t('contact.title')}
+          </a>
         </div>
         <div>
           <p class="text-xs font-semibold tracking-widest uppercase opacity-60">{t('footer.follow')}</p>

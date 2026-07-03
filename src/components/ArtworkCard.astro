@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import { isAvailable, type Artwork } from '../lib/artworks';
+import { isAvailable, isBaseAvailable, minPrice, type Artwork } from '../lib/artworks';
 import { formatPrice, localizePath, useTranslations, type Locale } from '../i18n';
 
 interface Props {
@@ -11,6 +11,12 @@ interface Props {
 const { artwork, locale } = Astro.props;
 const t = useTranslations(locale);
 const available = isAvailable(artwork);
+const cheapest = minPrice(artwork);
+const priceLabel = isBaseAvailable(artwork)
+  ? formatPrice(artwork.data.price, locale)
+  : cheapest !== null
+    ? t('artwork.from', { price: formatPrice(cheapest, locale) })
+    : t(artwork.data.kind === 'original' ? 'artwork.sold' : 'artwork.soldOut');
 const cover = artwork.data.images[0];
 const href = localizePath(locale, `/opere/${artwork.id}`);
 ---
@@ -35,9 +41,7 @@ const href = localizePath(locale, `/opere/${artwork.id}`);
     <h3 class="font-serif text-xl leading-snug font-medium">
       {artwork.data.title}<span class="ms-2 text-sm font-normal opacity-50">{artwork.data.year}</span>
     </h3>
-    <p class="shrink-0 font-serif text-lg opacity-80">
-      {available ? formatPrice(artwork.data.price, locale) : t(artwork.data.kind === 'original' ? 'artwork.sold' : 'artwork.soldOut')}
-    </p>
+    <p class="shrink-0 font-serif text-lg opacity-80">{priceLabel}</p>
   </div>
   <p class="text-xs opacity-50">
     {artwork.data.kind === 'print' ? t('artwork.print') : t('artwork.original')}

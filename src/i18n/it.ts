@@ -1,6 +1,15 @@
 export const it = {
   'nav.works': 'Opere',
   'nav.cart': 'Carrello',
+  'nav.contact': 'Contatti',
+  'contact.title': 'Contatta l’artista',
+  'contact.intro':
+    'Per informazioni sulle opere, richieste di commissioni su misura o qualsiasi domanda, scrivimi: rispondo personalmente a ogni messaggio.',
+  'contact.write': 'Scrivi all’artista',
+  'artwork.prints': 'Stampa fine art · scegli il formato',
+  'artwork.size': 'Formato',
+  'artwork.from': 'da {price}',
+  'artwork.askInfo': 'Richiedi informazioni',
   'home.featured': 'In evidenza',
   'home.allWorks': 'Tutte le opere',
   'hero.invite': 'Originali e stampe in edizione limitata, spedite in tutto il mondo.',

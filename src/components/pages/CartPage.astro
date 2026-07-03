@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import { isAvailable, maxQty } from '../../lib/artworks';
+import { catalogEntries } from '../../lib/artworks';
 import { localeMeta, localizePath, useTranslations, type Locale } from '../../i18n';
 
 interface Props {
@@ -15,18 +15,25 @@ const t = useTranslations(locale);
 const artworks = await getCollection('artworks');
 const catalog: Record<
   string,
-  { title: string; price: number; max: number; thumb: string; url: string }
+  { title: string; subtitle: string; price: number; max: number; thumb: string; url: string }
 > = {};
 for (const artwork of artworks) {
-  if (!isAvailable(artwork)) continue;
+  const entries = catalogEntries(artwork);
+  if (entries.length === 0) continue;
   const thumb = await getImage({ src: artwork.data.images[0], width: 240 });
-  catalog[artwork.id] = {
-    title: artwork.data.title,
-    price: artwork.data.price,
-    max: Math.min(maxQty(artwork), 10),
-    thumb: thumb.src,
-    url: localizePath(locale, `/opere/${artwork.id}`),
-  };
+  for (const entry of entries) {
+    catalog[entry.id] = {
+      title: entry.title,
+      subtitle:
+        entry.variant.kind === 'print'
+          ? `${t('artwork.size')}: ${entry.variant.size}`
+          : t(artwork.data.kind === 'print' ? 'artwork.print' : 'artwork.original'),
+      price: entry.price,
+      max: entry.max,
+      thumb: thumb.src,
+      url: localizePath(locale, `/opere/${artwork.id}`),
+    };
+  }
 }
 
 const clientData = {
@@ -86,7 +93,7 @@ const clientData = {
 
   type Catalog = Record<
     string,
-    { title: string; price: number; max: number; thumb: string; url: string }
+    { title: string; subtitle: string; price: number; max: number; thumb: string; url: string }
   >;
   const data = JSON.parse(document.getElementById('cart-data')!.textContent!) as {
     catalog: Catalog;
@@ -146,6 +153,7 @@ const clientData = {
         </a>
         <div class="min-w-0 flex-1">
           <a href="${art.url}" class="font-serif text-lg leading-snug hover:underline">${art.title}</a>
+          <p class="mt-0.5 text-xs tracking-wide uppercase opacity-50">${art.subtitle}</p>
           <p class="mt-1 text-sm opacity-60">${fmt.format(art.price)}</p>
           <div class="mt-2 flex items-center gap-4">
             ${qtyControl}

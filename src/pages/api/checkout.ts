@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import Stripe from 'stripe';
-import { isAvailable, maxQty } from '../../lib/artworks';
+import { catalogEntries, type CatalogEntry } from '../../lib/artworks';
 import { getEnv } from '../../lib/env';
 import { defaultLocale, locales, localizePath, type Locale } from '../../i18n';
 
@@ -59,39 +59,51 @@ export const POST: APIRoute = async ({ request, locals }) => {
   // Prices and availability always come from the build-time catalog, never from the client
   const artworks = await getCollection('artworks');
   const bySlug = new Map(artworks.map((a) => [a.id, a]));
+  const entryById = new Map<string, CatalogEntry>();
+  for (const artwork of artworks) {
+    for (const entry of catalogEntries(artwork)) entryById.set(entry.id, entry);
+  }
 
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
   const summary: string[] = [];
 
   for (const item of items) {
-    const artwork = item.slug ? bySlug.get(item.slug) : undefined;
+    const entry = item.slug ? entryById.get(item.slug) : undefined;
     const qty = item.qty ?? 0;
-    if (!artwork || !Number.isInteger(qty) || qty < 1) {
+    if (!Number.isInteger(qty) || qty < 1) {
       return json({ error: `Unknown or invalid item: ${item.slug ?? '?'}` }, 400);
     }
-    if (!isAvailable(artwork) || qty > maxQty(artwork)) {
-      return json({ error: `No longer available: ${artwork.data.title}`, slug: artwork.id }, 409);
+    if (!entry || qty > entry.max) {
+      return json({ error: `No longer available: ${item.slug}`, slug: item.slug }, 409);
     }
+    const artwork = bySlug.get(entry.slug)!;
+    const isPrintVariant = entry.variant.kind === 'print';
     lineItems.push({
       quantity: qty,
       price_data: {
         currency: 'eur',
-        unit_amount: Math.round(artwork.data.price * 100),
+        unit_amount: Math.round(entry.price * 100),
         product_data: {
-          name: artwork.data.title,
+          name: isPrintVariant
+            ? `${entry.title} — stampa fine art ${entry.variant.size}`
+            : entry.title,
           description: [
-            artwork.data.kind === 'print' ? 'Stampa - edizione limitata' : 'Opera originale',
+            isPrintVariant
+              ? `Stampa fine art - ${entry.variant.size}`
+              : artwork.data.kind === 'print'
+                ? 'Stampa - edizione limitata'
+                : 'Opera originale',
             artwork.data.technique,
-            artwork.data.dimensions,
+            isPrintVariant ? null : artwork.data.dimensions,
             String(artwork.data.year),
           ]
             .filter(Boolean)
             .join(' · '),
-          metadata: { slug: artwork.id },
+          metadata: { slug: entry.id },
         },
       },
     });
-    summary.push(`${artwork.id} x${qty}`);
+    summary.push(`${entry.id} x${qty}`);
   }
 
   const stripe = new Stripe(secretKey, {

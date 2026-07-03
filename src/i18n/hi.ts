@@ -3,6 +3,15 @@ import type { Dict } from './it';
 export const hi: Dict = {
   'nav.works': 'कृतियाँ',
   'nav.cart': 'कार्ट',
+  'nav.contact': 'संपर्क',
+  'contact.title': 'कलाकार से संपर्क करें',
+  'contact.intro':
+    'कृतियों की जानकारी, कस्टम कमीशन या किसी भी प्रश्न के लिए मुझे लिखें: मैं हर संदेश का व्यक्तिगत रूप से उत्तर देता हूँ।',
+  'contact.write': 'कलाकार को लिखें',
+  'artwork.prints': 'फाइन आर्ट प्रिंट · आकार चुनें',
+  'artwork.size': 'आकार',
+  'artwork.from': '{price} से',
+  'artwork.askInfo': 'जानकारी माँगें',
   'home.featured': 'विशेष कृतियाँ',
   'home.allWorks': 'सभी कृतियाँ',
   'hero.invite': 'मूल कृतियाँ और सीमित संस्करण प्रिंट, दुनिया भर में शिपिंग।',

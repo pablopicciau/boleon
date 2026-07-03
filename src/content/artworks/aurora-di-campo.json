@@ -10,9 +10,23 @@
   "stock": null,
   "featured": true,
   "sortOrder": 1,
-  "images": ["../../assets/artworks/aurora-di-campo/cover.svg"],
+  "images": [
+    "../../assets/artworks/aurora-di-campo/cover.svg"
+  ],
   "descriptions": {
     "it": "Una distesa di luce calda all'alba: strati di ocra e terra di Siena si sovrappongono come campi visti dall'alto, attraversati da gesti rapidi che ricordano il vento sul grano.",
     "en": "A field of warm light at dawn: layers of ochre and sienna overlap like fields seen from above, crossed by quick gestures that recall wind moving through wheat."
-  }
+  },
+  "printSizes": [
+    {
+      "size": "35 × 50 cm",
+      "price": 110,
+      "stock": 8
+    },
+    {
+      "size": "70 × 100 cm",
+      "price": 260,
+      "stock": 3
+    }
+  ]
 }
