@@ -17,6 +17,7 @@
     "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/cormorant": "^5.2.8",
+    "@fontsource/beth-ellen": "^5.2.8",
     "@keystatic/astro": "^5.1.0",
     "@keystatic/core": "^0.5.50",
     "@tailwindcss/vite": "^4.3.0",

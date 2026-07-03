@@ -7,6 +7,8 @@
   --color-accent: #8f2b45;
   /* Cormorant: serif da galleria per titoli e prezzi (caricato in Base.astro) */
   --font-serif: 'Cormorant Variable', ui-serif, Georgia, 'Times New Roman', serif;
+  /* Beth Ellen: calligrafico per le scritte grandi di presentazione (classe font-hand) */
+  --font-hand: 'Beth Ellen', 'Cormorant Variable', cursive;
 }
 
 html {
