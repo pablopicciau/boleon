@@ -44,5 +44,14 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      // Workaround ufficiale Astro per React 19 su Cloudflare Workers:
+      // senza questo alias il bundle usa react-dom/server.browser, che
+      // richiede MessageChannel (assente su Workers) e il deploy fallisce.
+      // prettier-ignore
+      alias: import.meta.env.PROD
+        ? { 'react-dom/server': 'react-dom/server.edge' }
+        : undefined,
+    },
   },
 });
