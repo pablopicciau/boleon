@@ -44,7 +44,14 @@ Node >= 22.12. Per provare il checkout in locale: copiare `.env.example` in `.en
 - `src/components/pages/` — corpi pagina condivisi tra italiano e `[lang]/` (evitare duplicazioni: le pagine localizzate sono wrapper sottili).
 - `src/lib/artworks.ts` — caricamento/ordinamento opere e helper traduzioni.
 - `src/content.config.ts` + `keystatic.config.ts` — schema contenuti: tenerli **allineati** se si modifica lo schema.
-- `wrangler.toml` — flag `nodejs_compat` necessario per Stripe/Resend su Cloudflare.
+- `wrangler.toml` — deploy come **Worker + assets** (non Pages): `main = ./dist/_worker.js/index.js` + `[assets] directory = ./dist`; `public/.assetsignore` esclude `_worker.js`/`_routes.json`. Flag `nodejs_compat` per Stripe/Resend.
+
+## Deploy su Cloudflare (Workers Builds)
+
+- Progetto **`boleon`** in Workers & Pages, connesso al repo GitHub. **Production branch: `main`** (fondamentale: se punta a un altro branch, i push su `main` usano solo `wrangler versions upload` = carica ma non pubblica → "No active routes").
+- Build command `npm run build`, deploy command `npx wrangler deploy`, `NODE_VERSION=22.12.0`.
+- React 19 su Workers: serve l'alias `react-dom/server` → `react-dom/server.edge` in `astro.config.mjs` (senza, deploy fallisce con `MessageChannel is not defined`).
+- Intestazioni di sicurezza in `public/_headers`. GitHub Pages NON usato (disattivato).
 
 ## Convenzioni
 
