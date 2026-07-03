@@ -31,6 +31,10 @@ const isPrint = artwork.data.kind === 'print';
 const description = pickLocalized(artwork.data.descriptions, locale);
 const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
 const printSizes = availablePrintSizes(artwork);
+const printMaterials = pickLocalized(
+  (settings as { printMaterials?: Record<string, string | null> }).printMaterials,
+  locale
+);
 const askInfoHref = settings.contactEmail
   ? `mailto:${settings.contactEmail}?subject=${encodeURIComponent(`${artwork.data.title} — ${t('artwork.askInfo')}`)}`
   : null;
@@ -226,6 +230,11 @@ const schema = {
                 {t('artwork.addToCart')}
               </button>
             </div>
+            {
+              printMaterials && (
+                <p class="mt-4 max-w-prose text-xs leading-relaxed opacity-60">{printMaterials}</p>
+              )
+            }
           </div>
         )
       }

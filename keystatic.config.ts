@@ -131,6 +131,7 @@ export default config({
         taglines: localizedText('Tagline'),
         bios: localizedText('Breve bio', true),
         contactEmail: fields.text({ label: 'Email di contatto' }),
+        printMaterials: localizedText('Materiali di stampa (mostrato sotto i formati)', true),
         instagram: fields.url({ label: 'Instagram (URL)' }),
         facebook: fields.url({ label: 'Facebook (URL)' }),
       },
