@@ -9,7 +9,7 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - Sito **ONLINE su https://boleon.it** (e www) dal 2026-07-03: Worker Cloudflare con custom domain, verificato HTTP 200. Anche `boleon-art.boleon.it` è collegato.
 - Le 8 opere in `src/content/artworks/` sono **segnaposto** (SVG generati da `scripts/`): mancano titoli/prezzi/dati dei 5 quadri reali (foto già in `src/assets/quadri/`). Da sostituire via Keystatic o quando l'utente fornisce i dati.
 - **Stripe in configurazione**: l'utente ha le chiavi TEST (sk_test/pk_test). La secret key va SOLO nelle variabili runtime di Cloudflare (Settings → Variables and Secrets, tipo Secret, nome `STRIPE_SECRET_KEY`) — mai nel repo. Webhook + Resend ancora da configurare.
-- Keystatic in produzione (GitHub mode) non ancora attivato: serve la procedura guidata su /keystatic + 4 variabili su Cloudflare.
+- Keystatic in produzione: GitHub App `boleoncms` creata e installata sul repo; variabili KEYSTATIC_* su Cloudflare (runtime) + PUBLIC_KEYSTATIC_GITHUB_APP_SLUG (build). Admin: https://boleon.it/keystatic (login con GitHub).
 - GitHub Pages: disattivato/inerte (source "GitHub Actions" senza workflow) — lasciare così.
 
 ## Stack e decisioni prese
