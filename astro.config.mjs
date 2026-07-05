@@ -11,6 +11,10 @@ import tailwindcss from '@tailwindcss/vite';
 // PUBLIC_SITE_URL nelle build di Cloudflare (es. per un dominio diverso).
 const site = process.env.PUBLIC_SITE_URL || 'https://boleon.it';
 
+// Slug della GitHub App di Keystatic (pubblico, non segreto): forzato qui così
+// non dipende da una variabile di build su Cloudflare facile da sbagliare.
+process.env.PUBLIC_KEYSTATIC_GITHUB_APP_SLUG = 'boleon-cms';
+
 // https://astro.build/config
 export default defineConfig({
   site,
