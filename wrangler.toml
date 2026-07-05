@@ -10,6 +10,13 @@ routes = [
   { pattern = "www.boleon.it", custom_domain = true },
 ]
 
+# Variabili runtime NON segrete: definite qui perché 'wrangler deploy'
+# cancella a ogni pubblicazione le variabili Text aggiunte dal pannello
+# (i Secret invece sopravvivono e restano nel pannello Cloudflare).
+[vars]
+KEYSTATIC_GITHUB_CLIENT_ID = "Iv23lit1B5FrO20FI1Kj"
+PUBLIC_KEYSTATIC_GITHUB_APP_SLUG = "boleon-cms"
+
 [assets]
 directory = "./dist"
 binding = "ASSETS"
