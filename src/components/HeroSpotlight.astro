@@ -5,22 +5,23 @@ import { pickLocalized, useTranslations, type Locale } from '../i18n';
 
 /**
  * Hero a schermo intero con "spotlight" che segue il cursore e rivela
- * una seconda opera attraverso una maschera circolare morbida.
- * Le immagini si cambiano da HomePage (props base/reveal).
+ * i colori dell'opera (base desaturata via CSS, quindi funziona con
+ * qualunque immagine). Più immagini: una a caso all'apertura, poi
+ * rotazione casuale ogni 10 secondi con dissolvenza.
  */
 interface Props {
   locale: Locale;
-  base: ImageMetadata;
-  reveal: ImageMetadata;
+  images: ImageMetadata[];
 }
 
-const { locale, base, reveal } = Astro.props;
+const { locale, images } = Astro.props;
 const t = useTranslations(locale);
 const tagline = pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);
 
-const baseImg = await getImage({ src: base, width: 1600 });
-const revealImg = await getImage({ src: reveal, width: 1600 });
+const optimized = await Promise.all(images.map((img) => getImage({ src: img, width: 1600 })));
+const urls = optimized.map((o) => o.src);
+const first = urls[0];
 
 // Maschera iniziale al centro, prima che il puntatore si muova.
 const initialMask =
@@ -33,9 +34,21 @@ const initialMask =
   style="height: calc(100dvh - 73px); min-height: 480px;"
 >
   <div
-    class="hero-zoom absolute inset-0 z-10 bg-paper bg-cover bg-center bg-no-repeat"
-    style={`background-image: url('${baseImg.src}')`}
+    class="hero-zoom absolute inset-0 z-10"
+    style="filter: grayscale(0.92) brightness(1.06);"
+    data-hero-layer="base"
   >
+    <div
+      class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-100 transition-opacity duration-1000"
+      style={`background-image: url('${first}')`}
+      data-buffer="a"
+    >
+    </div>
+    <div
+      class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 transition-opacity duration-1000"
+      data-buffer="b"
+    >
+    </div>
   </div>
   <div
     class="absolute inset-0 z-20 bg-gradient-to-b from-paper/85 via-transparent to-paper/70"
@@ -44,9 +57,21 @@ const initialMask =
   </div>
   <div
     data-hero-reveal
-    class="pointer-events-none absolute inset-0 z-30 bg-cover bg-center bg-no-repeat"
-    style={`background-image: url('${revealImg.src}'); mask-image: ${initialMask}; -webkit-mask-image: ${initialMask}; mask-size: 100% 100%; -webkit-mask-size: 100% 100%;`}
+    class="pointer-events-none absolute inset-0 z-30"
+    style={`mask-image: ${initialMask}; -webkit-mask-image: ${initialMask}; mask-size: 100% 100%; -webkit-mask-size: 100% 100%;`}
+    data-hero-layer="reveal"
   >
+    <div
+      class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-100 transition-opacity duration-1000"
+      style={`background-image: url('${first}')`}
+      data-buffer="a"
+    >
+    </div>
+    <div
+      class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 transition-opacity duration-1000"
+      data-buffer="b"
+    >
+    </div>
   </div>
 
   <div class="pointer-events-none absolute top-[16%] right-0 left-0 z-50 flex flex-col items-center px-5 text-center">
@@ -90,6 +115,8 @@ const initialMask =
       {t('hero.cta')}
     </a>
   </div>
+
+  <script type="application/json" id="hero-images" set:html={JSON.stringify(urls)} />
 </section>
 
 <script>
@@ -99,6 +126,8 @@ const initialMask =
   if (section && reveal) {
     const R = 260;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ---- Spotlight che segue il puntatore ----
     const rect = () => section.getBoundingClientRect();
     const raw = { x: rect().width / 2, y: rect().height * 0.45 };
     const pos = { ...raw };
@@ -125,6 +154,44 @@ const initialMask =
         requestAnimationFrame(tick);
       };
       requestAnimationFrame(tick);
+    }
+
+    // ---- Rotazione casuale degli sfondi ----
+    const urls: string[] = JSON.parse(document.getElementById('hero-images')!.textContent!);
+    if (urls.length > 1) {
+      const layers = section.querySelectorAll<HTMLElement>('[data-hero-layer]');
+      let front: 'a' | 'b' = 'a';
+      let current = 0;
+
+      const show = (idx: number) => {
+        const back = front === 'a' ? 'b' : 'a';
+        layers.forEach((layer) => {
+          const backEl = layer.querySelector<HTMLElement>(`[data-buffer="${back}"]`)!;
+          const frontEl = layer.querySelector<HTMLElement>(`[data-buffer="${front}"]`)!;
+          backEl.style.backgroundImage = `url('${urls[idx]}')`;
+          backEl.style.opacity = '1';
+          frontEl.style.opacity = '0';
+        });
+        front = back;
+        current = idx;
+      };
+
+      const randomOther = () => {
+        let idx = Math.floor(Math.random() * urls.length);
+        if (idx === current) idx = (idx + 1) % urls.length;
+        return idx;
+      };
+
+      // Apertura: immagine scelta a caso
+      const start = Math.floor(Math.random() * urls.length);
+      if (start !== 0) show(start);
+
+      // Poi una diversa ogni 10 secondi (salvo riduzione animazioni)
+      if (!reduced) {
+        setInterval(() => {
+          if (!document.hidden) show(randomOther());
+        }, 10000);
+      }
     }
   }
 </script>

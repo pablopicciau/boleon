@@ -23,6 +23,7 @@ export const it = {
   'artwork.remaining': '{n} copie disponibili',
   'artwork.sold': 'Venduta',
   'artwork.soldOut': 'Esaurita',
+  'artwork.buyOriginal': 'Acquista l’originale',
   'artwork.addToCart': 'Aggiungi al carrello',
   'artwork.addedToCart': 'Aggiunta al carrello ✓',
   'artwork.quantity': 'Quantità',

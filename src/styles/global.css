@@ -3,8 +3,12 @@
 @theme {
   --color-ink: #1a1a1a;
   --color-paper: #fcfbf9;
-  /* Bordeaux campionato dalle pennellate dei quadri dell'artista */
-  --color-accent: #8f2b45;
+  /* Palette campionata dai dipinti dell'artista */
+  --color-accent: #8f2b45; /* bordeaux delle pennellate */
+  --color-ochre: #c08430; /* ocra dorata */
+  --color-olive: #74803a; /* verde oliva */
+  --color-leaf: #3e7a4e; /* verde foglia */
+  --color-sun: #dfb43c; /* giallo sole */
   /* Cormorant: serif da galleria per titoli e prezzi (caricato in Base.astro) */
   --font-serif: 'Cormorant Variable', ui-serif, Georgia, 'Times New Roman', serif;
   /* Beth Ellen: calligrafico per le scritte grandi di presentazione (classe font-hand) */

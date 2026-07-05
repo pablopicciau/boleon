@@ -25,6 +25,7 @@ export const hi: Dict = {
   'artwork.remaining': '{n} प्रतियाँ उपलब्ध',
   'artwork.sold': 'बिक चुकी',
   'artwork.soldOut': 'स्टॉक समाप्त',
+  'artwork.buyOriginal': 'मूल कृति खरीदें',
   'artwork.addToCart': 'कार्ट में जोड़ें',
   'artwork.addedToCart': 'कार्ट में जोड़ा गया ✓',
   'artwork.quantity': 'मात्रा',

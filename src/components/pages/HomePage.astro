@@ -4,8 +4,8 @@ import Base from '../../layouts/Base.astro';
 import ArtworkCard from '../ArtworkCard.astro';
 import HeroSpotlight from '../HeroSpotlight.astro';
 import settings from '../../content/settings.json';
-import heroSpenta from '../../assets/quadri/hero-spenta.jpg';
-import heroColori from '../../assets/quadri/opera-03.jpg';
+import heroFallback from '../../assets/quadri/opera-03.jpg';
+import { heroImagesByName } from '../../lib/heroImages';
 import { sortArtworks } from '../../lib/artworks';
 import { pickLocalized, useTranslations, type Locale } from '../../i18n';
 
@@ -15,14 +15,20 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+
+// Sfondi hero scelti da Keystatic; fallback a un quadro fisso se la lista è vuota.
+const configuredNames = ((settings as { heroImages?: string[] }).heroImages ?? [])
+  .map((p) => p.split('/').pop() ?? '')
+  .filter((name) => name in heroImagesByName);
+const heroImages =
+  configuredNames.length > 0
+    ? configuredNames.map((name) => heroImagesByName[name])
+    : [heroFallback];
 const artworks = sortArtworks(await getCollection('artworks'));
 const featured = artworks.filter((a) => a.data.featured);
 const tagline = pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);
 const description = [tagline, bio].filter(Boolean).join(' — ');
-
-// Hero spotlight: la stessa opera in versione "spenta" e a colori pieni —
-// il cerchio di luce che segue il cursore le restituisce il colore.
 
 const site = Astro.site ?? new URL('https://boleon.it');
 const sameAs = [settings.instagram, settings.facebook].filter(Boolean);
@@ -49,7 +55,7 @@ const schema = [
 ---
 
 <Base locale={locale} description={description} schema={schema}>
-  <HeroSpotlight locale={locale} base={heroSpenta} reveal={heroColori} />
+  <HeroSpotlight locale={locale} images={heroImages} />
 
   {
     featured.length > 0 && (

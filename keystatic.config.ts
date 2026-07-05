@@ -131,6 +131,20 @@ export default config({
         taglines: localizedText('Tagline'),
         bios: localizedText('Breve bio', true),
         contactEmail: fields.text({ label: 'Email di contatto' }),
+        heroImages: fields.array(
+          fields.image({
+            label: 'Immagine',
+            directory: 'src/assets/hero',
+            publicPath: '../../assets/hero/',
+            validation: { isRequired: true },
+          }),
+          {
+            label: 'Sfondi della copertina',
+            description:
+              'Le immagini della schermata iniziale: una a caso all’apertura, poi si alternano ogni 10 secondi.',
+            itemLabel: () => 'Immagine di sfondo',
+          }
+        ),
         printMaterials: localizedText('Materiali di stampa (mostrato sotto i formati)', true),
         instagram: fields.url({ label: 'Instagram (URL)' }),
         facebook: fields.url({ label: 'Facebook (URL)' }),

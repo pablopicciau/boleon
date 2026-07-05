@@ -25,6 +25,7 @@ export const es: Dict = {
   'artwork.remaining': '{n} copias disponibles',
   'artwork.sold': 'Vendida',
   'artwork.soldOut': 'Agotada',
+  'artwork.buyOriginal': 'Comprar el original',
   'artwork.addToCart': 'Añadir al carrito',
   'artwork.addedToCart': 'Añadida al carrito ✓',
   'artwork.quantity': 'Cantidad',

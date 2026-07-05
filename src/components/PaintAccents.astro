@@ -1,0 +1,55 @@
+---
+/**
+ * Tracce di pittura decorative nei colori dei dipinti dell'artista.
+ * Piccole, nitide, sparse ai margini; rotazione/scala/selezione casuali
+ * a ogni visita (via script). Puramente ornamentali (aria-hidden).
+ */
+const marks = [
+  // pennellata a virgola
+  { svg: '<path d="M3 26 Q12 4 30 7 Q16 12 8 30 Z" fill="#8f2b45"/>', style: 'top: 9%; left: 3%;' },
+  // tre gocce
+  { svg: '<circle cx="6" cy="24" r="3.4" fill="#74803a"/><circle cx="16" cy="12" r="4.6" fill="#74803a"/><circle cx="27" cy="26" r="2.6" fill="#3e7a4e"/>', style: 'top: 24%; right: 4%;' },
+  // tratto ondulato
+  { svg: '<path d="M2 22 Q10 10 16 18 Q22 26 30 12" fill="none" stroke="#dfb43c" stroke-width="4.5" stroke-linecap="round"/>', style: 'top: 46%; left: 2%;' },
+  // macchia irregolare
+  { svg: '<path d="M14 4 Q24 2 27 12 Q32 20 22 25 Q12 30 7 21 Q2 11 14 4 Z" fill="#c08430"/>', style: 'top: 63%; right: 5%;' },
+  // pennellata diagonale
+  { svg: '<path d="M4 30 Q8 16 28 4 Q14 20 10 32 Z" fill="#3e7a4e"/>', style: 'top: 81%; left: 4%;' },
+  // schizzo con gocce
+  { svg: '<path d="M6 28 Q14 8 26 6 Q18 14 12 30 Z" fill="#dfb43c"/><circle cx="28" cy="14" r="2.2" fill="#8f2b45"/>', style: 'top: 15%; right: 13%;' },
+  // due tratti brevi
+  { svg: '<path d="M4 12 L26 6" stroke="#8f2b45" stroke-width="5" stroke-linecap="round"/><path d="M8 24 L24 20" stroke="#c08430" stroke-width="4" stroke-linecap="round"/>', style: 'top: 90%; right: 8%;' },
+  // goccia che cola
+  { svg: '<circle cx="16" cy="8" r="5.5" fill="#74803a"/><path d="M15 12 Q15.5 22 16.5 30" stroke="#74803a" stroke-width="2.4" stroke-linecap="round" fill="none"/>', style: 'top: 37%; left: 7%;' },
+];
+---
+
+<div
+  aria-hidden="true"
+  data-paint-accents
+  class="pointer-events-none absolute inset-0 z-0 hidden overflow-hidden sm:block"
+>
+  {
+    marks.map((mark) => (
+      <span class="absolute" style={mark.style} data-paint-mark>
+        <svg width="34" height="34" viewBox="0 0 34 34" set:html={mark.svg} />
+      </span>
+    ))
+  }
+</div>
+
+<script>
+  // Casualità a ogni visita: rotazione, scala e quali tracce mostrare.
+  document.querySelectorAll<HTMLElement>('[data-paint-mark]').forEach((el) => {
+    if (Math.random() < 0.25) {
+      el.remove();
+      return;
+    }
+    const rot = Math.round(Math.random() * 70 - 35);
+    const scale = (0.75 + Math.random() * 0.6).toFixed(2);
+    el.style.transform = `rotate(${rot}deg) scale(${scale})`;
+    // Piccolo spostamento casuale per non vederle mai uguali
+    el.style.marginTop = `${Math.round(Math.random() * 40 - 20)}px`;
+    el.style.marginInlineStart = `${Math.round(Math.random() * 30 - 15)}px`;
+  });
+</script>

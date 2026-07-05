@@ -125,14 +125,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return json({ url: session.url });
   } catch (err) {
     console.error('Stripe checkout error:', err);
-    const e = err as { type?: string; message?: string };
-    return json(
-      {
-        error: 'Could not create the checkout session.',
-        // Dettaglio diagnostico (Stripe maschera le chiavi nei messaggi)
-        detail: [e.type, e.message?.slice(0, 180)].filter(Boolean).join(': '),
-      },
-      502
-    );
+    return json({ error: 'Could not create the checkout session.' }, 502);
   }
 };

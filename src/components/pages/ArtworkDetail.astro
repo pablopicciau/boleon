@@ -158,13 +158,16 @@ const schema = {
       </dl>
 
       <div class="mt-8">
-        <p class="font-serif text-3xl">
+        <p class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+          {t('artwork.original')}
+        </p>
+        <p class="mt-2 font-serif text-4xl text-accent">
           {available ? formatPrice(artwork.data.price, locale) : unavailableLabel}
         </p>
 
         {
           available ? (
-            <div class="mt-6 flex flex-wrap items-center gap-4">
+            <div class="mt-5 flex flex-wrap items-center gap-4">
               {isPrint && max > 1 && (
                 <label class="flex items-center gap-2 text-sm">
                   <span class="opacity-60">{t('artwork.quantity')}</span>
@@ -182,11 +185,11 @@ const schema = {
                 data-add-to-cart
                 data-slug={artwork.id}
                 data-max={max}
-                data-label={t('artwork.addToCart')}
+                data-label={isPrint ? t('artwork.addToCart') : t('artwork.buyOriginal')}
                 data-added-label={t('artwork.addedToCart')}
-                class="cursor-pointer bg-ink px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-accent"
+                class="cursor-pointer bg-accent px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#6f1f33]"
               >
-                {t('artwork.addToCart')}
+                {isPrint ? t('artwork.addToCart') : t('artwork.buyOriginal')}
               </button>
             </div>
           ) : (
@@ -199,16 +202,24 @@ const schema = {
 
       {
         printSizes.length > 0 && (
-          <div class="mt-10 border-t border-neutral-200 pt-8">
-            <h2 class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+          <div class="mt-12 rounded-sm border border-olive/30 bg-olive/10 p-5 sm:p-6">
+            <h2 class="text-xs font-semibold tracking-[0.25em] text-olive uppercase">
               {t('artwork.prints')}
             </h2>
+            <p data-print-price class="mt-2 font-serif text-4xl text-olive">
+              {formatPrice(printSizes[0].price, locale)}
+            </p>
             <div class="mt-4 flex flex-wrap items-end gap-4">
               <label class="flex flex-col gap-2 text-sm">
                 <span class="opacity-60">{t('artwork.size')}</span>
-                <select data-print-size class="border border-neutral-300 bg-white px-3 py-2.5">
+                <select data-print-size class="border border-olive/40 bg-white px-3 py-2.5">
                   {printSizes.map((p) => (
-                    <option value={p.size} data-price={p.price} data-max={Math.min(p.stock, 10)}>
+                    <option
+                      value={p.size}
+                      data-price={p.price}
+                      data-price-label={formatPrice(p.price, locale)}
+                      data-max={Math.min(p.stock, 10)}
+                    >
                       {p.size} — {formatPrice(p.price, locale)}
                     </option>
                   ))}
@@ -216,7 +227,7 @@ const schema = {
               </label>
               <label class="flex flex-col gap-2 text-sm">
                 <span class="opacity-60">{t('artwork.quantity')}</span>
-                <select data-print-qty class="border border-neutral-300 bg-white px-3 py-2.5"
+                <select data-print-qty class="border border-olive/40 bg-white px-3 py-2.5"
                 ></select>
               </label>
               <button
@@ -225,14 +236,14 @@ const schema = {
                 data-separator={PRINT_ID_SEPARATOR}
                 data-label={t('artwork.addToCart')}
                 data-added-label={t('artwork.addedToCart')}
-                class="cursor-pointer bg-ink px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-accent"
+                class="cursor-pointer bg-olive px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#5c662c]"
               >
                 {t('artwork.addToCart')}
               </button>
             </div>
             {
               printMaterials && (
-                <p class="mt-4 max-w-prose text-xs leading-relaxed opacity-60">{printMaterials}</p>
+                <p class="mt-4 max-w-prose text-xs leading-relaxed opacity-70">{printMaterials}</p>
               )
             }
           </div>
@@ -297,6 +308,7 @@ const schema = {
   const qtySelect = document.querySelector<HTMLSelectElement>('[data-print-qty]');
   const printBtn = document.querySelector<HTMLButtonElement>('[data-add-print]');
   if (sizeSelect && qtySelect && printBtn) {
+    const priceEl = document.querySelector<HTMLElement>('[data-print-price]');
     const currentMax = () =>
       parseInt(sizeSelect.selectedOptions[0]?.dataset.max ?? '1', 10) || 1;
     const rebuildQty = () => {
@@ -305,6 +317,9 @@ const schema = {
         { length: max },
         (_, i) => `<option value="${i + 1}">${i + 1}</option>`
       ).join('');
+      // Il prezzo grande segue il formato selezionato
+      const label = sizeSelect.selectedOptions[0]?.dataset.priceLabel;
+      if (priceEl && label) priceEl.textContent = label;
     };
     sizeSelect.addEventListener('change', rebuildQty);
     rebuildQty();

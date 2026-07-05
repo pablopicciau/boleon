@@ -24,6 +24,7 @@ export const zh: Dict = {
   'artwork.remaining': '剩余 {n} 件',
   'artwork.sold': '已售出',
   'artwork.soldOut': '已售罄',
+  'artwork.buyOriginal': '购买原作',
   'artwork.addToCart': '加入购物车',
   'artwork.addedToCart': '已加入购物车 ✓',
   'artwork.quantity': '数量',
