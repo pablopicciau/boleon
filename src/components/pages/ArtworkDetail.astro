@@ -148,7 +148,7 @@ const schema = {
           )
         }
         {
-          isPrint && artwork.data.editionSize && (
+          isPrint && artwork.data.showAvailability && artwork.data.editionSize && (
             <div class="flex justify-between gap-4">
               <dt class="opacity-60">{t('artwork.editionOf', { n: artwork.data.editionSize })}</dt>
               <dd>{available ? t('artwork.remaining', { n: artwork.data.stock ?? 0 }) : t('artwork.soldOut')}</dd>
@@ -209,6 +209,15 @@ const schema = {
             <p data-print-price class="mt-2 font-serif text-4xl text-olive">
               {formatPrice(printSizes[0].price, locale)}
             </p>
+            {
+              artwork.data.showAvailability && (
+                <p data-print-availability class="mt-1 text-xs opacity-60">
+                  {printSizes[0].editionSize
+                    ? `${t('artwork.editionOf', { n: printSizes[0].editionSize })} · ${t('artwork.remaining', { n: printSizes[0].stock })}`
+                    : t('artwork.remaining', { n: printSizes[0].stock })}
+                </p>
+              )
+            }
             <div class="mt-4 flex flex-wrap items-end gap-4">
               <label class="flex flex-col gap-2 text-sm">
                 <span class="opacity-60">{t('artwork.size')}</span>
@@ -219,6 +228,11 @@ const schema = {
                       data-price={p.price}
                       data-price-label={formatPrice(p.price, locale)}
                       data-max={Math.min(p.stock, 10)}
+                      data-availability-label={
+                        p.editionSize
+                          ? `${t('artwork.editionOf', { n: p.editionSize })} · ${t('artwork.remaining', { n: p.stock })}`
+                          : t('artwork.remaining', { n: p.stock })
+                      }
                     >
                       {p.size} — {formatPrice(p.price, locale)}
                     </option>
@@ -309,6 +323,7 @@ const schema = {
   const printBtn = document.querySelector<HTMLButtonElement>('[data-add-print]');
   if (sizeSelect && qtySelect && printBtn) {
     const priceEl = document.querySelector<HTMLElement>('[data-print-price]');
+    const availabilityEl = document.querySelector<HTMLElement>('[data-print-availability]');
     const currentMax = () =>
       parseInt(sizeSelect.selectedOptions[0]?.dataset.max ?? '1', 10) || 1;
     const rebuildQty = () => {
@@ -317,9 +332,11 @@ const schema = {
         { length: max },
         (_, i) => `<option value="${i + 1}">${i + 1}</option>`
       ).join('');
-      // Il prezzo grande segue il formato selezionato
+      // Il prezzo grande e la disponibilità seguono il formato selezionato
       const label = sizeSelect.selectedOptions[0]?.dataset.priceLabel;
       if (priceEl && label) priceEl.textContent = label;
+      const availabilityLabel = sizeSelect.selectedOptions[0]?.dataset.availabilityLabel;
+      if (availabilityEl && availabilityLabel) availabilityEl.textContent = availabilityLabel;
     };
     sizeSelect.addEventListener('change', rebuildQty);
     rebuildQty();

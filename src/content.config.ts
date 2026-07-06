@@ -30,6 +30,8 @@ const artworks = defineCollection({
       sortOrder: z.number().default(0),
       images: z.array(image()).min(1),
       descriptions: localized,
+      // Se true, il sito mostra ai visitatori quante copie restano (pezzo base e ogni formato di stampa)
+      showAvailability: z.boolean().default(false),
       // Stampe dell'opera ordinabili in vari formati (opzionale, si affianca all'originale)
       printSizes: z
         .array(
@@ -37,6 +39,7 @@ const artworks = defineCollection({
             size: z.string(),
             price: z.number(),
             stock: z.number().default(0),
+            editionSize: z.number().nullable().optional(),
           })
         )
         .default([]),

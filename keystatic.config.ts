@@ -20,6 +20,10 @@ export default config({
     : { kind: 'github', repo: 'pablopicciau/boleon' },
   ui: {
     brand: { name: 'Boleon' },
+    navigation: {
+      Galleria: ['artworks'],
+      Sito: ['settings'],
+    },
   },
   collections: {
     artworks: collection({
@@ -66,6 +70,11 @@ export default config({
           label: 'Copie disponibili',
           description: 'Solo per le stampe: aggiorna dopo ogni vendita.',
         }),
+        showAvailability: fields.checkbox({
+          label: 'Mostra la disponibilità ai visitatori',
+          description:
+            'Se attivo, il sito mostra quante copie restano (del pezzo base e di ogni formato di stampa qui sotto), es. "7 di 30 disponibili". Se disattivo, questi numeri restano privati.',
+        }),
         printSizes: fields.array(
           fields.object({
             size: fields.text({
@@ -81,6 +90,11 @@ export default config({
               label: 'Copie disponibili',
               description: 'A 0 il formato risulta esaurito.',
               defaultValue: 0,
+            }),
+            editionSize: fields.integer({
+              label: 'Tiratura',
+              description:
+                'Facoltativo: numero totale di copie di questo formato. Vuoto = edizione aperta (si mostrano solo le copie rimaste, non il totale).',
             }),
           }),
           {

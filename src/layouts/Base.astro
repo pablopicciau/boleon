@@ -78,6 +78,38 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
     {ogImageUrl && <meta name="twitter:image" content={ogImageUrl} />}
 
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+
+    <script is:inline define:vars={{ currentLocale: locale, allLocales: locales, defaultLocale }}>
+      // Primo accesso della sessione: rispetta la lingua scelta in precedenza
+      // (localStorage, impostata dallo switcher) o quella del browser, saltando
+      // sulla stessa pagina nella lingua giusta. Guardia anti-loop in sessionStorage.
+      try {
+        if (!sessionStorage.getItem('boleon-lang-checked')) {
+          sessionStorage.setItem('boleon-lang-checked', '1');
+          var target = localStorage.getItem('boleon-lang');
+          if (allLocales.indexOf(target) < 0) {
+            target = null;
+            var wanted = navigator.languages || [navigator.language || ''];
+            for (var i = 0; i < wanted.length && !target; i++) {
+              var code = String(wanted[i]).toLowerCase().split('-')[0];
+              if (allLocales.indexOf(code) >= 0) target = code;
+            }
+          }
+          if (target && target !== currentLocale) {
+            var path = location.pathname;
+            if (currentLocale !== defaultLocale) {
+              path = path.replace(new RegExp('^/' + currentLocale + '(?=/|$)'), '') || '/';
+            }
+            if (target !== defaultLocale) {
+              path = '/' + target + (path === '/' ? '' : path);
+            }
+            location.replace(path + location.search + location.hash);
+          }
+        }
+      } catch (e) {
+        /* storage disabilitato: resta nella lingua corrente */
+      }
+    </script>
   </head>
   <body class="relative flex min-h-screen flex-col antialiased">
     <PaintAccents />

@@ -1,7 +1,12 @@
 import type { CollectionEntry } from 'astro:content';
 
 export type Artwork = CollectionEntry<'artworks'>;
-export type PrintSize = { size: string; price: number; stock: number };
+export type PrintSize = {
+  size: string;
+  price: number;
+  stock: number;
+  editionSize?: number | null;
+};
 
 /** Formati stampa ancora ordinabili (stock > 0). */
 export function availablePrintSizes(artwork: Artwork): PrintSize[] {
