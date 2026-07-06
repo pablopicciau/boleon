@@ -9,7 +9,7 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - Sito **completo e funzionante** ma **non ancora online**: manca il deploy su Cloudflare Pages (istruzioni nel README).
 - Le 8 opere in `src/content/artworks/` sono **segnaposto** (SVG generati da `scripts/`): vanno sostituite con foto reali via Keystatic.
 - Chiavi Stripe/Resend non ancora configurate (vedi `.env.example`).
-- Branch di lavoro: `claude/artist-static-site-vt93u2`.
+- Branch di lavoro: `claude/boleon-site-management-design-o2t73p` (base: `claude/artist-static-site-vt93u2`).
 
 ## Stack e decisioni prese
 
@@ -21,8 +21,12 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - **Resend** per le email di notifica ordine, inviate dal webhook Stripe (`src/pages/api/stripe-webhook.ts`, evento `checkout.session.completed`).
 - Carrello in `localStorage` (`src/scripts/cart.ts`), nessun backend per il carrello.
 - **7 lingue**: italiano default senza prefisso URL; `/en`, `/es`, `/fr`, `/zh`, `/hi`, `/ar` (arabo con layout RTL). Dizionari UI in `src/i18n/`; le descrizioni opere si traducono da Keystatic, con fallback sull'italiano se una lingua è vuota.
-- Opere di tipo **originale** (pezzo unico, flag "venduta") o **stampa/edizione** (tiratura + copie disponibili; a 0 copie risulta esaurita).
-- Gestione vendite **manuale**: dopo la notifica email l'artista aggiorna venduta/copie da Keystatic.
+- **Lingua automatica**: al primo accesso della sessione uno script inline in `Base.astro` reindirizza alla lingua salvata (`localStorage['boleon-lang']`, impostata dallo switcher) o a quella del browser; guardia anti-loop in `sessionStorage`. Tag `hreflang` in ogni pagina.
+- **Ogni opera può avere due possibilità di acquisto insieme**: l'**originale** (pezzo unico: prezzo, dimensioni, flag "venduta", attivo con `original.forSale`) e più **formati di stampa** (`prints[]`: dimensioni, prezzo, tiratura, copie per formato). Il modello è `PurchaseOption` in `src/lib/artworks.ts` (id `original` / `print-<indice>`); carrello e checkout usano `{slug, option, qty}`.
+- `showAvailability` per opera: se attivo il sito mostra ai visitatori le copie rimaste ("7 di 30 disponibili").
+- Gestione vendite **manuale**: dopo la notifica email l'artista aggiorna venduta/copie da `/gestione` o Keystatic.
+- **`/gestione`**: pannello privato (noindex, solo italiano) con galleria cliccabile delle opere, filtri e badge di stato; ogni card apre la scheda Keystatic corrispondente. Non linkato dal sito pubblico.
+- **Font self-hosted** via `@fontsource-variable/cormorant` (titoli) e `@fontsource-variable/inter` (testo), importati in `global.css`; palette calda (`--color-neutral-*` ridefiniti su toni caldi).
 
 ## Comandi
 

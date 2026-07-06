@@ -60,8 +60,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
         <p><strong>Indirizzo di spedizione:</strong> ${addressLines}</p>
         <p><strong>ID sessione Stripe:</strong> ${session.id}</p>
         <hr />
-        <p>⚠️ Ricordati di aggiornare il sito da <a href="https://keystatic.com">Keystatic</a>:
-        marca l'opera come <em>venduta</em> (originali) o riduci le <em>copie disponibili</em> (stampe).</p>
+        <p>⚠️ Ricordati di aggiornare il sito dalla <a href="https://boleon.it/gestione">pagina di gestione</a>:
+        marca l'originale come <em>venduto</em> o riduci le <em>copie disponibili</em> del formato di stampa acquistato.</p>
       `;
 
       try {

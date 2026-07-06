@@ -1,16 +1,28 @@
 {
   "title": "Giardino segreto",
   "year": 2023,
-  "technique": "Serigrafia su carta",
-  "dimensions": "35 × 50 cm",
-  "kind": "print",
-  "price": 180,
-  "sold": false,
-  "editionSize": 30,
-  "stock": 7,
+  "technique": "",
+  "original": {
+    "forSale": false,
+    "dimensions": "",
+    "price": null,
+    "sold": false
+  },
+  "printTechnique": "Serigrafia su carta",
+  "prints": [
+    {
+      "dimensions": "35 × 50 cm",
+      "price": 180,
+      "editionSize": 30,
+      "stock": 7
+    }
+  ],
+  "showAvailability": true,
   "featured": false,
   "sortOrder": 7,
-  "images": ["../../assets/artworks/giardino-segreto/cover.svg"],
+  "images": [
+    "../../assets/artworks/giardino-segreto/cover.svg"
+  ],
   "descriptions": {
     "it": "Serigrafia in sei colori, tiratura di 30 esemplari numerati e firmati. Un intreccio di verdi che nasconde, qua e là, lampi di rosso.",
     "en": "Six-colour screen print, edition of 30, numbered and signed. An interweaving of greens hiding flashes of red here and there."

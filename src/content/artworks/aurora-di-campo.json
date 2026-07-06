@@ -2,15 +2,33 @@
   "title": "Aurora di campo",
   "year": 2024,
   "technique": "Olio su tela",
-  "dimensions": "70 × 100 cm",
-  "kind": "original",
-  "price": 1200,
-  "sold": false,
-  "editionSize": null,
-  "stock": null,
+  "original": {
+    "forSale": true,
+    "dimensions": "70 × 100 cm",
+    "price": 1200,
+    "sold": false
+  },
+  "printTechnique": "Stampa fine art giclée su carta cotone",
+  "prints": [
+    {
+      "dimensions": "30 × 40 cm",
+      "price": 120,
+      "editionSize": 50,
+      "stock": 25
+    },
+    {
+      "dimensions": "50 × 70 cm",
+      "price": 240,
+      "editionSize": 25,
+      "stock": 12
+    }
+  ],
+  "showAvailability": true,
   "featured": true,
   "sortOrder": 1,
-  "images": ["../../assets/artworks/aurora-di-campo/cover.svg"],
+  "images": [
+    "../../assets/artworks/aurora-di-campo/cover.svg"
+  ],
   "descriptions": {
     "it": "Una distesa di luce calda all'alba: strati di ocra e terra di Siena si sovrappongono come campi visti dall'alto, attraversati da gesti rapidi che ricordano il vento sul grano.",
     "en": "A field of warm light at dawn: layers of ochre and sienna overlap like fields seen from above, crossed by quick gestures that recall wind moving through wheat."

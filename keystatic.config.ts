@@ -11,7 +11,11 @@ const localizedText = (label: string, multiline = false) =>
       hi: fields.text({ label: `${label} (हिन्दी)`, multiline }),
       ar: fields.text({ label: `${label} (العربية)`, multiline }),
     },
-    { label, description: 'Se una lingua è vuota viene usato l’italiano.' }
+    {
+      label,
+      description:
+        'Scrivi almeno l’italiano: le lingue lasciate vuote mostrano automaticamente il testo italiano.',
+    }
   );
 
 export default config({
@@ -20,6 +24,10 @@ export default config({
     : { kind: 'github', repo: 'pablopicciau/boleon' },
   ui: {
     brand: { name: 'Boleon' },
+    navigation: {
+      Galleria: ['artworks'],
+      Sito: ['settings'],
+    },
   },
   collections: {
     artworks: collection({
@@ -27,7 +35,7 @@ export default config({
       slugField: 'title',
       path: 'src/content/artworks/*',
       format: { data: 'json' },
-      columns: ['year', 'kind', 'price'],
+      columns: ['year', 'sortOrder'],
       schema: {
         title: fields.slug({ name: { label: 'Titolo' } }),
         year: fields.integer({
@@ -36,44 +44,7 @@ export default config({
         }),
         technique: fields.text({
           label: 'Tecnica',
-          description: 'Es. "Olio su tela", "Acrilico su legno"…',
-        }),
-        dimensions: fields.text({
-          label: 'Dimensioni',
-          description: 'Es. "70 × 100 cm"',
-        }),
-        kind: fields.select({
-          label: 'Tipo',
-          options: [
-            { label: 'Opera originale (pezzo unico)', value: 'original' },
-            { label: 'Stampa / edizione limitata', value: 'print' },
-          ],
-          defaultValue: 'original',
-        }),
-        price: fields.number({
-          label: 'Prezzo (EUR)',
-          validation: { isRequired: true, min: 0 },
-        }),
-        sold: fields.checkbox({
-          label: 'Venduta',
-          description: 'Solo per le opere originali: spunta dopo la vendita.',
-        }),
-        editionSize: fields.integer({
-          label: 'Tiratura',
-          description: 'Solo per le stampe: numero totale di copie dell’edizione.',
-        }),
-        stock: fields.integer({
-          label: 'Copie disponibili',
-          description: 'Solo per le stampe: aggiorna dopo ogni vendita.',
-        }),
-        featured: fields.checkbox({
-          label: 'In evidenza',
-          description: 'Mostra l’opera nella sezione in evidenza della home.',
-        }),
-        sortOrder: fields.integer({
-          label: 'Ordinamento',
-          description: 'Numero più basso = mostrata prima.',
-          defaultValue: 0,
+          description: 'Tecnica dell’opera: es. "Olio su tela", "Acrilico su legno"…',
         }),
         images: fields.array(
           fields.image({
@@ -89,6 +60,82 @@ export default config({
             validation: { length: { min: 1 } },
           }
         ),
+        original: fields.object(
+          {
+            forSale: fields.checkbox({
+              label: 'Originale in vendita sul sito',
+              description:
+                'Spunta se il pezzo unico è (o è stato) in vendita. Se vendi solo stampe di quest’opera, lascia vuoto.',
+            }),
+            dimensions: fields.text({
+              label: 'Dimensioni',
+              description: 'Es. "70 × 100 cm"',
+            }),
+            price: fields.number({
+              label: 'Prezzo (EUR)',
+              validation: { min: 0 },
+            }),
+            sold: fields.checkbox({
+              label: 'Venduta',
+              description: 'Spunta dopo la vendita: sul sito l’originale apparirà "Venduta".',
+            }),
+          },
+          {
+            label: 'Opera originale (pezzo unico)',
+            description: 'La prima possibilità di acquisto: il quadro originale.',
+          }
+        ),
+        printTechnique: fields.text({
+          label: 'Tecnica di stampa',
+          description:
+            'Es. "Stampa fine art giclée su carta cotone". Vale per tutti i formati di stampa qui sotto.',
+        }),
+        prints: fields.array(
+          fields.object({
+            dimensions: fields.text({
+              label: 'Dimensioni',
+              description: 'Es. "30 × 40 cm"',
+            }),
+            price: fields.number({
+              label: 'Prezzo (EUR)',
+              validation: { isRequired: true, min: 0 },
+            }),
+            editionSize: fields.integer({
+              label: 'Tiratura',
+              description: 'Numero totale di copie dell’edizione. Vuoto = edizione aperta.',
+            }),
+            stock: fields.integer({
+              label: 'Copie disponibili',
+              description: 'A 0 il formato risulta esaurito. Aggiorna dopo ogni vendita.',
+              defaultValue: 0,
+            }),
+          }),
+          {
+            label: 'Stampe / edizioni',
+            description:
+              'La seconda possibilità di acquisto: aggiungi un elemento per ogni formato di stampa, ognuno con misure e prezzo propri.',
+            itemLabel: (props) => {
+              const dims = props.fields.dimensions.value || 'Formato';
+              const price = props.fields.price.value;
+              const stock = props.fields.stock.value ?? 0;
+              return `${dims} — € ${price ?? '?'} — ${stock} disponibili`;
+            },
+          }
+        ),
+        showAvailability: fields.checkbox({
+          label: 'Mostra la disponibilità ai visitatori',
+          description:
+            'Se attivo, il sito mostra quante copie restano di ogni formato (es. "7 di 30 disponibili").',
+        }),
+        featured: fields.checkbox({
+          label: 'In evidenza',
+          description: 'Mostra l’opera nella sezione in evidenza della home.',
+        }),
+        sortOrder: fields.integer({
+          label: 'Ordinamento',
+          description: 'Numero più basso = mostrata prima.',
+          defaultValue: 0,
+        }),
         descriptions: localizedText('Descrizione', true),
       },
     }),

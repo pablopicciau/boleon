@@ -2,15 +2,27 @@
   "title": "Notturno n. 3",
   "year": 2023,
   "technique": "Acrilico su tela",
-  "dimensions": "80 × 80 cm",
-  "kind": "original",
-  "price": 950,
-  "sold": false,
-  "editionSize": null,
-  "stock": null,
+  "original": {
+    "forSale": true,
+    "dimensions": "80 × 80 cm",
+    "price": 950,
+    "sold": false
+  },
+  "printTechnique": "Stampa fine art giclée su carta cotone",
+  "prints": [
+    {
+      "dimensions": "40 × 40 cm",
+      "price": 140,
+      "editionSize": 40,
+      "stock": 18
+    }
+  ],
+  "showAvailability": true,
   "featured": true,
   "sortOrder": 2,
-  "images": ["../../assets/artworks/notturno-n-3/cover.svg"],
+  "images": [
+    "../../assets/artworks/notturno-n-3/cover.svg"
+  ],
   "descriptions": {
     "it": "Terzo capitolo della serie dei notturni: blu profondi e tracce d'argento costruiscono un cielo che è più memoria che paesaggio.",
     "en": "Third chapter in the nocturne series: deep blues and silver traces build a sky that is more memory than landscape."

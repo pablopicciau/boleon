@@ -31,6 +31,7 @@ const currentPath = Astro.url.pathname;
           <a
             href={switchLocalePath(currentPath, locale, l)}
             lang={localeMeta[l].lang}
+            data-set-lang={l}
             class:list={[
               'block px-4 py-2 text-sm transition hover:bg-neutral-100',
               l === locale && 'font-semibold',
@@ -49,6 +50,18 @@ const currentPath = Astro.url.pathname;
   document.addEventListener('click', (e) => {
     document.querySelectorAll('[data-lang-switcher][open]').forEach((d) => {
       if (!d.contains(e.target as Node)) d.removeAttribute('open');
+    });
+  });
+
+  // Remember the explicit choice so future visits open in this language
+  document.querySelectorAll<HTMLAnchorElement>('[data-set-lang]').forEach((link) => {
+    link.addEventListener('click', () => {
+      try {
+        localStorage.setItem('boleon-lang', link.dataset.setLang!);
+        sessionStorage.setItem('boleon-lang-checked', '1');
+      } catch {
+        /* storage disabled */
+      }
     });
   });
 </script>

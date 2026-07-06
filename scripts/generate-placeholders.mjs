@@ -74,16 +74,18 @@ function makeSvg({ seed, w, h, palette, bg }) {
   return parts.join('\n');
 }
 
+// Palette volutamente sobrie e desaturate: i segnaposto devono presentare
+// bene il sito finché non vengono caricate le foto reali delle opere.
 const artworks = [
-  { slug: 'aurora-di-campo', seed: 11, w: 1400, h: 2000, bg: '#f6ede2', palette: ['#e07a5f', '#f2cc8f', '#e6b89c', '#9c6644', '#f4f1de', '#c44536'] },
-  { slug: 'notturno-n-3', seed: 23, w: 1800, h: 1800, bg: '#10131f', palette: ['#1f2a48', '#3d5a80', '#98c1d9', '#e0fbfc', '#293241', '#5c6f9c'] },
-  { slug: 'frammenti-di-mare', seed: 37, w: 1400, h: 1960, bg: '#eef4f2', palette: ['#0a9396', '#94d2bd', '#005f73', '#e9d8a6', '#5aa9a3', '#001219'] },
-  { slug: 'terra-rossa', seed: 41, w: 2000, h: 1400, bg: '#f1e3d3', palette: ['#9b2226', '#ae2012', '#bb3e03', '#ca6702', '#6a040f', '#e09f3e'] },
-  { slug: 'vento-d-estate', seed: 53, w: 1320, h: 1980, bg: '#fdf8e7', palette: ['#f7b32b', '#f6e27f', '#e4cc37', '#a8c256', '#dd9633', '#f9f1c9'] },
-  { slug: 'vento-d-estate-dettaglio', seed: 59, w: 1600, h: 1600, bg: '#fbf3d4', palette: ['#f7b32b', '#e4cc37', '#dd9633', '#a8c256'] },
-  { slug: 'costellazione-minore', seed: 67, w: 1500, h: 2000, bg: '#1b1f3a', palette: ['#f1e4f3', '#c5a3ff', '#7f7caf', '#fdfdff', '#4f518c', '#907ad6'] },
-  { slug: 'giardino-segreto', seed: 79, w: 1400, h: 2000, bg: '#eef2e6', palette: ['#386641', '#6a994e', '#a7c957', '#bc4749', '#f2e8cf', '#52796f'] },
-  { slug: 'eco-di-luna', seed: 97, w: 1700, h: 1700, bg: '#e8e9ed', palette: ['#9a8c98', '#c9ada7', '#4a4e69', '#f2e9e4', '#22223b', '#b8bedd'] },
+  { slug: 'aurora-di-campo', seed: 11, w: 1400, h: 2000, bg: '#f3ece1', palette: ['#b08968', '#ddb892', '#e6ccb2', '#9c6644', '#ede0d4', '#7f5539'] },
+  { slug: 'notturno-n-3', seed: 23, w: 1800, h: 1800, bg: '#151a24', palette: ['#232b3a', '#33415c', '#5c677d', '#7d8597', '#979dac', '#404a63'] },
+  { slug: 'frammenti-di-mare', seed: 37, w: 1400, h: 1960, bg: '#eef2f1', palette: ['#4f6d7a', '#7a9e9f', '#b8d8d8', '#a3b9b9', '#56707b', '#2f4550'] },
+  { slug: 'terra-rossa', seed: 41, w: 2000, h: 1400, bg: '#f0e6dc', palette: ['#772e25', '#9a3b32', '#58281f', '#c08552', '#a45a52', '#6f1d1b'] },
+  { slug: 'vento-d-estate', seed: 53, w: 1320, h: 1980, bg: '#f9f4e6', palette: ['#d4b483', '#e6cf9e', '#c2a878', '#a89f68', '#e9dcbe', '#b49d5e'] },
+  { slug: 'vento-d-estate-dettaglio', seed: 59, w: 1600, h: 1600, bg: '#f7f0dd', palette: ['#d4b483', '#c2a878', '#b49d5e', '#a89f68'] },
+  { slug: 'costellazione-minore', seed: 67, w: 1500, h: 2000, bg: '#1e2030', palette: ['#494d6b', '#6c6f93', '#9c9ebf', '#d9dae8', '#3a3d58', '#7d81a8'] },
+  { slug: 'giardino-segreto', seed: 79, w: 1400, h: 2000, bg: '#eef0e7', palette: ['#5a6f52', '#7f9070', '#a3b18a', '#c8cdb6', '#465943', '#8a9b6e'] },
+  { slug: 'eco-di-luna', seed: 97, w: 1700, h: 1700, bg: '#e9e8ec', palette: ['#9b96a6', '#b9b4c2', '#6e6a7c', '#d8d5df', '#4c4956', '#a9a5b6'] },
 ];
 
 for (const a of artworks) {

@@ -2,12 +2,15 @@
   "title": "Vento d'estate",
   "year": 2025,
   "technique": "Olio su lino",
-  "dimensions": "60 × 90 cm",
-  "kind": "original",
-  "price": 1450,
-  "sold": false,
-  "editionSize": null,
-  "stock": null,
+  "original": {
+    "forSale": true,
+    "dimensions": "60 × 90 cm",
+    "price": 1450,
+    "sold": false
+  },
+  "printTechnique": "",
+  "prints": [],
+  "showAvailability": false,
   "featured": true,
   "sortOrder": 5,
   "images": [

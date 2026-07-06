@@ -15,23 +15,31 @@ const t = useTranslations(locale);
 const artworks = sortArtworks(await getCollection('artworks'));
 const featured = artworks.filter((a) => a.data.featured);
 const tagline = pickLocalized(settings.taglines, locale);
+const bio = pickLocalized(settings.bios, locale);
 ---
 
 <Base locale={locale}>
-  <section class="py-10 text-center sm:py-16">
-    <h1 class="font-serif text-4xl font-medium tracking-[0.25em] uppercase sm:text-6xl">
+  <section class="py-14 text-center sm:py-24">
+    <h1 class="font-serif text-5xl font-medium tracking-[0.22em] uppercase sm:text-7xl">
       {settings.artistName}
     </h1>
-    {tagline && <p class="mx-auto mt-5 max-w-xl text-base opacity-60 sm:text-lg">{tagline}</p>}
+    <span class="mx-auto mt-8 block h-px w-16 bg-accent"></span>
+    {
+      tagline && (
+        <p class="mx-auto mt-8 max-w-xl font-serif text-xl leading-relaxed italic opacity-70 sm:text-2xl">
+          {tagline}
+        </p>
+      )
+    }
   </section>
 
   {
     featured.length > 0 && (
-      <section class="mt-6">
-        <h2 class="mb-6 text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+      <section class="mt-8">
+        <h2 class="mb-8 text-[0.65rem] font-semibold tracking-[0.3em] uppercase opacity-60">
           {t('home.featured')}
         </h2>
-        <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((artwork) => (
             <ArtworkCard artwork={artwork} locale={locale} />
           ))}
@@ -40,12 +48,25 @@ const tagline = pickLocalized(settings.taglines, locale);
     )
   }
 
-  <section class="mt-16">
-    <h2 class="mb-6 text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+  <section class="mt-24">
+    <h2 class="mb-8 text-[0.65rem] font-semibold tracking-[0.3em] uppercase opacity-60">
       {t('home.allWorks')}
     </h2>
-    <div class="grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
       {artworks.map((artwork) => <ArtworkCard artwork={artwork} locale={locale} />)}
     </div>
   </section>
+
+  {
+    bio && (
+      <section class="mt-28 grid gap-6 border-t border-neutral-200 pt-14 sm:grid-cols-3 sm:gap-10">
+        <h2 class="text-[0.65rem] font-semibold tracking-[0.3em] uppercase opacity-60">
+          {t('home.about')}
+        </h2>
+        <p class="font-serif text-2xl leading-relaxed font-medium opacity-90 sm:col-span-2 sm:text-3xl">
+          {bio}
+        </p>
+      </section>
+    )
+  }
 </Base>

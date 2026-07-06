@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
-import { isAvailable, maxQty, type Artwork } from '../../lib/artworks';
+import { getOptions, offerKind, type Artwork } from '../../lib/artworks';
 import {
   formatPrice,
   localizePath,
@@ -17,25 +17,60 @@ interface Props {
 
 const { locale, artwork } = Astro.props;
 const t = useTranslations(locale);
-const available = isAvailable(artwork);
-const max = maxQty(artwork);
-const isPrint = artwork.data.kind === 'print';
 const description = pickLocalized(artwork.data.descriptions, locale);
-const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
+const kind = offerKind(artwork);
+const showAvailability = artwork.data.showAvailability;
+
+const kindLabel =
+  kind === 'both'
+    ? t('artwork.originalAndPrints')
+    : kind === 'print'
+      ? t('artwork.print')
+      : t('artwork.original');
+
+const options = getOptions(artwork).map((o) => {
+  const subParts: string[] = [];
+  if (o.type === 'original') {
+    subParts.push(t('artwork.uniquePiece'));
+  } else if (o.available && showAvailability && o.stock != null) {
+    subParts.push(
+      o.editionSize
+        ? t('artwork.remainingOf', { n: o.stock, total: o.editionSize })
+        : t('artwork.remaining', { n: o.stock })
+    );
+  } else if (o.editionSize) {
+    subParts.push(t('artwork.editionOf', { n: o.editionSize }));
+  }
+  return {
+    ...o,
+    label: o.type === 'original' ? t('artwork.originalOption') : t('artwork.printOption'),
+    sub: subParts.join(' · '),
+    priceLabel: formatPrice(o.price, locale),
+    statusLabel: o.available ? '' : t(o.type === 'original' ? 'artwork.sold' : 'artwork.soldOut'),
+  };
+});
+
+const selected = options.find((o) => o.available);
+const anyAvailable = Boolean(selected);
+const hasQtyOptions = options.some((o) => o.max > 1);
+const unavailableLabel =
+  options.length === 0
+    ? t('artwork.notForSale')
+    : t(kind === 'print' ? 'artwork.soldOut' : 'artwork.sold');
 ---
 
 <Base locale={locale} title={artwork.data.title} description={description}>
   <a
     href={localizePath(locale, '/')}
-    class="mb-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase opacity-60 transition hover:opacity-100"
+    class="mb-10 inline-flex items-center gap-2 text-xs tracking-[0.2em] uppercase opacity-60 transition hover:opacity-100"
   >
     <span class="rtl:rotate-180">←</span>
     {t('artwork.backToWorks')}
   </a>
 
-  <div class="grid gap-10 lg:grid-cols-5">
+  <div class="grid gap-12 lg:grid-cols-5 lg:gap-16">
     <div class="lg:col-span-3">
-      <div id="artwork-gallery" class="flex flex-col gap-4">
+      <div id="artwork-gallery" class="flex flex-col gap-5">
         {
           artwork.data.images.map((img, i) => (
             <a
@@ -61,92 +96,152 @@ const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
     </div>
 
     <div class="lg:col-span-2">
-      <h1 class="font-serif text-3xl leading-tight sm:text-4xl">{artwork.data.title}</h1>
-      <p class="mt-2 text-sm tracking-widest uppercase opacity-60">
-        {isPrint ? t('artwork.print') : t('artwork.original')}
-      </p>
+      <div class="lg:sticky lg:top-28">
+        <p class="text-[0.65rem] font-medium tracking-[0.3em] uppercase opacity-50">{kindLabel}</p>
+        <h1 class="mt-2 font-serif text-4xl leading-tight font-medium sm:text-5xl">
+          {artwork.data.title}
+        </h1>
 
-      <dl class="mt-8 space-y-3 border-y border-neutral-200 py-6 text-sm">
-        <div class="flex justify-between gap-4">
-          <dt class="opacity-60">{t('artwork.year')}</dt>
-          <dd>{artwork.data.year}</dd>
-        </div>
-        {
-          artwork.data.technique && (
-            <div class="flex justify-between gap-4">
-              <dt class="opacity-60">{t('artwork.technique')}</dt>
-              <dd class="text-end">{artwork.data.technique}</dd>
-            </div>
-          )
-        }
-        {
-          artwork.data.dimensions && (
-            <div class="flex justify-between gap-4">
-              <dt class="opacity-60">{t('artwork.dimensions')}</dt>
-              <dd>{artwork.data.dimensions}</dd>
-            </div>
-          )
-        }
-        {
-          isPrint && artwork.data.editionSize && (
-            <div class="flex justify-between gap-4">
-              <dt class="opacity-60">{t('artwork.editionOf', { n: artwork.data.editionSize })}</dt>
-              <dd>{available ? t('artwork.remaining', { n: artwork.data.stock ?? 0 }) : t('artwork.soldOut')}</dd>
-            </div>
-          )
-        }
-      </dl>
-
-      <div class="mt-8">
-        <p class="font-serif text-3xl">
-          {available ? formatPrice(artwork.data.price, locale) : unavailableLabel}
-        </p>
+        <dl class="mt-8 space-y-3 border-y border-neutral-200 py-6 text-sm">
+          <div class="flex justify-between gap-4">
+            <dt class="opacity-60">{t('artwork.year')}</dt>
+            <dd>{artwork.data.year}</dd>
+          </div>
+          {
+            artwork.data.technique && (
+              <div class="flex justify-between gap-4">
+                <dt class="opacity-60">{t('artwork.technique')}</dt>
+                <dd class="text-end">{artwork.data.technique}</dd>
+              </div>
+            )
+          }
+          {
+            options.length === 0 && artwork.data.original.dimensions && (
+              <div class="flex justify-between gap-4">
+                <dt class="opacity-60">{t('artwork.dimensions')}</dt>
+                <dd>{artwork.data.original.dimensions}</dd>
+              </div>
+            )
+          }
+          {
+            artwork.data.prints.length > 0 && artwork.data.printTechnique && (
+              <div class="flex justify-between gap-4">
+                <dt class="opacity-60">{t('artwork.printOption')}</dt>
+                <dd class="text-end">{artwork.data.printTechnique}</dd>
+              </div>
+            )
+          }
+        </dl>
 
         {
-          available ? (
-            <div class="mt-6 flex flex-wrap items-center gap-4">
-              {isPrint && max > 1 && (
-                <label class="flex items-center gap-2 text-sm">
-                  <span class="opacity-60">{t('artwork.quantity')}</span>
-                  <select
-                    data-qty-input
-                    class="border border-neutral-300 bg-white px-3 py-2.5"
+          options.length > 1 && (
+            <fieldset class="mt-8">
+              <legend class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase opacity-60">
+                {t('artwork.chooseFormat')}
+              </legend>
+              <div class="mt-3 border-y border-neutral-200">
+                {options.map((o) => (
+                  <label
+                    class:list={[
+                      'flex items-center gap-3 border-b border-neutral-200 py-4 last:border-b-0',
+                      o.available ? 'cursor-pointer' : 'opacity-45',
+                    ]}
                   >
-                    {Array.from({ length: Math.min(max, 10) }, (_, i) => (
-                      <option value={i + 1}>{i + 1}</option>
-                    ))}
-                  </select>
-                </label>
-              )}
-              <button
-                data-add-to-cart
-                data-slug={artwork.id}
-                data-max={max}
-                data-label={t('artwork.addToCart')}
-                data-added-label={t('artwork.addedToCart')}
-                class="cursor-pointer bg-ink px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-accent"
-              >
-                {t('artwork.addToCart')}
-              </button>
+                    <input
+                      type="radio"
+                      name="format"
+                      value={o.id}
+                      disabled={!o.available}
+                      checked={selected?.id === o.id}
+                      data-format
+                      data-price-display={o.priceLabel}
+                      data-max={o.max}
+                      class="size-4 shrink-0 accent-ink"
+                    />
+                    <span class="min-w-0 flex-1">
+                      <span class="block text-sm font-medium">
+                        {o.label}
+                        {o.dimensions && <span class="font-normal opacity-60"> · {o.dimensions}</span>}
+                      </span>
+                      {o.sub && <span class="mt-0.5 block text-xs opacity-60">{o.sub}</span>}
+                    </span>
+                    <span class="shrink-0 text-sm">{o.available ? o.priceLabel : o.statusLabel}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          )
+        }
+
+        {
+          options.length === 1 && (
+            <div class="mt-8 border-y border-neutral-200 py-4">
+              <p class="text-sm font-medium">
+                {options[0].label}
+                {options[0].dimensions && (
+                  <span class="font-normal opacity-60"> · {options[0].dimensions}</span>
+                )}
+              </p>
+              {options[0].sub && <p class="mt-0.5 text-xs opacity-60">{options[0].sub}</p>}
             </div>
-          ) : (
-            <p class="mt-4 inline-block bg-neutral-200 px-4 py-2 text-xs tracking-widest uppercase">
-              {unavailableLabel}
-            </p>
+          )
+        }
+
+        <div class="mt-8">
+          <p data-price class="font-serif text-3xl font-medium sm:text-4xl">
+            {anyAvailable ? selected!.priceLabel : unavailableLabel}
+          </p>
+
+          {
+            anyAvailable ? (
+              <div class="mt-6 flex flex-wrap items-center gap-4">
+                {hasQtyOptions && (
+                  <label
+                    data-qty-wrap
+                    class:list={[
+                      'flex items-center gap-2 text-sm',
+                      selected!.max < 2 && 'hidden',
+                    ]}
+                  >
+                    <span class="opacity-60">{t('artwork.quantity')}</span>
+                    <select data-qty-input class="border border-neutral-300 bg-white px-3 py-2.5">
+                      {Array.from({ length: Math.max(selected!.max, 1) }, (_, i) => (
+                        <option value={i + 1}>{i + 1}</option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+                <button
+                  data-add-to-cart
+                  data-slug={artwork.id}
+                  data-option={selected!.id}
+                  data-max={selected!.max}
+                  data-label={t('artwork.addToCart')}
+                  data-added-label={t('artwork.addedToCart')}
+                  class="cursor-pointer bg-ink px-8 py-3.5 text-xs font-medium tracking-[0.2em] text-white uppercase transition-colors duration-300 hover:bg-accent"
+                >
+                  {t('artwork.addToCart')}
+                </button>
+              </div>
+            ) : (
+              <p class="mt-4 inline-block border border-neutral-300 px-4 py-2 text-xs tracking-[0.2em] uppercase opacity-70">
+                {unavailableLabel}
+              </p>
+            )
+          }
+        </div>
+
+        {
+          description && (
+            <div class="mt-12">
+              <h2 class="text-[0.65rem] font-semibold tracking-[0.25em] uppercase opacity-60">
+                {t('artwork.description')}
+              </h2>
+              <p class="mt-3 leading-relaxed whitespace-pre-line opacity-80">{description}</p>
+            </div>
           )
         }
       </div>
-
-      {
-        description && (
-          <div class="mt-10">
-            <h2 class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
-              {t('artwork.description')}
-            </h2>
-            <p class="mt-3 leading-relaxed whitespace-pre-line opacity-80">{description}</p>
-          </div>
-        )
-      }
     </div>
   </div>
 </Base>
@@ -167,15 +262,36 @@ const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
   });
   lightbox.init();
 
-  document.querySelectorAll<HTMLButtonElement>('[data-add-to-cart]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const qtyInput = document.querySelector<HTMLSelectElement>('[data-qty-input]');
-      const qty = qtyInput ? parseInt(qtyInput.value, 10) : 1;
-      addToCart(btn.dataset.slug!, qty, parseInt(btn.dataset.max!, 10));
-      btn.textContent = btn.dataset.addedLabel!;
-      setTimeout(() => {
-        btn.textContent = btn.dataset.label!;
-      }, 1800);
-    });
+  const btn = document.querySelector<HTMLButtonElement>('[data-add-to-cart]');
+  const priceEl = document.querySelector<HTMLElement>('[data-price]');
+  const qtyWrap = document.querySelector<HTMLElement>('[data-qty-wrap]');
+  const qtyInput = document.querySelector<HTMLSelectElement>('[data-qty-input]');
+
+  function applyFormat(radio: HTMLInputElement) {
+    if (!btn) return;
+    const max = parseInt(radio.dataset.max ?? '1', 10);
+    btn.dataset.option = radio.value;
+    btn.dataset.max = String(max);
+    if (priceEl && radio.dataset.priceDisplay) priceEl.textContent = radio.dataset.priceDisplay;
+    if (qtyWrap && qtyInput) {
+      qtyWrap.classList.toggle('hidden', max < 2);
+      qtyInput.innerHTML = Array.from(
+        { length: Math.max(max, 1) },
+        (_, i) => `<option value="${i + 1}">${i + 1}</option>`
+      ).join('');
+    }
+  }
+
+  document.querySelectorAll<HTMLInputElement>('[data-format]').forEach((radio) => {
+    radio.addEventListener('change', () => applyFormat(radio));
+  });
+
+  btn?.addEventListener('click', () => {
+    const qty = qtyInput && !qtyWrap?.classList.contains('hidden') ? parseInt(qtyInput.value, 10) : 1;
+    addToCart(btn.dataset.slug!, btn.dataset.option!, qty, parseInt(btn.dataset.max!, 10));
+    btn.textContent = btn.dataset.addedLabel!;
+    setTimeout(() => {
+      btn.textContent = btn.dataset.label!;
+    }, 1800);
   });
 </script>

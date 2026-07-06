@@ -1,16 +1,28 @@
 {
   "title": "Eco di luna",
   "year": 2025,
-  "technique": "Stampa fine art giclée su carta cotone",
-  "dimensions": "40 × 40 cm",
-  "kind": "print",
-  "price": 150,
-  "sold": false,
-  "editionSize": 40,
-  "stock": 0,
+  "technique": "",
+  "original": {
+    "forSale": false,
+    "dimensions": "",
+    "price": null,
+    "sold": false
+  },
+  "printTechnique": "Stampa fine art giclée su carta cotone",
+  "prints": [
+    {
+      "dimensions": "40 × 40 cm",
+      "price": 150,
+      "editionSize": 40,
+      "stock": 0
+    }
+  ],
+  "showAvailability": false,
   "featured": false,
   "sortOrder": 8,
-  "images": ["../../assets/artworks/eco-di-luna/cover.svg"],
+  "images": [
+    "../../assets/artworks/eco-di-luna/cover.svg"
+  ],
   "descriptions": {
     "it": "Edizione limitata di 40 esemplari, ora esaurita. Grigi perlacei e viola spenti per un omaggio alla luce lunare.",
     "en": "Limited edition of 40, now sold out. Pearly greys and muted purples in homage to moonlight."

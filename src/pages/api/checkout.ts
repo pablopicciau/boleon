@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import Stripe from 'stripe';
-import { isAvailable, maxQty } from '../../lib/artworks';
+import { getOption } from '../../lib/artworks';
 import { getEnv } from '../../lib/env';
 import { defaultLocale, locales, localizePath, type Locale } from '../../i18n';
 
@@ -24,7 +24,7 @@ const SHIPPING_COUNTRIES: Stripe.Checkout.SessionCreateParams.ShippingAddressCol
   ];
 
 type CheckoutPayload = {
-  items?: { slug?: string; qty?: number }[];
+  items?: { slug?: string; option?: string; qty?: number }[];
   locale?: string;
 };
 
@@ -66,32 +66,37 @@ export const POST: APIRoute = async ({ request, locals }) => {
   for (const item of items) {
     const artwork = item.slug ? bySlug.get(item.slug) : undefined;
     const qty = item.qty ?? 0;
-    if (!artwork || !Number.isInteger(qty) || qty < 1) {
+    if (!artwork || typeof item.option !== 'string' || !Number.isInteger(qty) || qty < 1) {
       return json({ error: `Unknown or invalid item: ${item.slug ?? '?'}` }, 400);
     }
-    if (!isAvailable(artwork) || qty > maxQty(artwork)) {
+    const option = getOption(artwork, item.option);
+    if (!option || !option.available || qty > option.max) {
       return json({ error: `No longer available: ${artwork.data.title}`, slug: artwork.id }, 409);
     }
+    const isPrint = option.type === 'print';
     lineItems.push({
       quantity: qty,
       price_data: {
         currency: 'eur',
-        unit_amount: Math.round(artwork.data.price * 100),
+        unit_amount: Math.round(option.price * 100),
         product_data: {
-          name: artwork.data.title,
+          name: isPrint
+            ? `${artwork.data.title} — Stampa ${option.dimensions}`.trim()
+            : `${artwork.data.title} — Originale`,
           description: [
-            artwork.data.kind === 'print' ? 'Stampa - edizione limitata' : 'Opera originale',
-            artwork.data.technique,
-            artwork.data.dimensions,
+            isPrint ? 'Stampa - edizione limitata' : 'Opera originale - pezzo unico',
+            isPrint ? artwork.data.printTechnique : artwork.data.technique,
+            option.dimensions,
+            isPrint && option.editionSize ? `Edizione di ${option.editionSize}` : '',
             String(artwork.data.year),
           ]
             .filter(Boolean)
             .join(' · '),
-          metadata: { slug: artwork.id },
+          metadata: { slug: artwork.id, option: option.id },
         },
       },
     });
-    summary.push(`${artwork.id} x${qty}`);
+    summary.push(`${artwork.id} [${option.id}] x${qty}`);
   }
 
   const stripe = new Stripe(secretKey, {

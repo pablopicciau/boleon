@@ -20,12 +20,26 @@ const artworks = defineCollection({
       title: z.string(),
       year: z.number(),
       technique: z.string().default(''),
-      dimensions: z.string().default(''),
-      kind: z.enum(['original', 'print']),
-      price: z.number(),
-      sold: z.boolean().default(false),
-      editionSize: z.number().nullable().optional(),
-      stock: z.number().nullable().optional(),
+      original: z
+        .object({
+          forSale: z.boolean().default(false),
+          dimensions: z.string().default(''),
+          price: z.number().nullable().optional(),
+          sold: z.boolean().default(false),
+        })
+        .default({ forSale: false, dimensions: '', price: null, sold: false }),
+      printTechnique: z.string().default(''),
+      prints: z
+        .array(
+          z.object({
+            dimensions: z.string().default(''),
+            price: z.number(),
+            editionSize: z.number().nullable().optional(),
+            stock: z.number().default(0),
+          })
+        )
+        .default([]),
+      showAvailability: z.boolean().default(false),
       featured: z.boolean().default(false),
       sortOrder: z.number().default(0),
       images: z.array(image()).min(1),

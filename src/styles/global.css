@@ -1,9 +1,26 @@
 @import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/cormorant';
 
 @theme {
-  --color-ink: #1a1a1a;
-  --color-paper: #fcfbf9;
-  --color-accent: #9b2226;
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Variable', 'Didot', 'Bodoni MT', Georgia, serif;
+
+  --color-ink: #1d1a16;
+  --color-paper: #faf8f4;
+  --color-accent: #96262b;
+
+  /* Warm greys tuned to the paper tone (replace Tailwind's cold neutrals) */
+  --color-neutral-50: #f7f5f0;
+  --color-neutral-100: #f1ede6;
+  --color-neutral-200: #e4ded2;
+  --color-neutral-300: #d0c8b8;
+  --color-neutral-400: #a89f8f;
+  --color-neutral-500: #837b6c;
+  --color-neutral-600: #635c4f;
+  --color-neutral-700: #4a443a;
+  --color-neutral-800: #322e27;
+  --color-neutral-900: #211e19;
 }
 
 html {
@@ -13,6 +30,17 @@ html {
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
+  font-optical-sizing: auto;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }
 
 /* PhotoSwipe must sit above the sticky header */
