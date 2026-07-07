@@ -75,7 +75,7 @@ In alternativa puoi sempre modificare i contenuti in locale con `npm run dev` �
 src/
 ├── i18n/                  # dizionari UI (7 lingue) + helper
 ├── content/artworks/      # opere (JSON, gestite da Keystatic)
-├── content/settings.json  # impostazioni sito
+├── content/site-*.json    # impostazioni sito (4 sezioni Keystatic, unite da lib/settings.ts)
 ├── assets/artworks/       # immagini delle opere
 ├── layouts/Base.astro     # header, footer, switcher lingua, badge carrello
 ├── components/            # card opera, switcher, corpi pagina condivisi

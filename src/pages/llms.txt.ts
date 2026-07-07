@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import settings from '../content/settings.json';
+import settings from '../lib/settings';
 import { availablePrintSizes, isBaseAvailable, sortArtworks } from '../lib/artworks';
 
 export const prerender = true;

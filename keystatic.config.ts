@@ -22,7 +22,7 @@ export default config({
     brand: { name: 'Boleon' },
     navigation: {
       Galleria: ['artworks'],
-      Sito: ['settings'],
+      Sito: ['identity', 'cover', 'contacts', 'shop'],
     },
   },
   collections: {
@@ -133,9 +133,9 @@ export default config({
     }),
   },
   singletons: {
-    settings: singleton({
-      label: 'Impostazioni sito',
-      path: 'src/content/settings',
+    identity: singleton({
+      label: 'Nome e testi',
+      path: 'src/content/site-identity',
       format: { data: 'json' },
       schema: {
         artistName: fields.text({
@@ -144,7 +144,13 @@ export default config({
         }),
         taglines: localizedText('Tagline'),
         bios: localizedText('Breve bio', true),
-        contactEmail: fields.text({ label: 'Email di contatto' }),
+      },
+    }),
+    cover: singleton({
+      label: 'Sfondi della copertina',
+      path: 'src/content/site-cover',
+      format: { data: 'json' },
+      schema: {
         heroImages: fields.array(
           fields.image({
             label: 'Immagine',
@@ -159,9 +165,24 @@ export default config({
             itemLabel: () => 'Immagine di sfondo',
           }
         ),
-        printMaterials: localizedText('Materiali di stampa (mostrato sotto i formati)', true),
+      },
+    }),
+    contacts: singleton({
+      label: 'Contatti e social',
+      path: 'src/content/site-contacts',
+      format: { data: 'json' },
+      schema: {
+        contactEmail: fields.text({ label: 'Email di contatto' }),
         instagram: fields.url({ label: 'Instagram (URL)' }),
         facebook: fields.url({ label: 'Facebook (URL)' }),
+      },
+    }),
+    shop: singleton({
+      label: 'Vendita e stampe',
+      path: 'src/content/site-shop',
+      format: { data: 'json' },
+      schema: {
+        printMaterials: localizedText('Materiali di stampa (mostrato sotto i formati)', true),
       },
     }),
   },
