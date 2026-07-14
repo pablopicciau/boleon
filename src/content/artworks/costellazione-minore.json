@@ -17,5 +17,9 @@
     "it": "Edizione limitata di 50 esemplari, numerati e firmati. Una mappa stellare immaginaria stampata su carta di cotone di qualità museale.",
     "en": "Limited edition of 50, numbered and signed. An imaginary star map printed on museum-grade cotton paper."
   },
-  "showAvailability": true
+  "showAvailability": true,
+  "bestseller": true,
+  "collections": [
+    "notturni"
+  ]
 }

@@ -4,6 +4,9 @@ export const fr: Dict = {
   'nav.works': 'Œuvres',
   'nav.cart': 'Panier',
   'nav.contact': 'Contact',
+  'nav.gallery': 'Galerie',
+  'gallery.bestSellers': 'Meilleures ventes',
+  'gallery.empty': 'Pas encore d’œuvres dans cette collection.',
   'contact.title': 'Contacter l’artiste',
   'contact.intro':
     'Pour toute information sur les œuvres, une commande sur mesure ou toute question, écrivez-moi : je réponds personnellement à chaque message.',

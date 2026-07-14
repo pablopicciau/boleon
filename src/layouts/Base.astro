@@ -129,6 +129,12 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
             {t('nav.works')}
           </a>
           <a
+            href={localizePath(locale, '/galleria')}
+            class="hidden text-xs tracking-widest uppercase opacity-70 transition hover:opacity-100 sm:block"
+          >
+            {t('nav.gallery')}
+          </a>
+          <a
             href={localizePath(locale, '/contatto')}
             class="hidden text-xs tracking-widest uppercase opacity-70 transition hover:opacity-100 sm:block"
           >

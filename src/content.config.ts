@@ -27,6 +27,10 @@ const artworks = defineCollection({
       editionSize: z.number().nullable().optional(),
       stock: z.number().nullable().optional(),
       featured: z.boolean().default(false),
+      // Mostrata nella sottosezione "I più venduti" della galleria
+      bestseller: z.boolean().default(false),
+      // Slug delle collezioni a cui l'opera appartiene (es. "bianco-e-nero")
+      collections: z.array(z.string()).default([]),
       sortOrder: z.number().default(0),
       images: z.array(image()).min(1),
       descriptions: localized,
@@ -46,4 +50,14 @@ const artworks = defineCollection({
     }),
 });
 
-export const collections = { artworks };
+// Le collezioni tematiche della galleria (es. "Bianco e nero"), gestite da Keystatic
+const artCollections = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/collections' }),
+  schema: z.object({
+    name: z.string(),
+    names: localized,
+    sortOrder: z.number().default(0),
+  }),
+});
+
+export const collections = { artworks, collections: artCollections };

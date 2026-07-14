@@ -10,9 +10,15 @@
   "stock": null,
   "featured": false,
   "sortOrder": 3,
-  "images": ["../../assets/artworks/frammenti-di-mare/cover.svg"],
+  "images": [
+    "../../assets/artworks/frammenti-di-mare/cover.svg"
+  ],
   "descriptions": {
     "it": "Acqua, sale e luce mediterranea scomposti in frammenti: una marina astratta costruita per stratificazioni successive di colore e materia.",
     "en": "Water, salt and Mediterranean light broken into fragments: an abstract seascape built through successive layers of colour and matter."
-  }
+  },
+  "bestseller": false,
+  "collections": [
+    "ceramica-e-tatto"
+  ]
 }

@@ -17,5 +17,9 @@
     "it": "Edizione limitata di 40 esemplari, ora esaurita. Grigi perlacei e viola spenti per un omaggio alla luce lunare.",
     "en": "Limited edition of 40, now sold out. Pearly greys and muted purples in homage to moonlight."
   },
-  "showAvailability": true
+  "showAvailability": true,
+  "bestseller": false,
+  "collections": [
+    "notturni"
+  ]
 }

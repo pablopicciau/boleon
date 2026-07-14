@@ -21,7 +21,7 @@ export default config({
   ui: {
     brand: { name: 'Boleon' },
     navigation: {
-      Galleria: ['artworks'],
+      Galleria: ['artworks', 'collections'],
       Sito: ['identity', 'cover', 'contacts', 'shop'],
     },
   },
@@ -109,6 +109,24 @@ export default config({
           label: 'In evidenza',
           description: 'Mostra l’opera nella sezione in evidenza della home.',
         }),
+        bestseller: fields.checkbox({
+          label: 'Tra i più venduti',
+          description:
+            'Mostra l’opera nella sottosezione "I più venduti", quella che si apre per prima nella galleria.',
+        }),
+        collections: fields.array(
+          fields.relationship({
+            label: 'Collezione',
+            collection: 'collections',
+            validation: { isRequired: true },
+          }),
+          {
+            label: 'Collezioni',
+            description:
+              'Le collezioni a cui appartiene l’opera (es. "Bianco e nero"). Un’opera può stare in più collezioni.',
+            itemLabel: (props) => props.value ?? 'Collezione',
+          }
+        ),
         sortOrder: fields.integer({
           label: 'Ordinamento',
           description: 'Numero più basso = mostrata prima.',
@@ -129,6 +147,27 @@ export default config({
           }
         ),
         descriptions: localizedText('Descrizione', true),
+      },
+    }),
+    collections: collection({
+      label: 'Collezioni',
+      slugField: 'name',
+      path: 'src/content/collections/*',
+      format: { data: 'json' },
+      columns: ['sortOrder'],
+      schema: {
+        name: fields.slug({
+          name: {
+            label: 'Nome (Italiano)',
+            description: 'Il nome della collezione, es. "Bianco e nero".',
+          },
+        }),
+        names: localizedText('Nome nelle altre lingue'),
+        sortOrder: fields.integer({
+          label: 'Ordinamento',
+          description: 'Numero più basso = mostrata prima tra le linguette della galleria.',
+          defaultValue: 0,
+        }),
       },
     }),
   },

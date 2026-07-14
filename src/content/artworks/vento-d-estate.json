@@ -29,5 +29,9 @@
       "price": 180,
       "stock": 5
     }
+  ],
+  "bestseller": true,
+  "collections": [
+    "colore-e-materia"
   ]
 }

@@ -24,7 +24,9 @@ export default defineConfig({
     markdoc(),
     keystatic(),
     sitemap({
-      filter: (page) => !page.includes('/keystatic') && !page.includes('/api/'),
+      // /gestione è il pannello privato: mai pubblicizzarlo nella sitemap
+      filter: (page) =>
+        !page.includes('/keystatic') && !page.includes('/api/') && !page.includes('/gestione'),
       i18n: {
         defaultLocale: 'it',
         locales: {

@@ -8,6 +8,13 @@ import settings from '../lib/settings';
 // Pannello privato dell'artista: galleria cliccabile che apre la scheda
 // di modifica in Keystatic. Non è linkato dal sito pubblico.
 const artworks = sortArtworks(await getCollection('artworks'));
+const artCollections = (await getCollection('collections')).sort(
+  (a, b) => a.data.sortOrder - b.data.sortOrder || a.data.name.localeCompare(b.data.name)
+);
+const collectionName = new Map(artCollections.map((c) => [c.id, c.data.name]));
+const collectionCounts = new Map(
+  artCollections.map((c) => [c.id, artworks.filter((a) => a.data.collections.includes(c.id)).length])
+);
 
 const rows = artworks.map((a) => {
   const printSizes = availablePrintSizes(a);
@@ -32,6 +39,12 @@ const rows = artworks.map((a) => {
         ? { text: `${printSizes.length} ${printSizes.length === 1 ? 'formato' : 'formati'} · ${totalStock} copie`, tone: 'ok' }
         : { text: 'Formati stampa esauriti', tone: 'warn' }
     );
+  }
+  if (a.data.bestseller) {
+    badges.push({ text: '★ Più venduti', tone: 'muted' });
+  }
+  for (const c of a.data.collections) {
+    badges.push({ text: collectionName.get(c) ?? c, tone: 'muted' });
   }
   const kindFilter = a.data.kind === 'original' && (a.data.printSizes ?? []).length > 0 ? 'both' : a.data.kind;
   return { artwork: a, kindFilter, available: isAvailable(a), badges };
@@ -124,6 +137,39 @@ const toneClass = {
                   <span class={`px-2 py-0.5 text-[0.7rem] ${toneClass[b.tone]}`}>{b.text}</span>
                 ))}
               </div>
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="mt-16 flex flex-wrap items-baseline justify-between gap-4 border-t border-neutral-200 pt-10">
+        <h2 class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">Collezioni</h2>
+        <a
+          href="/keystatic/collection/collections/create"
+          class="bg-ink px-4 py-2 text-xs font-medium tracking-[0.15em] text-white uppercase transition-colors hover:bg-accent"
+        >
+          + Nuova collezione
+        </a>
+      </div>
+      <p class="mt-3 max-w-2xl text-sm leading-relaxed opacity-70">
+        Le collezioni sono le sottosezioni della pagina <a href="/galleria" class="underline underline-offset-4">Galleria</a> del sito.
+        Per assegnare un'opera a una collezione, apri l'opera e usa il campo "Collezioni".
+      </p>
+      <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          artCollections.map((c) => (
+            <a
+              href={`/keystatic/collection/collections/item/${c.id}`}
+              class="group border border-neutral-200 bg-white/60 p-5 transition hover:border-ink"
+            >
+              <p class="font-serif text-lg font-medium">{c.data.name}</p>
+              <p class="mt-1.5 text-xs opacity-60">
+                {collectionCounts.get(c.id) ?? 0}{' '}
+                {(collectionCounts.get(c.id) ?? 0) === 1 ? 'opera' : 'opere'}
+              </p>
+              <p class="mt-3 text-[0.65rem] tracking-[0.2em] uppercase opacity-50 transition group-hover:opacity-100">
+                ✎ Modifica →
+              </p>
             </a>
           ))
         }

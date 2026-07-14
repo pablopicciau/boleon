@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ArtworkCard from '../ArtworkCard.astro';
+import { sortArtworks } from '../../lib/artworks';
+import { pickLocalized, useTranslations, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+
+const artworks = sortArtworks(await getCollection('artworks'));
+const collectionEntries = (await getCollection('collections')).sort(
+  (a, b) => a.data.sortOrder - b.data.sortOrder || a.data.name.localeCompare(b.data.name)
+);
+
+const hasBestsellers = artworks.some((a) => a.data.bestseller);
+
+// Le linguette: "I più venduti" (aperta per prima), "Tutte le opere", poi le collezioni.
+// Gli id delle collezioni hanno prefisso "c-" per non scontrarsi con quelli fissi.
+const tabs = [
+  ...(hasBestsellers ? [{ id: 'piu-venduti', label: t('gallery.bestSellers') }] : []),
+  { id: 'tutte', label: t('home.allWorks') },
+  ...collectionEntries.map((c) => ({
+    id: `c-${c.id}`,
+    label: pickLocalized(c.data.names, locale) || c.data.name,
+  })),
+];
+const defaultTab = hasBestsellers ? 'piu-venduti' : 'tutte';
+
+const groupsOf = (a: (typeof artworks)[number]) =>
+  ['tutte', ...(a.data.bestseller ? ['piu-venduti'] : []), ...a.data.collections.map((c) => `c-${c}`)].join(
+    ' '
+  );
+---
+
+<Base locale={locale} title={t('nav.gallery')}>
+  <h1 class="font-serif text-3xl sm:text-4xl">{t('nav.gallery')}</h1>
+
+  <div class="mt-8 flex flex-wrap gap-2" data-gallery-tabs>
+    {
+      tabs.map((tab) => (
+        <button
+          data-tab={tab.id}
+          class:list={[
+            'cursor-pointer border border-neutral-300 px-4 py-2 text-xs tracking-[0.15em] uppercase transition hover:border-ink',
+            tab.id === defaultTab && 'tab-active',
+          ]}
+        >
+          {tab.label}
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="mt-10 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-gallery-grid>
+    {
+      artworks.map((artwork) => (
+        <div data-groups={groupsOf(artwork)}>
+          <ArtworkCard artwork={artwork} locale={locale} />
+        </div>
+      ))
+    }
+  </div>
+
+  <p data-gallery-empty class="mt-10 hidden opacity-60">{t('gallery.empty')}</p>
+</Base>
+
+<style>
+  [data-gallery-tabs] button.tab-active {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: var(--color-paper);
+  }
+</style>
+
+<script define:vars={{ defaultTab }}>
+  const buttons = [...document.querySelectorAll('[data-gallery-tabs] button')];
+  const cards = [...document.querySelectorAll('[data-gallery-grid] > [data-groups]')];
+  const empty = document.querySelector('[data-gallery-empty]');
+
+  function activate(id, updateHash) {
+    let shown = 0;
+    buttons.forEach((b) => b.classList.toggle('tab-active', b.dataset.tab === id));
+    cards.forEach((card) => {
+      const show = card.dataset.groups.split(' ').includes(id);
+      card.classList.toggle('hidden', !show);
+      if (show) shown++;
+    });
+    if (empty) empty.classList.toggle('hidden', shown > 0);
+    if (updateHash) history.replaceState(null, '', '#' + id);
+  }
+
+  buttons.forEach((b) => b.addEventListener('click', () => activate(b.dataset.tab, true)));
+
+  // Un link con #collezione apre direttamente quella linguetta
+  const fromHash = decodeURIComponent(location.hash.slice(1));
+  activate(buttons.some((b) => b.dataset.tab === fromHash) ? fromHash : defaultTab, false);
+</script>
