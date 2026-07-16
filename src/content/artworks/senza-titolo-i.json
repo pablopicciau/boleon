@@ -1,0 +1,22 @@
+{
+  "title": "Senza titolo I",
+  "year": 2026,
+  "technique": "Tecnica mista su carta",
+  "dimensions": "",
+  "kind": "original",
+  "price": 400,
+  "sold": false,
+  "editionSize": null,
+  "stock": null,
+  "showAvailability": false,
+  "featured": true,
+  "bestseller": false,
+  "collections": [],
+  "collectionNumber": null,
+  "sortOrder": 1,
+  "images": [
+    "../../assets/artworks/senza-titolo-i/cover.jpg"
+  ],
+  "descriptions": {},
+  "printSizes": []
+}

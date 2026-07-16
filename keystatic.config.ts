@@ -127,6 +127,11 @@ export default config({
             itemLabel: (props) => props.value ?? 'Collezione',
           }
         ),
+        collectionNumber: fields.integer({
+          label: 'Numero nella collezione',
+          description:
+            'Il numero mostrato come "N° …" sotto il titolo. Se lasci vuoto viene calcolato in automatico dall’ordinamento.',
+        }),
         sortOrder: fields.integer({
           label: 'Ordinamento',
           description: 'Numero più basso = mostrata prima.',
@@ -190,6 +195,11 @@ export default config({
       path: 'src/content/site-cover',
       format: { data: 'json' },
       schema: {
+        useArtworkImages: fields.checkbox({
+          label: 'Usa le foto delle opere dello store',
+          description:
+            'Se attivo, gli sfondi della copertina sono le immagini delle opere in vendita, alternate a caso. Se spento, vengono usate le immagini caricate qui sotto.',
+        }),
         heroImages: fields.array(
           fields.image({
             label: 'Immagine',

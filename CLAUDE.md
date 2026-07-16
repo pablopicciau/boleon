@@ -7,7 +7,9 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 ## Stato attuale
 
 - Sito **ONLINE su https://boleon.it** (e www) dal 2026-07-03: Worker Cloudflare con custom domain, verificato HTTP 200. Anche `boleon-art.boleon.it` è collegato.
-- Le 8 opere in `src/content/artworks/` sono **segnaposto** (SVG generati da `scripts/`): mancano titoli/prezzi/dati dei 5 quadri reali (foto già in `src/assets/quadri/`). Da sostituire via Keystatic o quando l'utente fornisce i dati.
+- In catalogo ci sono **2 opere reali** ("Senza titolo I/II", acquerelli inviati in chat il 2026-07-16) con **dati provvisori** (titolo, prezzo 400 €, tecnica, anno: in attesa di titolo/collezione/N°/prezzo veri dall'utente). Gli 8 segnaposto SVG sono stati eliminati. Le altre 5 foto reali restano in `src/assets/quadri/` in attesa di essere catalogate.
+- **Sfondi copertina dalle opere** (`useArtworkImages` in site-cover.json, checkbox in Keystatic → Sfondi della copertina): se attivo (default ora) la hero ruota a caso tra le copertine delle opere in catalogo; se spento usa la lista manuale `heroImages`.
+- Campo **`collectionNumber`** sull'opera: numero manuale mostrato come "N° …"; vuoto = calcolato dall'ordinamento nella collezione.
 - **Stripe in configurazione**: l'utente ha le chiavi TEST (sk_test/pk_test). La secret key va SOLO nelle variabili runtime di Cloudflare (Settings → Variables and Secrets, tipo Secret, nome `STRIPE_SECRET_KEY`) — mai nel repo. Webhook + Resend ancora da configurare.
 - Keystatic in produzione: GitHub App `boleoncms` creata e installata sul repo; variabili KEYSTATIC_* su Cloudflare (runtime) + PUBLIC_KEYSTATIC_GITHUB_APP_SLUG (build). Admin: https://boleon.it/keystatic (login con GitHub).
 - GitHub Pages: disattivato/inerte (source "GitHub Actions" senza workflow) — lasciare così.

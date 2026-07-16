@@ -1,0 +1,22 @@
+{
+  "title": "Senza titolo II",
+  "year": 2026,
+  "technique": "Tecnica mista su carta",
+  "dimensions": "",
+  "kind": "original",
+  "price": 400,
+  "sold": false,
+  "editionSize": null,
+  "stock": null,
+  "showAvailability": false,
+  "featured": true,
+  "bestseller": false,
+  "collections": [],
+  "collectionNumber": null,
+  "sortOrder": 2,
+  "images": [
+    "../../assets/artworks/senza-titolo-ii/cover.jpg"
+  ],
+  "descriptions": {},
+  "printSizes": []
+}

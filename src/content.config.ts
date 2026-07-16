@@ -31,6 +31,8 @@ const artworks = defineCollection({
       bestseller: z.boolean().default(false),
       // Slug delle collezioni a cui l'opera appartiene (es. "bianco-e-nero")
       collections: z.array(z.string()).default([]),
+      // Numero manuale nella collezione ("N° X"); vuoto = calcolato dall'ordinamento
+      collectionNumber: z.number().nullable().optional(),
       sortOrder: z.number().default(0),
       images: z.array(image()).min(1),
       descriptions: localized,

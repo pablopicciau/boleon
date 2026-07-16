@@ -16,15 +16,22 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 
-// Sfondi hero scelti da Keystatic; fallback a un quadro fisso se la lista è vuota.
+const artworks = sortArtworks(await getCollection('artworks'));
+
+// Sfondi hero: se l'opzione "Usa le foto delle opere dello store" è attiva
+// ruotano le copertine delle opere in catalogo; altrimenti le immagini scelte
+// a mano da Keystatic; fallback a un quadro fisso se non c'è nulla.
+const useArtworkImages = (settings as { useArtworkImages?: boolean }).useArtworkImages ?? false;
 const configuredNames = ((settings as { heroImages?: string[] }).heroImages ?? [])
   .map((p) => p.split('/').pop() ?? '')
   .filter((name) => name in heroImagesByName);
+const artworkCovers = artworks.map((a) => a.data.images[0]);
 const heroImages =
-  configuredNames.length > 0
-    ? configuredNames.map((name) => heroImagesByName[name])
-    : [heroFallback];
-const artworks = sortArtworks(await getCollection('artworks'));
+  useArtworkImages && artworkCovers.length > 0
+    ? artworkCovers
+    : configuredNames.length > 0
+      ? configuredNames.map((name) => heroImagesByName[name])
+      : [heroFallback];
 const featured = artworks.filter((a) => a.data.featured);
 const tagline = pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);

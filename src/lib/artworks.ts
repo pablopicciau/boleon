@@ -87,15 +87,17 @@ export function sortArtworks(list: Artwork[]): Artwork[] {
 }
 
 /**
- * Numero progressivo dell'opera nella sua collezione (1-based), calcolato
- * sull'ordinamento della galleria ("Ordinamento", poi anno). Ricalcolato a
- * ogni build: aggiungendo o riordinando opere i numeri si aggiornano da soli.
+ * Numero dell'opera nella sua collezione ("N° …"). Se l'artista ha impostato
+ * un numero manuale (campo "Numero nella collezione") vince quello; altrimenti
+ * è la posizione 1-based nell'ordinamento della galleria, ricalcolata a ogni
+ * build: aggiungendo o riordinando opere i numeri si aggiornano da soli.
  */
 export function collectionNumber(
   all: Artwork[],
   artwork: Artwork,
   collectionSlug: string
 ): number | null {
+  if (artwork.data.collectionNumber != null) return artwork.data.collectionNumber;
   const members = sortArtworks(all.filter((a) => a.data.collections.includes(collectionSlug)));
   const index = members.findIndex((a) => a.id === artwork.id);
   return index === -1 ? null : index + 1;
