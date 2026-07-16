@@ -1,10 +1,4 @@
 {
   "useArtworkImages": true,
-  "heroImages": [
-    "../../assets/hero/opera-03.jpg",
-    "../../assets/hero/opera-01.jpg",
-    "../../assets/hero/opera-02.jpg",
-    "../../assets/hero/opera-04.jpg",
-    "../../assets/hero/opera-05.jpg"
-  ]
+  "heroImages": []
 }
