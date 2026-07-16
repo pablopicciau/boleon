@@ -7,7 +7,7 @@ import settings from '../../lib/settings';
 import heroFallback from '../../assets/quadri/opera-03.jpg';
 import { heroImagesByName } from '../../lib/heroImages';
 import { sortArtworks } from '../../lib/artworks';
-import { pickLocalized, useTranslations, type Locale } from '../../i18n';
+import { localizePath, pickLocalized, useTranslations, type Locale } from '../../i18n';
 
 interface Props {
   locale: Locale;
@@ -87,4 +87,13 @@ const schema = [
       {artworks.map((artwork) => <ArtworkCard artwork={artwork} locale={locale} />)}
     </div>
   </section>
+
+  <div class="mt-20 text-center">
+    <a
+      href={localizePath(locale, '/galleria')}
+      class="inline-block rounded-full bg-accent px-8 py-3.5 text-sm font-medium tracking-wide text-white uppercase transition-all hover:scale-[1.03] hover:bg-[#6f1f33] hover:shadow-lg hover:shadow-accent/30 active:scale-95"
+    >
+      {t('home.moreWorks')}
+    </a>
+  </div>
 </Base>

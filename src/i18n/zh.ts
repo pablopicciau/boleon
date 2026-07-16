@@ -5,6 +5,7 @@ export const zh: Dict = {
   'nav.cart': '购物车',
   'nav.contact': '联系',
   'nav.artist': '艺术家',
+  'home.moreWorks': '前往画廊探索更多作品',
   'nav.gallery': '画廊',
   'gallery.bestSellers': '热销作品',
   'gallery.empty': '此系列暂无作品。',

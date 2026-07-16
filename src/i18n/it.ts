@@ -3,6 +3,7 @@ export const it = {
   'nav.cart': 'Carrello',
   'nav.contact': 'Contatti',
   'nav.artist': 'L’artista',
+  'home.moreWorks': 'Scopri altre opere in galleria',
   'nav.gallery': 'Galleria',
   'gallery.bestSellers': 'I più venduti',
   'gallery.empty': 'Nessuna opera in questa collezione, per ora.',

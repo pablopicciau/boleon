@@ -1,7 +1,7 @@
 ---
 import { getImage } from 'astro:assets';
 import settings from '../lib/settings';
-import { pickLocalized, useTranslations, type Locale } from '../i18n';
+import { localizePath, useTranslations, type Locale } from '../i18n';
 
 /**
  * Hero a schermo intero con "spotlight" che segue il cursore e rivela
@@ -16,7 +16,6 @@ interface Props {
 
 const { locale, images } = Astro.props;
 const t = useTranslations(locale);
-const tagline = pickLocalized(settings.taglines, locale);
 
 const optimized = await Promise.all(images.map((img) => getImage({ src: img, width: 1600 })));
 const urls = optimized.map((o) => o.src);
@@ -81,29 +80,24 @@ const initialMask =
       >
         {settings.artistName}
       </span>
-      {
-        tagline && (
-          <span
-            class="hero-anim hero-reveal mt-4 block text-base font-light tracking-wide text-ink/70 sm:text-xl"
-            style="animation-delay: 0.42s;"
-          >
-            {tagline}
-          </span>
-        )
-      }
     </h1>
   </div>
 
   <div
-    class="hero-anim hero-fade absolute start-5 end-5 bottom-10 z-50 flex max-w-full flex-col items-start gap-4 sm:start-auto sm:end-10 sm:bottom-24 sm:max-w-[280px]"
+    class="hero-anim hero-fade absolute start-5 end-5 bottom-10 z-50 flex max-w-full flex-wrap items-center gap-3 sm:start-auto sm:end-10 sm:bottom-24"
     style="animation-delay: 0.85s;"
   >
-    <p class="text-xs leading-relaxed text-ink/70 sm:text-sm">{t('hero.invite')}</p>
     <a
       href="#opere"
       class="rounded-full bg-accent px-7 py-3 text-sm font-medium tracking-wide text-white uppercase transition-all hover:scale-[1.03] hover:bg-[#6f1f33] hover:shadow-lg hover:shadow-accent/30 active:scale-95"
     >
       {t('hero.cta')}
+    </a>
+    <a
+      href={localizePath(locale, '/galleria')}
+      class="rounded-full bg-accent px-7 py-3 text-sm font-medium tracking-wide text-white uppercase transition-all hover:scale-[1.03] hover:bg-[#6f1f33] hover:shadow-lg hover:shadow-accent/30 active:scale-95"
+    >
+      {t('nav.gallery')}
     </a>
   </div>
 

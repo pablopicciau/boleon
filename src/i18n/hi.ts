@@ -5,6 +5,7 @@ export const hi: Dict = {
   'nav.cart': 'कार्ट',
   'nav.contact': 'संपर्क',
   'nav.artist': 'कलाकार',
+  'home.moreWorks': 'गैलरी में और कृतियाँ देखें',
   'nav.gallery': 'गैलरी',
   'gallery.bestSellers': 'सबसे अधिक बिकने वाली',
   'gallery.empty': 'इस संग्रह में अभी कोई कृति नहीं है।',

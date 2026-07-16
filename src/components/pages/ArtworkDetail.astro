@@ -248,24 +248,14 @@ const schema = {
             <p class="text-xs font-semibold tracking-[0.2em] text-accent uppercase">
               {t('artwork.originalOnRequest')}
             </p>
-            <div class="flex flex-wrap gap-2">
-              <button
-                type="button"
-                data-open-inquiry
-                data-inq-type="original"
-                class="paper-btn px-5 py-2.5 text-xs tracking-[0.15em] text-white uppercase"
-              >
-                {t('artwork.requestOriginal')}
-              </button>
-              <button
-                type="button"
-                data-open-inquiry
-                data-inq-type="info"
-                class="paper-btn-outline px-5 py-2.5 text-xs tracking-[0.15em] uppercase"
-              >
-                {t('artwork.askInfo')}
-              </button>
-            </div>
+            <button
+              type="button"
+              data-open-inquiry
+              data-inq-type="original"
+              class="paper-btn px-5 py-2.5 text-xs tracking-[0.15em] text-white uppercase"
+            >
+              {t('artwork.requestOriginal')}
+            </button>
           </div>
         ) : (
           <div class="mt-8">
@@ -303,16 +293,6 @@ const schema = {
               <p class="mt-4 inline-block bg-neutral-200 px-4 py-2 text-xs tracking-widest uppercase">
                 {unavailableLabel}
               </p>
-            )}
-            {settings.contactEmail && (
-              <button
-                type="button"
-                data-open-inquiry
-                data-inq-type="info"
-                class="paper-btn-outline mt-5 px-6 py-3 text-xs tracking-widest uppercase"
-              >
-                {t('artwork.askInfo')}
-              </button>
             )}
           </div>
         )
