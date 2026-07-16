@@ -1,0 +1,22 @@
+{
+  "name": "Ispirazioni",
+  "names": {
+    "it": "",
+    "en": "Inspirations",
+    "es": "Inspiraciones",
+    "fr": "Inspirations",
+    "zh": "灵感",
+    "hi": "प्रेरणाएँ",
+    "ar": "إلهامات"
+  },
+  "descriptions": {
+    "it": "Opere nate da un incontro: una foto, un evento, un'immagine che colpisce e resta. L'artista la accoglie e la restituisce trasformata — non più ciò che era, ma una nuova voce, la sua interpretazione.",
+    "en": "Works born from an encounter: a photograph, an event, an image that strikes and stays. The artist takes it in and gives it back transformed — no longer what it was, but a new voice, a personal reading.",
+    "es": "Obras nacidas de un encuentro: una foto, un acontecimiento, una imagen que impacta y permanece. El artista la acoge y la devuelve transformada: ya no lo que era, sino una nueva voz, su interpretación.",
+    "fr": "Des œuvres nées d'une rencontre : une photo, un événement, une image qui frappe et demeure. L'artiste l'accueille et la restitue transformée — non plus ce qu'elle était, mais une voix nouvelle, sa lecture.",
+    "zh": "源于一次相遇的作品:一张照片、一个事件、一幅击中并驻留心中的图像。艺术家将其纳入,再以转化的姿态归还——不再是原来的模样,而是一种新的声音,他的诠释。",
+    "hi": "एक मुलाक़ात से जन्मी कृतियाँ: एक तस्वीर, एक घटना, एक छवि जो छू जाए और ठहर जाए। कलाकार उसे अपनाता है और रूपांतरित कर लौटाता है — अब वह नहीं जो थी, बल्कि एक नई आवाज़, उसकी अपनी व्याख्या।",
+    "ar": "أعمال وُلدت من لقاء: صورة، حدث، مشهد يترك أثره ويبقى. يتلقّاه الفنان ويعيده متحوّلًا — لم يعد كما كان، بل صوتًا جديدًا، قراءته الخاصة."
+  },
+  "sortOrder": 2
+}

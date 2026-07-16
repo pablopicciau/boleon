@@ -34,6 +34,7 @@ export default config({
       columns: ['year', 'kind', 'price'],
       schema: {
         title: fields.slug({ name: { label: 'Titolo' } }),
+        titles: localizedText('Titolo tradotto (opzionale)'),
         year: fields.integer({
           label: 'Anno',
           validation: { isRequired: true },
@@ -176,6 +177,7 @@ export default config({
           },
         }),
         names: localizedText('Nome nelle altre lingue'),
+        descriptions: localizedText('Storia della collezione', true),
         sortOrder: fields.integer({
           label: 'Ordinamento',
           description: 'Numero più basso = mostrata prima tra le linguette della galleria.',

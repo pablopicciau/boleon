@@ -6,6 +6,8 @@ export const it = {
   'gallery.bestSellers': 'I più venduti',
   'gallery.empty': 'Nessuna opera in questa collezione, per ora.',
   'artwork.collectionLine': 'N° {n} · C. {name}',
+  'artwork.requestOriginal': 'Originale su richiesta',
+  'inquiry.infoMessage': "Salve, vorrei ricevere maggiori informazioni sull'opera «{title}». Grazie.",
   'artwork.originalOnRequest': 'Originale · pezzo unico su richiesta',
   'inquiry.title': 'Richiedi informazioni sull’originale',
   'inquiry.intro': 'L’originale è un pezzo unico. Lasciami i tuoi dati e ti risponderò personalmente.',

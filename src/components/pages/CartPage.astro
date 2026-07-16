@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import { catalogEntries } from '../../lib/artworks';
-import { localeMeta, localizePath, useTranslations, type Locale } from '../../i18n';
+import { localeMeta, localizePath, pickLocalized, useTranslations, type Locale } from '../../i18n';
 
 interface Props {
   locale: Locale;
@@ -21,9 +21,10 @@ for (const artwork of artworks) {
   const entries = catalogEntries(artwork);
   if (entries.length === 0) continue;
   const thumb = await getImage({ src: artwork.data.images[0], width: 240 });
+  const displayTitle = pickLocalized(artwork.data.titles, locale) || artwork.data.title;
   for (const entry of entries) {
     catalog[entry.id] = {
-      title: entry.title,
+      title: displayTitle,
       subtitle:
         entry.variant.kind === 'print'
           ? `${t('artwork.size')}: ${entry.variant.size}`

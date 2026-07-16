@@ -1,0 +1,22 @@
+{
+  "name": "Shades",
+  "names": {
+    "it": "",
+    "en": "Shades",
+    "es": "Shades",
+    "fr": "Shades",
+    "zh": "Shades",
+    "hi": "Shades",
+    "ar": "Shades"
+  },
+  "descriptions": {
+    "it": "Sfumature. Acquerelli in cui il colore respira e trascolora, e ogni gesto lascia che l'acqua decida dove finire. Forme sospese tra il mare e il sogno.",
+    "en": "Shades. Watercolours where colour breathes and bleeds, and every gesture lets the water decide where to settle. Forms suspended between the sea and a dream.",
+    "es": "Matices. Acuarelas donde el color respira y se difumina, y cada gesto deja que el agua decida dónde detenerse. Formas suspendidas entre el mar y el sueño.",
+    "fr": "Nuances. Aquarelles où la couleur respire et se fond, où chaque geste laisse l'eau décider de son point d'arrêt. Des formes suspendues entre la mer et le rêve.",
+    "zh": "色调。水彩中色彩自由呼吸、晕染,每一笔都任由水去决定归处。悬于海洋与梦境之间的形态。",
+    "hi": "रंगत। जलरंग जिनमें रंग साँस लेता और घुलता है, और हर लय पानी को तय करने देती है कि कहाँ ठहरे। समुद्र और स्वप्न के बीच लटकती आकृतियाँ।",
+    "ar": "درجات. ألوان مائية يتنفّس فيها اللون ويذوب، وكل حركة تترك للماء أن يقرّر أين يستقر. أشكال معلّقة بين البحر والحلم."
+  },
+  "sortOrder": 1
+}

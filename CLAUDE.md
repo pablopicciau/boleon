@@ -43,6 +43,12 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - **Quadri reali**: 5 foto migliorate (livelli, saturazione, nitidezza via sharp) in `src/assets/quadri/opera-01..05.jpg`, caricate dall'utente il 2026-07-02. Non ancora nel catalogo: mancano titoli/prezzi/dimensioni — quando l'utente li fornisce, creare le voci in `src/content/artworks/` e rimuovere i segnaposto SVG. Il colore `--color-accent` (#8f2b45, bordeaux) è campionato dalle pennellate di questi quadri.
 - Gestione vendite **manuale**: dopo la notifica email l'artista aggiorna venduta/copie da Keystatic.
 
+- **Contatti**: email `boleon.art@gmail.com`, Instagram `boleon.art` (in `site-contacts.json`).
+- **Richiesta originale / informazioni via finestra (modale)**: la pagina opera ha un tasto rosso materico "Originale su richiesta" e un tasto "Richiedi informazioni"; entrambi aprono un `<dialog>` (`.paper-panel`) col modulo, che invia a `/api/inquiry` con `type` (original/info) → oggetto email "Richiesta originale/informazioni — <opera> — <email cliente>", destinatario `boleon.art@gmail.com`, reply-to = cliente; fallback mailto se Resend non configurato.
+- **Titoli traducibili** (`titles` localized sull'opera, opzionale): `pickLocalized(titles) || title` in card/dettaglio/carrello; lo slug resta il titolo base.
+- **Storie collezioni** (`descriptions` localized sulla collezione): mostrate nella galleria quando si apre la relativa linguetta. Collezioni attuali: Shades (con Sea Drop e Night Sea Shooting Star), Ispirazioni, Fiori (queste due ancora senza opere).
+- **Estetica carta**: font "caratteristico" Beth Ellen applicato a tutti i titoli/prezzi/header (via `--font-serif`); texture di carta ruvida generata (SVG `feDiffuseLighting`+grana) su `body` e `.paper-panel`; bottoni materici `.paper-btn`/`.paper-btn-outline`. Rimosso `PaintAccents` (gli schizzi colorati).
+
 ## Comandi
 
 ```sh

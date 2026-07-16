@@ -8,6 +8,8 @@ export const ar: Dict = {
   'gallery.bestSellers': 'الأكثر مبيعًا',
   'gallery.empty': 'لا توجد أعمال في هذه المجموعة بعد.',
   'artwork.collectionLine': 'N° {n} · C. {name}',
+  'artwork.requestOriginal': 'العمل الأصلي عند الطلب',
+  'inquiry.infoMessage': 'مرحبًا، أود الحصول على مزيد من المعلومات حول «{title}». شكرًا.',
   'artwork.originalOnRequest': 'العمل الأصلي · قطعة فريدة عند الطلب',
   'inquiry.title': 'اطلب معلومات عن العمل الأصلي',
   'inquiry.intro': 'العمل الأصلي قطعة فريدة. اترك بياناتك وسأرد عليك شخصيًا.',

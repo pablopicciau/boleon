@@ -8,6 +8,8 @@ export const zh: Dict = {
   'gallery.bestSellers': '热销作品',
   'gallery.empty': '此系列暂无作品。',
   'artwork.collectionLine': 'N° {n} · C. {name}',
+  'artwork.requestOriginal': '预约洽购原作',
+  'inquiry.infoMessage': '您好,我想了解更多关于《{title}》的信息。谢谢。',
   'artwork.originalOnRequest': '原作 · 独一无二,预约洽购',
   'inquiry.title': '咨询原作信息',
   'inquiry.intro': '原作为独一无二的作品。留下您的联系方式,我会亲自回复您。',

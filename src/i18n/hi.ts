@@ -8,6 +8,8 @@ export const hi: Dict = {
   'gallery.bestSellers': 'सबसे अधिक बिकने वाली',
   'gallery.empty': 'इस संग्रह में अभी कोई कृति नहीं है।',
   'artwork.collectionLine': 'N° {n} · C. {name}',
+  'artwork.requestOriginal': 'अनुरोध पर मूल कृति',
+  'inquiry.infoMessage': 'नमस्ते, मैं «{title}» के बारे में अधिक जानकारी चाहता/चाहती हूँ। धन्यवाद।',
   'artwork.originalOnRequest': 'मूल कृति · अनुरोध पर उपलब्ध अद्वितीय कृति',
   'inquiry.title': 'मूल कृति के बारे में जानकारी माँगें',
   'inquiry.intro': 'मूल कृति एक अद्वितीय कृति है। अपनी जानकारी छोड़ें, मैं व्यक्तिगत रूप से उत्तर दूँगा।',

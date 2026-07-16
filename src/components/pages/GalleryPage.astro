@@ -35,6 +35,11 @@ const groupsOf = (a: (typeof artworks)[number]) =>
   ['tutte', ...(a.data.bestseller ? ['piu-venduti'] : []), ...a.data.collections.map((c) => `c-${c}`)].join(
     ' '
   );
+
+// Storie delle collezioni, mostrate quando si apre la relativa linguetta
+const collectionStories = collectionEntries
+  .map((c) => ({ id: `c-${c.id}`, text: pickLocalized(c.data.descriptions, locale) }))
+  .filter((s) => s.text);
 ---
 
 <Base locale={locale} title={t('nav.gallery')}>
@@ -55,6 +60,17 @@ const groupsOf = (a: (typeof artworks)[number]) =>
       ))
     }
   </div>
+
+  {
+    collectionStories.map((s) => (
+      <p
+        data-story={s.id}
+        class="mt-8 hidden max-w-2xl font-serif text-xl leading-relaxed opacity-80 sm:text-2xl"
+      >
+        {s.text}
+      </p>
+    ))
+  }
 
   <div class="mt-10 grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3" data-gallery-grid>
     {
@@ -80,6 +96,7 @@ const groupsOf = (a: (typeof artworks)[number]) =>
 <script define:vars={{ defaultTab }}>
   const buttons = [...document.querySelectorAll('[data-gallery-tabs] button')];
   const cards = [...document.querySelectorAll('[data-gallery-grid] > [data-groups]')];
+  const stories = [...document.querySelectorAll('[data-story]')];
   const empty = document.querySelector('[data-gallery-empty]');
 
   function activate(id, updateHash) {
@@ -90,6 +107,7 @@ const groupsOf = (a: (typeof artworks)[number]) =>
       card.classList.toggle('hidden', !show);
       if (show) shown++;
     });
+    stories.forEach((s) => s.classList.toggle('hidden', s.dataset.story !== id));
     if (empty) empty.classList.toggle('hidden', shown > 0);
     if (updateHash) history.replaceState(null, '', '#' + id);
   }

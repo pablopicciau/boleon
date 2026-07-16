@@ -13,9 +13,9 @@
   "featured": true,
   "bestseller": true,
   "collections": [
-    "shades-n-2"
+    "shades"
   ],
-  "collectionNumber": null,
+  "collectionNumber": 2,
   "sortOrder": 2,
   "images": [
     "../../assets/artworks/night-sea-shooting-star/cover.jpg"

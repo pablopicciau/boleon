@@ -5,6 +5,7 @@ import { getEnv } from '../../lib/env';
 export const prerender = false;
 
 type InquiryPayload = {
+  type?: string;
   name?: string;
   email?: string;
   message?: string;
@@ -33,6 +34,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     return json({ error: 'invalid_json' }, 400);
   }
 
+  const type = payload.type === 'original' ? 'original' : 'info';
   const name = clean(payload.name, 120);
   const email = clean(payload.email, 200);
   const message = clean(payload.message, 4000);
@@ -44,16 +46,20 @@ export const POST: APIRoute = async ({ request, locals }) => {
   }
 
   const resendKey = getEnv(locals, 'RESEND_API_KEY');
-  const to = getEnv(locals, 'ORDER_NOTIFICATION_EMAIL');
+  const to = getEnv(locals, 'ORDER_NOTIFICATION_EMAIL') ?? 'boleon.art@gmail.com';
   const from = getEnv(locals, 'RESEND_FROM_EMAIL') ?? 'onboarding@resend.dev';
-  if (!resendKey || !to) {
+  if (!resendKey) {
     // Il modulo esiste ma Resend non è ancora configurato: il front-end
     // mostrerà un fallback (scrivi direttamente all'artista via email).
     return json({ error: 'not_configured' }, 503);
   }
 
+  // Oggetto: "Richiesta originale/informazioni — <opera> — <email del cliente>"
+  const kindLabel = type === 'original' ? 'Richiesta originale' : 'Richiesta informazioni';
+  const subject = [kindLabel, artwork || null, email].filter(Boolean).join(' — ');
+
   const html = `
-    <h2>Nuova richiesta dal sito</h2>
+    <h2>${escapeHtml(kindLabel)}</h2>
     ${artwork ? `<p><strong>Opera:</strong> ${escapeHtml(artwork)}</p>` : ''}
     ${url ? `<p><strong>Pagina:</strong> <a href="${escapeHtml(url)}">${escapeHtml(url)}</a></p>` : ''}
     <p><strong>Da:</strong> ${escapeHtml(name)} (${escapeHtml(email)})</p>
@@ -67,7 +73,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       from: `Boleon <${from}>`,
       to,
       replyTo: email,
-      subject: artwork ? `Richiesta — ${artwork}` : 'Nuova richiesta dal sito',
+      subject,
       html,
     });
     return json({ ok: true });

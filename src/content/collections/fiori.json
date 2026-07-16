@@ -1,0 +1,22 @@
+{
+  "name": "Fiori",
+  "names": {
+    "it": "",
+    "en": "Flowers",
+    "es": "Flores",
+    "fr": "Fleurs",
+    "zh": "花",
+    "hi": "फूल",
+    "ar": "زهور"
+  },
+  "descriptions": {
+    "it": "Un omaggio al fiore, dono della natura nella sua forma più creativa. Da sempre i fiori chiamano a sé altre forme di vita: sono il ponte fra i ponti, il luogo dove gli esseri viventi si incontrano.",
+    "en": "A tribute to the flower, nature's gift in its most creative form. Flowers have always called other forms of life toward them: they are the bridge among bridges, the place where living beings meet.",
+    "es": "Un homenaje a la flor, don de la naturaleza en su forma más creativa. Desde siempre las flores atraen otras formas de vida: son el puente entre los puentes, el lugar donde los seres vivos se encuentran.",
+    "fr": "Un hommage à la fleur, don de la nature dans sa forme la plus créative. Depuis toujours les fleurs appellent à elles d'autres formes de vie : elles sont le pont entre les ponts, le lieu où les êtres vivants se rencontrent.",
+    "zh": "献给花的礼赞——大自然以最富创造力的形态赋予的馈赠。自古以来,花朵吸引着其他生命:它们是众桥之桥,是生灵相遇之所。",
+    "hi": "फूल को एक श्रद्धांजलि, प्रकृति का सबसे रचनात्मक रूप में दिया गया उपहार। फूल सदा से अन्य जीवन-रूपों को अपनी ओर बुलाते रहे हैं: वे पुलों के बीच का पुल हैं, वह स्थान जहाँ जीव मिलते हैं।",
+    "ar": "تحيّة إلى الزهرة، هبة الطبيعة في أكثر صورها إبداعًا. لطالما استدعت الزهور أشكال حياة أخرى إليها: إنها الجسر بين الجسور، المكان الذي تلتقي فيه الكائنات الحية."
+  },
+  "sortOrder": 3
+}

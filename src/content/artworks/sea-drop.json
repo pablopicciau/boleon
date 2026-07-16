@@ -13,9 +13,9 @@
   "featured": true,
   "bestseller": true,
   "collections": [
-    "shades-n-1"
+    "shades"
   ],
-  "collectionNumber": null,
+  "collectionNumber": 1,
   "sortOrder": 1,
   "images": [
     "../../assets/artworks/sea-drop/cover.jpg"

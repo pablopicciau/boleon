@@ -18,6 +18,8 @@ const artworks = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      // Titolo tradotto per lingua (opzionale): se vuoto usa il titolo qui sopra
+      titles: localized,
       year: z.number(),
       technique: z.string().default(''),
       dimensions: z.string().default(''),
@@ -60,6 +62,8 @@ const artCollections = defineCollection({
   schema: z.object({
     name: z.string(),
     names: localized,
+    // Storia / descrizione della collezione, mostrata nella galleria
+    descriptions: localized,
     sortOrder: z.number().default(0),
   }),
 });

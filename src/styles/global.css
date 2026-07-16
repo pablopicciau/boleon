@@ -1,45 +1,39 @@
 @import 'tailwindcss';
+@import '@fontsource/beth-ellen';
 
 @theme {
-  --color-ink: #1a1a1a;
-  --color-paper: #fcfbf9;
+  --color-ink: #2a2622;
+  --color-paper: #f4f0e8;
   /* Palette campionata dai dipinti dell'artista */
   --color-accent: #8f2b45; /* bordeaux delle pennellate */
-  --color-ochre: #c08430; /* ocra dorata */
-  --color-olive: #74803a; /* verde oliva */
-  --color-leaf: #3e7a4e; /* verde foglia */
-  --color-sun: #dfb43c; /* giallo sole */
-  /* Cormorant: serif da galleria per titoli e prezzi (caricato in Base.astro) */
-  --font-serif: 'Cormorant Variable', ui-serif, Georgia, 'Times New Roman', serif;
-  /* Beth Ellen: calligrafico per le scritte grandi di presentazione (classe font-hand) */
+  --color-ochre: #c08430;
+  --color-olive: #74803a;
+  --color-leaf: #3e7a4e;
+  --color-sun: #dfb43c;
+  /* Font "caratteristico" (quello grande della home) applicato a tutti i titoli */
+  --font-serif: 'Beth Ellen', 'Cormorant Variable', ui-serif, Georgia, serif;
   --font-hand: 'Beth Ellen', 'Cormorant Variable', cursive;
+}
+
+/* Texture di carta ruvida bianca, generata (nessuna immagine da scaricare) */
+:root {
+  --paper-relief: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22300%22%20height%3D%22300%22%3E%3Cfilter%20id%3D%22p%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.045%22%20numOctaves%3D%225%22%20seed%3D%227%22%20stitchTiles%3D%22stitch%22%20result%3D%22n%22%2F%3E%3CfeDiffuseLighting%20in%3D%22n%22%20lighting-color%3D%22%23ffffff%22%20surfaceScale%3D%221.4%22%20diffuseConstant%3D%221.05%22%20result%3D%22l%22%3E%3CfeDistantLight%20azimuth%3D%2255%22%20elevation%3D%2260%22%2F%3E%3C%2FfeDiffuseLighting%3E%3CfeColorMatrix%20in%3D%22l%22%20type%3D%22matrix%22%20values%3D%220%200%200%200%201%20%200%200%200%200%201%20%200%200%200%200%201%20%200.34%200.34%200.34%200%200%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22300%22%20height%3D%22300%22%20filter%3D%22url%28%23p%29%22%2F%3E%3C%2Fsvg%3E");
+  --paper-grain: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22220%22%20height%3D%22220%22%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%220.9%22%20numOctaves%3D%222%22%20stitchTiles%3D%22stitch%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Crect%20width%3D%22220%22%20height%3D%22220%22%20filter%3D%22url%28%23g%29%22%2F%3E%3C%2Fsvg%3E");
 }
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
-  background-color: var(--color-paper);
   color: var(--color-ink);
+  background-color: var(--color-paper);
+  background-image: var(--paper-relief), var(--paper-grain);
+  background-size: 300px 300px, 220px 220px;
+  background-attachment: fixed, fixed;
+  background-blend-mode: multiply, overlay;
   font-feature-settings: 'kern' 1, 'liga' 1;
-}
-
-/* Grana di carta su tutto il sito: rumore SVG procedurale (nessuna immagine
-   da scaricare) sovrapposto in trasparenza, come un foglio fotografato da
-   vicino. Sta sotto PhotoSwipe (z 100), così lo zoom delle opere resta pulito.
-   Per usare una foto vera di carta: sostituire background-image con
-   url('/textures/carta.jpg') resa "seamless" e alzare leggermente l'opacità. */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  pointer-events: none;
-  opacity: 0.05;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
-  background-size: 280px 280px;
 }
 
 ::selection {
@@ -48,19 +42,52 @@ body::before {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-ink);
+  outline: 2px solid var(--color-accent);
   outline-offset: 3px;
 }
 
-/* PhotoSwipe must sit above the sticky header */
-.pswp {
-  z-index: 100;
+/* Bottoni materici, ispirati alla carta: colore + grana in soft-light */
+.paper-btn,
+.paper-btn-outline {
+  cursor: pointer;
+  background-image: var(--paper-grain);
+  background-size: 180px 180px;
+  background-blend-mode: soft-light;
+  border-radius: 2px;
+  transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+}
+.paper-btn {
+  background-color: var(--color-accent);
+  color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 6px rgba(42, 38, 34, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+.paper-btn:hover { background-color: #741f36; }
+.paper-btn:active { transform: translateY(1px); }
+.paper-btn-outline {
+  background-color: color-mix(in srgb, var(--color-paper) 70%, transparent);
+  color: var(--color-ink);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 30%, transparent);
+}
+.paper-btn-outline:hover { border-color: var(--color-ink); background-color: var(--color-paper); }
+
+/* La finestra (dialog) su fondo carta */
+dialog.paper-panel {
+  margin: auto;
+}
+.paper-panel {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
+  border-radius: 3px;
+  background-color: var(--color-paper);
+  background-image: var(--paper-relief), var(--paper-grain);
+  background-size: 300px 300px, 220px 220px;
+  background-blend-mode: multiply, overlay;
+  box-shadow: 0 20px 60px rgba(42, 38, 34, 0.3);
+  color: var(--color-ink);
 }
 
-/* La hero è larga 100vw: evita lo scroll orizzontale da scrollbar */
-html {
-  overflow-x: clip;
-}
+/* PhotoSwipe deve stare sopra tutto */
+.pswp { z-index: 100; }
 
 /* Animazioni d'ingresso della hero (HeroSpotlight.astro) */
 @keyframes heroReveal {

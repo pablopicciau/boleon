@@ -31,11 +31,10 @@ const t = useTranslations(locale);
 const available = isBaseAvailable(artwork);
 const max = maxQty(artwork);
 const isPrint = artwork.data.kind === 'print';
+const displayTitle = pickLocalized(artwork.data.titles, locale) || artwork.data.title;
 const inquiryOnly = isInquiryOnly(artwork);
-const inquiryDefaultMessage = t('inquiry.defaultMessage', { title: artwork.data.title });
-const inquiryMailto = settings.contactEmail
-  ? `mailto:${settings.contactEmail}?subject=${encodeURIComponent(artwork.data.title)}&body=${encodeURIComponent(inquiryDefaultMessage)}`
-  : null;
+const inquiryOriginalMessage = t('inquiry.defaultMessage', { title: displayTitle });
+const inquiryInfoMessage = t('inquiry.infoMessage', { title: displayTitle });
 const description = pickLocalized(artwork.data.descriptions, locale);
 const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
 const printSizes = availablePrintSizes(artwork);
@@ -43,9 +42,6 @@ const printMaterials = pickLocalized(
   (settings as { printMaterials?: Record<string, string | null> }).printMaterials,
   locale
 );
-const askInfoHref = settings.contactEmail
-  ? `mailto:${settings.contactEmail}?subject=${encodeURIComponent(`${artwork.data.title} — ${t('artwork.askInfo')}`)}`
-  : null;
 
 // "N° 2 · C. Notturni": numero dell'opera nella sua prima collezione
 const firstCollection = artwork.data.collections[0];
@@ -72,7 +68,7 @@ const entries = catalogEntries(artwork);
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'VisualArtwork',
-  name: artwork.data.title,
+  name: displayTitle,
   url: canonical.href,
   image: artwork.data.images.map((img) => new URL(img.src, site).href),
   ...(description ? { description } : {}),
@@ -86,8 +82,8 @@ const schema = {
         '@type': 'Offer',
         name:
           e.variant.kind === 'print'
-            ? `${artwork.data.title} — fine art print ${e.variant.size}`
-            : artwork.data.title,
+            ? `${displayTitle} — fine art print ${e.variant.size}`
+            : displayTitle,
         price: e.price,
         priceCurrency: 'EUR',
         availability: 'https://schema.org/InStock',
@@ -105,7 +101,7 @@ const schema = {
 
 <Base
   locale={locale}
-  title={artwork.data.title}
+  title={displayTitle}
   description={description}
   ogImage={cover.src}
   ogType="product"
@@ -147,7 +143,7 @@ const schema = {
     </div>
 
     <div class="lg:col-span-2">
-      <h1 class="font-serif text-3xl leading-tight sm:text-4xl">{artwork.data.title}</h1>
+      <h1 class="font-serif text-3xl leading-tight sm:text-4xl">{displayTitle}</h1>
       {collectionLine && <p class="mt-2 text-sm tracking-wide opacity-70">{collectionLine}</p>}
       <p class="mt-2 text-sm tracking-widest uppercase opacity-60">
         {isPrint ? t('artwork.print') : t('artwork.original')}
@@ -186,63 +182,18 @@ const schema = {
 
       {
         inquiryOnly ? (
-          <div class="mt-8 rounded-sm border border-accent/25 bg-accent/5 p-5 sm:p-6">
+          <div class="mt-8">
             <p class="text-xs font-semibold tracking-[0.25em] text-accent uppercase">
               {t('artwork.originalOnRequest')}
             </p>
-            <h2 class="mt-2 font-serif text-2xl">{t('inquiry.title')}</h2>
-            <p class="mt-1 text-sm opacity-70">{t('inquiry.intro')}</p>
-            <form
-              data-inquiry-form
-              data-artwork={artwork.data.title}
-              data-label-send={t('inquiry.send')}
-              data-label-sending={t('inquiry.sending')}
-              data-label-sent={t('inquiry.sent')}
-              data-label-error={t('inquiry.error')}
-              class="mt-4 flex flex-col gap-3"
+            <button
+              type="button"
+              data-open-inquiry
+              data-inq-type="original"
+              class="paper-btn mt-3 w-full px-8 py-4 text-sm tracking-widest text-white uppercase"
             >
-              <input
-                data-inq-name
-                name="name"
-                required
-                autocomplete="name"
-                placeholder={t('inquiry.name')}
-                class="border border-neutral-300 bg-white px-3 py-2.5 text-sm"
-              />
-              <input
-                data-inq-email
-                name="email"
-                type="email"
-                required
-                autocomplete="email"
-                placeholder={t('inquiry.email')}
-                class="border border-neutral-300 bg-white px-3 py-2.5 text-sm"
-              />
-              <textarea
-                data-inq-message
-                name="message"
-                required
-                rows="4"
-                class="border border-neutral-300 bg-white px-3 py-2.5 text-sm"
-              >{inquiryDefaultMessage}</textarea>
-              <button
-                type="submit"
-                data-inq-send
-                class="cursor-pointer bg-accent px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#6f1f33] disabled:cursor-wait disabled:opacity-50"
-              >
-                {t('inquiry.send')}
-              </button>
-              <p data-inq-status class="hidden text-sm"></p>
-              {inquiryMailto && (
-                <a
-                  data-inq-fallback
-                  href={inquiryMailto}
-                  class="hidden text-sm underline underline-offset-4 opacity-70 hover:opacity-100"
-                >
-                  {t('inquiry.fallback')}
-                </a>
-              )}
-            </form>
+              {t('artwork.requestOriginal')}
+            </button>
           </div>
         ) : (
           <div class="mt-8">
@@ -350,13 +301,15 @@ const schema = {
       }
 
       {
-        askInfoHref && (
-          <a
-            href={askInfoHref}
-            class="mt-8 inline-flex items-center gap-2 text-xs tracking-widest uppercase opacity-60 underline-offset-4 transition hover:opacity-100 hover:underline"
+        settings.contactEmail && (
+          <button
+            type="button"
+            data-open-inquiry
+            data-inq-type="info"
+            class="paper-btn-outline mt-8 inline-flex items-center gap-2 px-6 py-3 text-xs tracking-widest uppercase"
           >
-            ✉ {t('artwork.askInfo')}
-          </a>
+            {t('artwork.askInfo')}
+          </button>
         )
       }
 
@@ -372,6 +325,82 @@ const schema = {
       }
     </div>
   </div>
+
+  {/* Finestra (modale) per richiesta originale / informazioni */}
+  <dialog
+    data-inquiry-modal
+    class="paper-panel w-[min(30rem,92vw)] p-0 backdrop:bg-ink/40 backdrop:backdrop-blur-sm"
+  >
+    <form
+      data-inquiry-form
+      data-artwork={displayTitle}
+      data-email={settings.contactEmail ?? ''}
+      data-title-original={t('inquiry.title')}
+      data-title-info={t('artwork.askInfo')}
+      data-intro={t('inquiry.intro')}
+      data-msg-original={inquiryOriginalMessage}
+      data-msg-info={inquiryInfoMessage}
+      data-subject-original="Richiesta originale"
+      data-subject-info="Richiesta informazioni"
+      data-label-send={t('inquiry.send')}
+      data-label-sending={t('inquiry.sending')}
+      data-label-sent={t('inquiry.sent')}
+      data-label-error={t('inquiry.error')}
+      class="flex flex-col gap-3 p-6 sm:p-8"
+    >
+      <div class="flex items-start justify-between gap-4">
+        <h2 data-inq-title class="font-serif text-2xl leading-tight"></h2>
+        <button
+          type="button"
+          data-inq-close
+          aria-label="×"
+          class="-mt-1 shrink-0 text-2xl leading-none opacity-50 transition hover:opacity-100"
+        >
+          ×
+        </button>
+      </div>
+      <p data-inq-intro class="text-sm opacity-70"></p>
+      <input
+        data-inq-name
+        name="name"
+        required
+        autocomplete="name"
+        placeholder={t('inquiry.name')}
+        class="border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"
+      />
+      <input
+        data-inq-email
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder={t('inquiry.email')}
+        class="border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"
+      />
+      <textarea
+        data-inq-message
+        name="message"
+        required
+        rows="4"
+        class="border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"
+      ></textarea>
+      <button
+        type="submit"
+        data-inq-send
+        class="paper-btn px-8 py-3 text-sm tracking-widest text-white uppercase disabled:cursor-wait disabled:opacity-50"
+      >
+        {t('inquiry.send')}
+      </button>
+      <p data-inq-status class="hidden text-sm"></p>
+      <a
+        data-inq-fallback
+        href="#"
+        class="hidden text-sm underline underline-offset-4 opacity-70 hover:opacity-100"
+      >
+        {t('inquiry.fallback')}
+      </a>
+    </form>
+  </dialog>
 </Base>
 
 <script>
@@ -436,31 +465,75 @@ const schema = {
     });
   }
 
-  // Modulo "richiedi informazioni" sull'originale: invia via /api/inquiry.
-  const inquiryForm = document.querySelector<HTMLFormElement>('[data-inquiry-form]');
-  if (inquiryForm) {
+  // Finestra "richiesta originale / informazioni": apertura, precompilazione, invio.
+  const modal = document.querySelector<HTMLDialogElement>('[data-inquiry-modal]');
+  const inquiryForm = modal?.querySelector<HTMLFormElement>('[data-inquiry-form]');
+  if (modal && inquiryForm) {
+    const titleEl = inquiryForm.querySelector<HTMLElement>('[data-inq-title]')!;
+    const introEl = inquiryForm.querySelector<HTMLElement>('[data-inq-intro]')!;
+    const nameEl = inquiryForm.querySelector<HTMLInputElement>('[data-inq-name]')!;
+    const emailEl = inquiryForm.querySelector<HTMLInputElement>('[data-inq-email]')!;
+    const messageEl = inquiryForm.querySelector<HTMLTextAreaElement>('[data-inq-message]')!;
     const sendBtn = inquiryForm.querySelector<HTMLButtonElement>('[data-inq-send]')!;
     const status = inquiryForm.querySelector<HTMLElement>('[data-inq-status]')!;
-    const fallback = inquiryForm.querySelector<HTMLElement>('[data-inq-fallback]');
+    const fallback = inquiryForm.querySelector<HTMLAnchorElement>('[data-inq-fallback]');
+    let type: 'original' | 'info' = 'original';
+
+    function resetView() {
+      inquiryForm!
+        .querySelectorAll('[data-inq-name], [data-inq-email], [data-inq-message], [data-inq-send]')
+        .forEach((el) => (el as HTMLElement).classList.remove('hidden'));
+      status.classList.add('hidden');
+      fallback?.classList.add('hidden');
+      sendBtn.disabled = false;
+      sendBtn.textContent = inquiryForm!.dataset.labelSend!;
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('[data-open-inquiry]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        type = btn.dataset.inqType === 'info' ? 'info' : 'original';
+        titleEl.textContent =
+          type === 'info' ? inquiryForm.dataset.titleInfo! : inquiryForm.dataset.titleOriginal!;
+        introEl.textContent = inquiryForm.dataset.intro!;
+        messageEl.value =
+          type === 'info' ? inquiryForm.dataset.msgInfo! : inquiryForm.dataset.msgOriginal!;
+        resetView();
+        modal.showModal();
+      });
+    });
+
+    inquiryForm.querySelector('[data-inq-close]')!.addEventListener('click', () => modal.close());
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.close();
+    });
+
     inquiryForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = inquiryForm.querySelector<HTMLInputElement>('[data-inq-name]')!.value.trim();
-      const email = inquiryForm.querySelector<HTMLInputElement>('[data-inq-email]')!.value.trim();
-      const message = inquiryForm.querySelector<HTMLTextAreaElement>('[data-inq-message]')!.value.trim();
+      const name = nameEl.value.trim();
+      const email = emailEl.value.trim();
+      const message = messageEl.value.trim();
       if (!name || !email || !message) return;
       sendBtn.disabled = true;
       sendBtn.textContent = inquiryForm.dataset.labelSending!;
       status.classList.add('hidden');
+      fallback?.classList.add('hidden');
       try {
         const res = await fetch('/api/inquiry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, message, artwork: inquiryForm.dataset.artwork, url: location.href }),
+          body: JSON.stringify({
+            type,
+            name,
+            email,
+            message,
+            artwork: inquiryForm.dataset.artwork,
+            url: location.href,
+          }),
         });
         if (res.ok) {
-          inquiryForm.querySelectorAll('input, textarea, [data-inq-send]').forEach((el) =>
-            (el as HTMLElement).classList.add('hidden')
-          );
+          inquiryForm
+            .querySelectorAll('[data-inq-name], [data-inq-email], [data-inq-message], [data-inq-send]')
+            .forEach((el) => (el as HTMLElement).classList.add('hidden'));
           status.textContent = inquiryForm.dataset.labelSent!;
           status.className = 'text-sm text-olive';
           status.classList.remove('hidden');
@@ -471,7 +544,16 @@ const schema = {
         status.textContent = inquiryForm.dataset.labelError!;
         status.className = 'text-sm text-accent';
         status.classList.remove('hidden');
-        fallback?.classList.remove('hidden');
+        // Fallback: apre il client email verso l'artista, oggetto per tipo + email cliente
+        const artworkTitle = inquiryForm.dataset.artwork ?? '';
+        const kind =
+          type === 'info' ? inquiryForm.dataset.subjectInfo! : inquiryForm.dataset.subjectOriginal!;
+        const subject = [kind, artworkTitle, email].filter(Boolean).join(' — ');
+        const to = inquiryForm.dataset.email;
+        if (fallback && to) {
+          fallback.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+          fallback.classList.remove('hidden');
+        }
         sendBtn.disabled = false;
         sendBtn.textContent = inquiryForm.dataset.labelSend!;
       }

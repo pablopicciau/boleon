@@ -4,7 +4,6 @@ import '@fontsource/beth-ellen';
 import '../styles/global.css';
 import settings from '../lib/settings';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
-import PaintAccents from '../components/PaintAccents.astro';
 import {
   defaultLocale,
   localeMeta,
@@ -112,12 +111,11 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
     </script>
   </head>
   <body class="relative flex min-h-screen flex-col antialiased">
-    <PaintAccents />
-    <header class="sticky top-0 z-40 border-b border-neutral-200 bg-paper/90 backdrop-blur">
-      <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-5">
+    <header class="sticky top-0 z-40 border-b border-neutral-300/50 bg-paper/85 backdrop-blur">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
         <a
           href={localizePath(locale, '/')}
-          class="font-serif text-2xl font-semibold tracking-[0.35em] uppercase"
+          class="font-serif text-4xl leading-none"
         >
           {settings.artistName}
         </a>
