@@ -13,11 +13,16 @@ export function availablePrintSizes(artwork: Artwork): PrintSize[] {
   return (artwork.data.printSizes ?? []).filter((p) => (p.stock ?? 0) > 0);
 }
 
-/** Il pezzo base (originale o edizione legacy) è acquistabile? */
+/** Il pezzo base (originale o edizione legacy) è acquistabile online? */
 export function isBaseAvailable(artwork: Artwork): boolean {
   return artwork.data.kind === 'original'
-    ? !artwork.data.sold
+    ? !artwork.data.sold && !artwork.data.originalInquiryOnly && artwork.data.price != null
     : (artwork.data.stock ?? 0) > 0;
+}
+
+/** L'originale è un pezzo unico offerto solo su richiesta (non acquistabile online)? */
+export function isInquiryOnly(artwork: Artwork): boolean {
+  return artwork.data.kind === 'original' && artwork.data.originalInquiryOnly && !artwork.data.sold;
 }
 
 /** L'opera ha almeno qualcosa di acquistabile (originale o una stampa)? */
@@ -33,7 +38,7 @@ export function maxQty(artwork: Artwork): number {
 /** Prezzo minimo tra le opzioni disponibili (per la card "da …"). */
 export function minPrice(artwork: Artwork): number | null {
   const prices: number[] = [];
-  if (isBaseAvailable(artwork)) prices.push(artwork.data.price);
+  if (isBaseAvailable(artwork) && artwork.data.price != null) prices.push(artwork.data.price);
   for (const p of availablePrintSizes(artwork)) prices.push(p.price);
   return prices.length ? Math.min(...prices) : null;
 }
@@ -63,7 +68,7 @@ export function catalogEntries(artwork: Artwork): CatalogEntry[] {
       slug: artwork.id,
       title: artwork.data.title,
       variant: { kind: 'base' },
-      price: artwork.data.price,
+      price: artwork.data.price ?? 0,
       max: Math.min(maxQty(artwork), 10),
     });
   }

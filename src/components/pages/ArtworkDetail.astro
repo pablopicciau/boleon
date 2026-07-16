@@ -8,6 +8,7 @@ import {
   catalogEntries,
   collectionNumber,
   isBaseAvailable,
+  isInquiryOnly,
   maxQty,
   PRINT_ID_SEPARATOR,
   type Artwork,
@@ -30,6 +31,11 @@ const t = useTranslations(locale);
 const available = isBaseAvailable(artwork);
 const max = maxQty(artwork);
 const isPrint = artwork.data.kind === 'print';
+const inquiryOnly = isInquiryOnly(artwork);
+const inquiryDefaultMessage = t('inquiry.defaultMessage', { title: artwork.data.title });
+const inquiryMailto = settings.contactEmail
+  ? `mailto:${settings.contactEmail}?subject=${encodeURIComponent(artwork.data.title)}&body=${encodeURIComponent(inquiryDefaultMessage)}`
+  : null;
 const description = pickLocalized(artwork.data.descriptions, locale);
 const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
 const printSizes = availablePrintSizes(artwork);
@@ -178,48 +184,106 @@ const schema = {
         }
       </dl>
 
-      <div class="mt-8">
-        <p class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
-          {t('artwork.original')}
-        </p>
-        <p class="mt-2 font-serif text-4xl text-accent">
-          {available ? formatPrice(artwork.data.price, locale) : unavailableLabel}
-        </p>
-
-        {
-          available ? (
-            <div class="mt-5 flex flex-wrap items-center gap-4">
-              {isPrint && max > 1 && (
-                <label class="flex items-center gap-2 text-sm">
-                  <span class="opacity-60">{t('artwork.quantity')}</span>
-                  <select
-                    data-qty-input
-                    class="border border-neutral-300 bg-white px-3 py-2.5"
-                  >
-                    {Array.from({ length: Math.min(max, 10) }, (_, i) => (
-                      <option value={i + 1}>{i + 1}</option>
-                    ))}
-                  </select>
-                </label>
-              )}
-              <button
-                data-add-to-cart
-                data-slug={artwork.id}
-                data-max={max}
-                data-label={isPrint ? t('artwork.addToCart') : t('artwork.buyOriginal')}
-                data-added-label={t('artwork.addedToCart')}
-                class="cursor-pointer bg-accent px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#6f1f33]"
-              >
-                {isPrint ? t('artwork.addToCart') : t('artwork.buyOriginal')}
-              </button>
-            </div>
-          ) : (
-            <p class="mt-4 inline-block bg-neutral-200 px-4 py-2 text-xs tracking-widest uppercase">
-              {unavailableLabel}
+      {
+        inquiryOnly ? (
+          <div class="mt-8 rounded-sm border border-accent/25 bg-accent/5 p-5 sm:p-6">
+            <p class="text-xs font-semibold tracking-[0.25em] text-accent uppercase">
+              {t('artwork.originalOnRequest')}
             </p>
-          )
-        }
-      </div>
+            <h2 class="mt-2 font-serif text-2xl">{t('inquiry.title')}</h2>
+            <p class="mt-1 text-sm opacity-70">{t('inquiry.intro')}</p>
+            <form
+              data-inquiry-form
+              data-artwork={artwork.data.title}
+              data-label-send={t('inquiry.send')}
+              data-label-sending={t('inquiry.sending')}
+              data-label-sent={t('inquiry.sent')}
+              data-label-error={t('inquiry.error')}
+              class="mt-4 flex flex-col gap-3"
+            >
+              <input
+                data-inq-name
+                name="name"
+                required
+                autocomplete="name"
+                placeholder={t('inquiry.name')}
+                class="border border-neutral-300 bg-white px-3 py-2.5 text-sm"
+              />
+              <input
+                data-inq-email
+                name="email"
+                type="email"
+                required
+                autocomplete="email"
+                placeholder={t('inquiry.email')}
+                class="border border-neutral-300 bg-white px-3 py-2.5 text-sm"
+              />
+              <textarea
+                data-inq-message
+                name="message"
+                required
+                rows="4"
+                class="border border-neutral-300 bg-white px-3 py-2.5 text-sm"
+              >{inquiryDefaultMessage}</textarea>
+              <button
+                type="submit"
+                data-inq-send
+                class="cursor-pointer bg-accent px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#6f1f33] disabled:cursor-wait disabled:opacity-50"
+              >
+                {t('inquiry.send')}
+              </button>
+              <p data-inq-status class="hidden text-sm"></p>
+              {inquiryMailto && (
+                <a
+                  data-inq-fallback
+                  href={inquiryMailto}
+                  class="hidden text-sm underline underline-offset-4 opacity-70 hover:opacity-100"
+                >
+                  {t('inquiry.fallback')}
+                </a>
+              )}
+            </form>
+          </div>
+        ) : (
+          <div class="mt-8">
+            <p class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
+              {t('artwork.original')}
+            </p>
+            <p class="mt-2 font-serif text-4xl text-accent">
+              {available ? formatPrice(artwork.data.price ?? 0, locale) : unavailableLabel}
+            </p>
+
+            {available ? (
+              <div class="mt-5 flex flex-wrap items-center gap-4">
+                {isPrint && max > 1 && (
+                  <label class="flex items-center gap-2 text-sm">
+                    <span class="opacity-60">{t('artwork.quantity')}</span>
+                    <select data-qty-input class="border border-neutral-300 bg-white px-3 py-2.5">
+                      {Array.from({ length: Math.min(max, 10) }, (_, i) => (
+                        <option value={i + 1}>{i + 1}</option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+                <button
+                  data-add-to-cart
+                  data-slug={artwork.id}
+                  data-max={max}
+                  data-label={isPrint ? t('artwork.addToCart') : t('artwork.buyOriginal')}
+                  data-added-label={t('artwork.addedToCart')}
+                  class="cursor-pointer bg-accent px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#6f1f33]"
+                >
+                  {isPrint ? t('artwork.addToCart') : t('artwork.buyOriginal')}
+                </button>
+              </div>
+            ) : (
+              <p class="mt-4 inline-block bg-neutral-200 px-4 py-2 text-xs tracking-widest uppercase">
+                {unavailableLabel}
+              </p>
+            )}
+          </div>
+        )
+      }
 
       {
         printSizes.length > 0 && (
@@ -369,6 +433,48 @@ const schema = {
       setTimeout(() => {
         printBtn.textContent = printBtn.dataset.label!;
       }, 1800);
+    });
+  }
+
+  // Modulo "richiedi informazioni" sull'originale: invia via /api/inquiry.
+  const inquiryForm = document.querySelector<HTMLFormElement>('[data-inquiry-form]');
+  if (inquiryForm) {
+    const sendBtn = inquiryForm.querySelector<HTMLButtonElement>('[data-inq-send]')!;
+    const status = inquiryForm.querySelector<HTMLElement>('[data-inq-status]')!;
+    const fallback = inquiryForm.querySelector<HTMLElement>('[data-inq-fallback]');
+    inquiryForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = inquiryForm.querySelector<HTMLInputElement>('[data-inq-name]')!.value.trim();
+      const email = inquiryForm.querySelector<HTMLInputElement>('[data-inq-email]')!.value.trim();
+      const message = inquiryForm.querySelector<HTMLTextAreaElement>('[data-inq-message]')!.value.trim();
+      if (!name || !email || !message) return;
+      sendBtn.disabled = true;
+      sendBtn.textContent = inquiryForm.dataset.labelSending!;
+      status.classList.add('hidden');
+      try {
+        const res = await fetch('/api/inquiry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message, artwork: inquiryForm.dataset.artwork, url: location.href }),
+        });
+        if (res.ok) {
+          inquiryForm.querySelectorAll('input, textarea, [data-inq-send]').forEach((el) =>
+            (el as HTMLElement).classList.add('hidden')
+          );
+          status.textContent = inquiryForm.dataset.labelSent!;
+          status.className = 'text-sm text-olive';
+          status.classList.remove('hidden');
+        } else {
+          throw new Error(String(res.status));
+        }
+      } catch {
+        status.textContent = inquiryForm.dataset.labelError!;
+        status.className = 'text-sm text-accent';
+        status.classList.remove('hidden');
+        fallback?.classList.remove('hidden');
+        sendBtn.disabled = false;
+        sendBtn.textContent = inquiryForm.dataset.labelSend!;
+      }
     });
   }
 </script>

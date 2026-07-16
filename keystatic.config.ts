@@ -54,9 +54,17 @@ export default config({
           ],
           defaultValue: 'original',
         }),
+        originalInquiryOnly: fields.checkbox({
+          label: 'Originale solo su richiesta',
+          description:
+            'Consigliato per gli originali: il pezzo unico non si compra online, ma il visitatore può inviarti un’email dal sito per informazioni. Le stampe qui sotto restano acquistabili.',
+          defaultValue: true,
+        }),
         price: fields.number({
-          label: 'Prezzo (EUR)',
-          validation: { isRequired: true, min: 0 },
+          label: 'Prezzo originale (EUR)',
+          description:
+            'Solo se l’originale è acquistabile online (cioè "solo su richiesta" è disattivato). Altrimenti lascia vuoto.',
+          validation: { min: 0 },
         }),
         sold: fields.checkbox({
           label: 'Venduta',

@@ -1,0 +1,56 @@
+{
+  "title": "Night Sea Shooting Star",
+  "year": 2026,
+  "technique": "Acquerello e tecnica mista su carta",
+  "dimensions": "",
+  "kind": "original",
+  "originalInquiryOnly": true,
+  "price": null,
+  "sold": false,
+  "editionSize": null,
+  "stock": null,
+  "showAvailability": false,
+  "featured": true,
+  "bestseller": true,
+  "collections": [
+    "shades-n-2"
+  ],
+  "collectionNumber": null,
+  "sortOrder": 2,
+  "images": [
+    "../../assets/artworks/night-sea-shooting-star/cover.jpg"
+  ],
+  "descriptions": {},
+  "printSizes": [
+    {
+      "size": "A4 · 21 × 29,7 cm",
+      "price": 45,
+      "stock": 50,
+      "editionSize": null
+    },
+    {
+      "size": "A3 · 29,7 × 42 cm",
+      "price": 75,
+      "stock": 50,
+      "editionSize": null
+    },
+    {
+      "size": "A2 · 42 × 59,4 cm",
+      "price": 120,
+      "stock": 50,
+      "editionSize": null
+    },
+    {
+      "size": "A1 · 59,4 × 84,1 cm",
+      "price": 195,
+      "stock": 40,
+      "editionSize": null
+    },
+    {
+      "size": "A0 · 84,1 × 118,9 cm",
+      "price": 330,
+      "stock": 25,
+      "editionSize": null
+    }
+  ]
+}

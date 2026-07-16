@@ -22,7 +22,9 @@ const artworks = defineCollection({
       technique: z.string().default(''),
       dimensions: z.string().default(''),
       kind: z.enum(['original', 'print']),
-      price: z.number(),
+      price: z.number().nullable().optional(),
+      // Originale non acquistabile online: mostra solo il modulo "richiedi informazioni"
+      originalInquiryOnly: z.boolean().default(false),
       sold: z.boolean().default(false),
       editionSize: z.number().nullable().optional(),
       stock: z.number().nullable().optional(),

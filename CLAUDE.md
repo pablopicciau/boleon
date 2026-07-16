@@ -7,7 +7,9 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 ## Stato attuale
 
 - Sito **ONLINE su https://boleon.it** (e www) dal 2026-07-03: Worker Cloudflare con custom domain, verificato HTTP 200. Anche `boleon-art.boleon.it` è collegato.
-- In catalogo ci sono **2 opere reali** ("Senza titolo I/II", acquerelli inviati in chat il 2026-07-16) con **dati provvisori** (titolo, prezzo 400 €, tecnica, anno: in attesa di titolo/collezione/N°/prezzo veri dall'utente). Gli 8 segnaposto SVG sono stati eliminati. Le altre 5 foto reali restano in `src/assets/quadri/` in attesa di essere catalogate.
+- In catalogo ci sono **2 opere reali**: "Sea Drop" (collezione Shades n.1) e "Night Sea Shooting Star" (collezione Shades n.2), acquerelli inviati in chat il 2026-07-16. Originale **solo su richiesta** (non acquistabile online), stampe A4→A0. Le altre 5 foto reali restano in `src/assets/quadri/` in attesa di essere catalogate.
+- **Originale su richiesta** (`originalInquiryOnly`, default acceso in Keystatic): il pezzo unico non si compra online; la pagina opera mostra un modulo "Richiedi informazioni" che invia un'email all'artista via `src/pages/api/inquiry.ts` (Resend, reply-to = email del visitatore; fallback mailto se Resend non è configurato). Helper `isInquiryOnly` in `src/lib/artworks.ts`; `price` sull'opera è ora opzionale.
+- **Stampe standard A4→A0** (`printSizes`): prezzi = costo stampa "fatto bene" +50% (A4 45 €, A3 75 €, A2 120 €, A1 195 €, A0 330 €).
 - **Sfondi copertina dalle opere** (`useArtworkImages` in site-cover.json, checkbox in Keystatic → Sfondi della copertina): se attivo (default ora) la hero ruota a caso tra le copertine delle opere in catalogo; se spento usa la lista manuale `heroImages`.
 - Campo **`collectionNumber`** sull'opera: numero manuale mostrato come "N° …"; vuoto = calcolato dall'ordinamento nella collezione.
 - **Stripe in configurazione**: l'utente ha le chiavi TEST (sk_test/pk_test). La secret key va SOLO nelle variabili runtime di Cloudflare (Settings → Variables and Secrets, tipo Secret, nome `STRIPE_SECRET_KEY`) — mai nel repo. Webhook + Resend ancora da configurare.
