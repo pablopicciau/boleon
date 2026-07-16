@@ -4,6 +4,7 @@ export const ar: Dict = {
   'nav.works': 'الأعمال',
   'nav.cart': 'سلة التسوق',
   'nav.contact': 'تواصل',
+  'nav.artist': 'الفنان',
   'nav.gallery': 'المعرض',
   'gallery.bestSellers': 'الأكثر مبيعًا',
   'gallery.empty': 'لا توجد أعمال في هذه المجموعة بعد.',

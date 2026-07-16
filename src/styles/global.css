@@ -28,11 +28,15 @@ html {
 
 body {
   color: var(--color-ink);
+  /* Carta ruvida bianca ravvicinata (public/textures/carta.webp) + velo chiaro
+     per tenerla luminosa: il rilievo resta, il fondo rimane bianco carta. */
   background-color: var(--color-paper);
-  background-image: var(--paper-relief), var(--paper-grain);
-  background-size: 300px 300px, 220px 220px;
+  background-image:
+    linear-gradient(rgba(250, 247, 240, 0.45), rgba(250, 247, 240, 0.45)),
+    url('/textures/carta.webp');
+  background-size: auto, 512px 512px;
   background-attachment: fixed, fixed;
-  background-blend-mode: multiply, overlay;
+  background-blend-mode: normal, multiply;
   font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
@@ -79,9 +83,9 @@ dialog.paper-panel {
   border: 1px solid color-mix(in srgb, var(--color-ink) 18%, transparent);
   border-radius: 3px;
   background-color: var(--color-paper);
-  background-image: var(--paper-relief), var(--paper-grain);
-  background-size: 300px 300px, 220px 220px;
-  background-blend-mode: multiply, overlay;
+  background-image: url('/textures/carta.webp');
+  background-size: 512px 512px;
+  background-blend-mode: multiply;
   box-shadow: 0 20px 60px rgba(42, 38, 34, 0.3);
   color: var(--color-ink);
 }

@@ -17,7 +17,6 @@ interface Props {
 const { locale, images } = Astro.props;
 const t = useTranslations(locale);
 const tagline = pickLocalized(settings.taglines, locale);
-const bio = pickLocalized(settings.bios, locale);
 
 const optimized = await Promise.all(images.map((img) => getImage({ src: img, width: 1600 })));
 const urls = optimized.map((o) => o.src);
@@ -94,14 +93,6 @@ const initialMask =
       }
     </h1>
   </div>
-
-  {
-    bio && (
-      <div class="hero-anim hero-fade absolute bottom-14 start-10 z-50 hidden max-w-[280px] sm:block" style="animation-delay: 0.7s;">
-        <p class="text-sm leading-relaxed text-ink/70">{bio}</p>
-      </div>
-    )
-  }
 
   <div
     class="hero-anim hero-fade absolute start-5 end-5 bottom-10 z-50 flex max-w-full flex-col items-start gap-4 sm:start-auto sm:end-10 sm:bottom-24 sm:max-w-[280px]"

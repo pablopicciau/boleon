@@ -133,6 +133,12 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
             {t('nav.gallery')}
           </a>
           <a
+            href={localizePath(locale, '/artista')}
+            class="hidden text-xs tracking-widest uppercase opacity-70 transition hover:opacity-100 sm:block"
+          >
+            {t('nav.artist')}
+          </a>
+          <a
             href={localizePath(locale, '/contatto')}
             class="hidden text-xs tracking-widest uppercase opacity-70 transition hover:opacity-100 sm:block"
           >
@@ -161,7 +167,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
       <slot />
     </main>
 
-    <footer class="relative z-10 border-t border-neutral-200 bg-paper">
+    <footer class="relative z-10 border-t border-neutral-300/50">
       <div class="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:grid-cols-3">
         <div>
           <p class="font-serif text-lg tracking-[0.3em] uppercase">{settings.artistName}</p>

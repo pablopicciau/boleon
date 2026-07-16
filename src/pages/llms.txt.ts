@@ -1,7 +1,12 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import settings from '../lib/settings';
-import { availablePrintSizes, isBaseAvailable, sortArtworks } from '../lib/artworks';
+import {
+  availablePrintSizes,
+  isBaseAvailable,
+  isInquiryOnly,
+  sortArtworks,
+} from '../lib/artworks';
 
 export const prerender = true;
 
@@ -10,6 +15,10 @@ export const prerender = true;
 export const GET: APIRoute = async ({ site }) => {
   const base = site ?? new URL('https://boleon.it');
   const artworks = sortArtworks(await getCollection('artworks'));
+  const artCollections = (await getCollection('collections')).sort(
+    (a, b) => a.data.sortOrder - b.data.sortOrder
+  );
+  const collectionName = new Map(artCollections.map((c) => [c.id, c.data.name]));
 
   const lines = artworks.map((a) => {
     const url = new URL(`/opere/${a.id}`, base).href;
@@ -17,43 +26,71 @@ export const GET: APIRoute = async ({ site }) => {
       ? a.data.kind === 'original'
         ? `original available, €${a.data.price}`
         : `available, €${a.data.price}, edition of ${a.data.editionSize}, ${a.data.stock} left`
-      : a.data.kind === 'original'
-        ? 'original sold'
-        : 'sold out';
+      : isInquiryOnly(a)
+        ? 'original: unique piece, available on request via the site contact form (not sold online)'
+        : a.data.kind === 'original'
+          ? 'original sold'
+          : 'sold out';
     const prints = availablePrintSizes(a)
-      .map((p) => `${p.size} €${p.price} (${p.stock} left)`)
+      .map((p) => `${p.size} €${p.price}`)
       .join(', ');
-    const status = prints ? `${baseStatus}; fine art prints: ${prints}` : baseStatus;
+    const status = prints
+      ? `${baseStatus}; museum-grade fine art prints (pigment giclée, signed and numbered): ${prints}`
+      : baseStatus;
     const desc = a.data.descriptions.en || a.data.descriptions.it || '';
+    const coll = a.data.collections
+      .map((c) => collectionName.get(c) ?? c)
+      .join(', ');
     const details = [
       `${a.data.year}`,
       a.data.technique,
       a.data.dimensions,
       a.data.kind === 'original' ? 'original artwork (unique piece)' : 'limited edition print',
+      coll ? `collection: ${coll}` : '',
       status,
     ]
       .filter(Boolean)
       .join(' · ');
-    return `- [${a.data.title}](${url}): ${details}${desc ? ` — ${desc}` : ''}`;
+    const title = a.data.titles?.en || a.data.title;
+    return `- [${title}](${url}): ${details}${desc ? ` — ${desc}` : ''}`;
   });
+
+  const collectionLines = artCollections.map((c) => {
+    const desc = c.data.descriptions?.en || c.data.descriptions?.it || '';
+    return `- ${c.data.names?.en || c.data.name}${desc ? `: ${desc}` : ''}`;
+  });
+
+  const story =
+    (settings as { stories?: Record<string, string | null> }).stories?.en ||
+    settings.bios.en ||
+    settings.bios.it ||
+    '';
 
   const body = `# ${settings.artistName}
 
-> ${settings.taglines.en || settings.taglines.it} — online gallery and shop of the artist ${settings.artistName}. Original artworks (unique pieces) and limited edition prints, purchasable online with worldwide shipping. Secure checkout via Stripe.
+> ${settings.taglines.en || settings.taglines.it} — online gallery and shop of the artist ${settings.artistName}, a mysterious Italian artist. Original artworks are unique pieces available on request via the site contact form; museum-grade fine art prints (pigment giclée on 100% cotton archival paper or artist canvas, signed and numbered) are purchasable online in sizes A4 to A0, with worldwide shipping and secure Stripe checkout.
 
-${settings.bios.en || settings.bios.it || ''}
+${story}
 
 The site is available in 7 languages: Italian (default, ${base.href}), English (${new URL('/en/', base).href}), Spanish (/es), French (/fr), Chinese (/zh), Hindi (/hi), Arabic (/ar).
 
 Contact: ${settings.contactEmail}
+Instagram: ${settings.instagram || '—'}
 
 ## Artworks
 
 ${lines.join('\n')}
 
+## Collections
+
+${collectionLines.join('\n')}
+
 ## Pages
 
-- [Gallery / Home](${base.href}): all artworks with prices and availability
+- [Home](${base.href}): featured artworks with prices and availability
+- [Gallery](${new URL('/galleria', base).href}): all artworks by collection (best sellers, Shades, Inspirations, Flowers)
+- [The artist](${new URL('/artista', base).href}): who Boleòn is
+- [Contact](${new URL('/contatto', base).href}): contact form for inquiries and original requests
 - [Cart](${new URL('/carrello', base).href}): shopping cart and Stripe checkout
 - [Sitemap](${new URL('/sitemap-index.xml', base).href})
 `;

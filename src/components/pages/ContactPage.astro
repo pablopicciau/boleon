@@ -9,41 +9,128 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
-const mailHref = settings.contactEmail
-  ? `mailto:${settings.contactEmail}?subject=${encodeURIComponent(settings.artistName)}`
-  : null;
 ---
 
 <Base locale={locale} title={t('contact.title')} description={t('contact.intro')}>
-  <section class="mx-auto max-w-2xl py-16 text-center sm:py-24">
-    <h1 class="font-hand text-3xl sm:text-4xl">{t('contact.title')}</h1>
-    <p class="mx-auto mt-6 max-w-prose leading-relaxed opacity-70">{t('contact.intro')}</p>
+  <section class="mx-auto max-w-xl py-14 sm:py-20">
+    <h1 class="text-center font-hand text-3xl sm:text-4xl">{t('contact.title')}</h1>
+    <p class="mx-auto mt-6 max-w-prose text-center leading-relaxed opacity-70">
+      {t('contact.intro')}
+    </p>
 
-    {
-      mailHref && (
-        <a
-          href={mailHref}
-          class="mt-10 inline-block rounded-full bg-accent px-10 py-4 text-sm font-medium tracking-widest text-white uppercase transition-all hover:scale-[1.03] hover:bg-[#6f1f33] hover:shadow-lg hover:shadow-accent/30 active:scale-95"
-        >
-          ✉ {t('contact.write')}
-        </a>
-      )
-    }
-    {settings.contactEmail && <p class="mt-5 text-sm opacity-60">{settings.contactEmail}</p>}
+    <form
+      data-contact-form
+      data-email={settings.contactEmail ?? ''}
+      data-subject="Richiesta informazioni"
+      data-label-send={t('inquiry.send')}
+      data-label-sending={t('inquiry.sending')}
+      data-label-sent={t('inquiry.sent')}
+      data-label-error={t('inquiry.error')}
+      class="paper-panel mt-10 flex flex-col gap-3 p-6 sm:p-8"
+    >
+      <input
+        data-c-name
+        name="name"
+        required
+        autocomplete="name"
+        placeholder={t('inquiry.name')}
+        class="border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"
+      />
+      <input
+        data-c-email
+        name="email"
+        type="email"
+        required
+        autocomplete="email"
+        placeholder={t('inquiry.email')}
+        class="border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"
+      />
+      <textarea
+        data-c-message
+        name="message"
+        required
+        rows="5"
+        placeholder={t('inquiry.message')}
+        class="border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"></textarea>
+      <button
+        type="submit"
+        data-c-send
+        class="paper-btn px-8 py-3 text-sm tracking-widest text-white uppercase disabled:cursor-wait disabled:opacity-50"
+      >
+        {t('inquiry.send')}
+      </button>
+      <p data-c-status class="hidden text-sm"></p>
+      <a
+        data-c-fallback
+        href="#"
+        class="hidden text-sm underline underline-offset-4 opacity-70 hover:opacity-100"
+      >
+        {t('inquiry.fallback')}
+      </a>
+    </form>
 
-    {
-      settings.instagram && (
-        <p class="mt-10">
-          <a
-            href={settings.instagram}
-            rel="noopener"
-            target="_blank"
-            class="text-xs tracking-widest uppercase opacity-60 underline-offset-4 transition hover:opacity-100 hover:underline"
-          >
-            Instagram ↗
-          </a>
-        </p>
-      )
-    }
+    <div class="mt-8 text-center">
+      {settings.contactEmail && <p class="text-sm opacity-60">{settings.contactEmail}</p>}
+      {
+        settings.instagram && (
+          <p class="mt-3">
+            <a
+              href={settings.instagram}
+              rel="noopener"
+              target="_blank"
+              class="text-xs tracking-widest uppercase opacity-60 underline-offset-4 transition hover:opacity-100 hover:underline"
+            >
+              Instagram ↗
+            </a>
+          </p>
+        )
+      }
+    </div>
   </section>
 </Base>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const sendBtn = form.querySelector<HTMLButtonElement>('[data-c-send]')!;
+    const status = form.querySelector<HTMLElement>('[data-c-status]')!;
+    const fallback = form.querySelector<HTMLAnchorElement>('[data-c-fallback]');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = form.querySelector<HTMLInputElement>('[data-c-name]')!.value.trim();
+      const email = form.querySelector<HTMLInputElement>('[data-c-email]')!.value.trim();
+      const message = form.querySelector<HTMLTextAreaElement>('[data-c-message]')!.value.trim();
+      if (!name || !email || !message) return;
+      sendBtn.disabled = true;
+      sendBtn.textContent = form.dataset.labelSending!;
+      status.classList.add('hidden');
+      fallback?.classList.add('hidden');
+      try {
+        const res = await fetch('/api/inquiry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'info', name, email, message, url: location.href }),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form
+          .querySelectorAll('input, textarea, [data-c-send]')
+          .forEach((el) => (el as HTMLElement).classList.add('hidden'));
+        status.textContent = form.dataset.labelSent!;
+        status.className = 'text-sm text-olive';
+        status.classList.remove('hidden');
+      } catch {
+        status.textContent = form.dataset.labelError!;
+        status.className = 'text-sm text-accent';
+        status.classList.remove('hidden');
+        const to = form.dataset.email;
+        if (fallback && to) {
+          const subject = [form.dataset.subject, email].filter(Boolean).join(' — ');
+          fallback.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+          fallback.classList.remove('hidden');
+        }
+        sendBtn.disabled = false;
+        sendBtn.textContent = form.dataset.labelSend!;
+      }
+    });
+  }
+</script>

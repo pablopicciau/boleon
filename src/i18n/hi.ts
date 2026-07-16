@@ -4,6 +4,7 @@ export const hi: Dict = {
   'nav.works': 'कृतियाँ',
   'nav.cart': 'कार्ट',
   'nav.contact': 'संपर्क',
+  'nav.artist': 'कलाकार',
   'nav.gallery': 'गैलरी',
   'gallery.bestSellers': 'सबसे अधिक बिकने वाली',
   'gallery.empty': 'इस संग्रह में अभी कोई कृति नहीं है।',

@@ -2,6 +2,7 @@ export const it = {
   'nav.works': 'Opere',
   'nav.cart': 'Carrello',
   'nav.contact': 'Contatti',
+  'nav.artist': 'L’artista',
   'nav.gallery': 'Galleria',
   'gallery.bestSellers': 'I più venduti',
   'gallery.empty': 'Nessuna opera in questa collezione, per ora.',

@@ -47,7 +47,11 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - **Richiesta originale / informazioni via finestra (modale)**: la pagina opera ha un tasto rosso materico "Originale su richiesta" e un tasto "Richiedi informazioni"; entrambi aprono un `<dialog>` (`.paper-panel`) col modulo, che invia a `/api/inquiry` con `type` (original/info) → oggetto email "Richiesta originale/informazioni — <opera> — <email cliente>", destinatario `boleon.art@gmail.com`, reply-to = cliente; fallback mailto se Resend non configurato.
 - **Titoli traducibili** (`titles` localized sull'opera, opzionale): `pickLocalized(titles) || title` in card/dettaglio/carrello; lo slug resta il titolo base.
 - **Storie collezioni** (`descriptions` localized sulla collezione): mostrate nella galleria quando si apre la relativa linguetta. Collezioni attuali: Shades (con Sea Drop e Night Sea Shooting Star), Ispirazioni, Fiori (queste due ancora senza opere).
-- **Estetica carta**: font "caratteristico" Beth Ellen applicato a tutti i titoli/prezzi/header (via `--font-serif`); texture di carta ruvida generata (SVG `feDiffuseLighting`+grana) su `body` e `.paper-panel`; bottoni materici `.paper-btn`/`.paper-btn-outline`. Rimosso `PaintAccents` (gli schizzi colorati).
+- **Estetica carta**: font "caratteristico" Beth Ellen su tutti i titoli/prezzi/header (via `--font-serif`); texture di carta ruvida BEN VISIBILE: tile raster `public/textures/carta.webp` (generato con sharp da SVG feTurbulence+feDiffuseLighting, rigenerabile) su `body` (con velo chiaro al 45%) e `.paper-panel`; bottoni materici `.paper-btn`/`.paper-btn-outline`. Rimosso `PaintAccents`; footer trasparente.
+- **Pagina "L'artista"** `/artista` (+ wrapper `[lang]`, corpo in `ArtistPage.astro`): storia del "misterioso artista italiano" in 7 lingue dal campo `stories` del singleton identity (Keystatic → Nome e testi); JSON-LD Person; voce "L'artista" nell'header. Bio rimossa dalla hero della home (resta nel footer).
+- **Pagina contatti col modulo**: form nome/email/messaggio che invia a `/api/inquiry` (type info, oggetto "Richiesta informazioni — email cliente"), fallback mailto. Niente più bottone mailto.
+- **Pagina opera riordinata**: prima il riquadro stampe (testo `printMaterials` promozionale in alto, 7 lingue), poi la riga compatta "Originale · pezzo unico su richiesta" con i due tasti (rosso + outline).
+- **llms.txt** arricchito: stato "available on request" per gli originali su richiesta, collezioni con storie, pagine galleria/artista/contatti, titoli inglesi.
 
 ## Comandi
 

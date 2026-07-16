@@ -198,6 +198,7 @@ export default config({
         }),
         taglines: localizedText('Tagline'),
         bios: localizedText('Breve bio', true),
+        stories: localizedText('Storia dell’artista (pagina "L’artista")', true),
       },
     }),
     cover: singleton({
