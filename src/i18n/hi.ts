@@ -7,6 +7,7 @@ export const hi: Dict = {
   'nav.gallery': 'गैलरी',
   'gallery.bestSellers': 'सबसे अधिक बिकने वाली',
   'gallery.empty': 'इस संग्रह में अभी कोई कृति नहीं है।',
+  'artwork.collectionLine': 'N° {n} · C. {name}',
   'contact.title': 'कलाकार से संपर्क करें',
   'contact.intro':
     'कृतियों की जानकारी, कस्टम कमीशन या किसी भी प्रश्न के लिए मुझे लिखें: मैं हर संदेश का व्यक्तिगत रूप से उत्तर देता हूँ।',

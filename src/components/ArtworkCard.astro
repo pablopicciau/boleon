@@ -1,7 +1,14 @@
 ---
 import { Image } from 'astro:assets';
-import { isAvailable, isBaseAvailable, minPrice, type Artwork } from '../lib/artworks';
-import { formatPrice, localizePath, useTranslations, type Locale } from '../i18n';
+import { getCollection } from 'astro:content';
+import {
+  collectionNumber,
+  isAvailable,
+  isBaseAvailable,
+  minPrice,
+  type Artwork,
+} from '../lib/artworks';
+import { formatPrice, localizePath, pickLocalized, useTranslations, type Locale } from '../i18n';
 
 interface Props {
   artwork: Artwork;
@@ -19,6 +26,24 @@ const priceLabel = isBaseAvailable(artwork)
     : t(artwork.data.kind === 'original' ? 'artwork.sold' : 'artwork.soldOut');
 const cover = artwork.data.images[0];
 const href = localizePath(locale, `/opere/${artwork.id}`);
+
+// "N° 2 · C. Notturni": numero dell'opera nella sua prima collezione
+const firstCollection = artwork.data.collections[0];
+let collectionLine: string | null = null;
+if (firstCollection) {
+  const [allArtworks, allCollections] = await Promise.all([
+    getCollection('artworks'),
+    getCollection('collections'),
+  ]);
+  const entry = allCollections.find((c) => c.id === firstCollection);
+  const n = collectionNumber(allArtworks, artwork, firstCollection);
+  if (entry && n) {
+    collectionLine = t('artwork.collectionLine', {
+      n,
+      name: pickLocalized(entry.data.names, locale) || entry.data.name,
+    });
+  }
+}
 ---
 
 <a href={href} class="group block">
@@ -43,7 +68,8 @@ const href = localizePath(locale, `/opere/${artwork.id}`);
     </h3>
     <p class="shrink-0 font-serif text-lg opacity-80">{priceLabel}</p>
   </div>
-  <p class="text-xs opacity-50">
+  {collectionLine && <p class="mt-0.5 text-xs tracking-wide opacity-60">{collectionLine}</p>}
+  <p class="mt-0.5 text-xs opacity-50">
     {artwork.data.kind === 'print' ? t('artwork.print') : t('artwork.original')}
   </p>
 </a>

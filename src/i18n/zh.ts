@@ -7,6 +7,7 @@ export const zh: Dict = {
   'nav.gallery': '画廊',
   'gallery.bestSellers': '热销作品',
   'gallery.empty': '此系列暂无作品。',
+  'artwork.collectionLine': 'N° {n} · C. {name}',
   'contact.title': '联系艺术家',
   'contact.intro': '如需了解作品信息、定制委托或任何问题，请给我写信：每条消息我都会亲自回复。',
   'contact.write': '给艺术家写信',

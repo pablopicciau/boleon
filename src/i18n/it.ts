@@ -5,6 +5,7 @@ export const it = {
   'nav.gallery': 'Galleria',
   'gallery.bestSellers': 'I più venduti',
   'gallery.empty': 'Nessuna opera in questa collezione, per ora.',
+  'artwork.collectionLine': 'N° {n} · C. {name}',
   'contact.title': 'Contatta l’artista',
   'contact.intro':
     'Per informazioni sulle opere, richieste di commissioni su misura o qualsiasi domanda, scrivimi: rispondo personalmente a ogni messaggio.',

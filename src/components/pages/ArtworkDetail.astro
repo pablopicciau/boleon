@@ -1,10 +1,12 @@
 ---
 import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import settings from '../../lib/settings';
 import {
   availablePrintSizes,
   catalogEntries,
+  collectionNumber,
   isBaseAvailable,
   maxQty,
   PRINT_ID_SEPARATOR,
@@ -38,6 +40,24 @@ const printMaterials = pickLocalized(
 const askInfoHref = settings.contactEmail
   ? `mailto:${settings.contactEmail}?subject=${encodeURIComponent(`${artwork.data.title} — ${t('artwork.askInfo')}`)}`
   : null;
+
+// "N° 2 · C. Notturni": numero dell'opera nella sua prima collezione
+const firstCollection = artwork.data.collections[0];
+let collectionLine: string | null = null;
+if (firstCollection) {
+  const [allArtworks, allCollections] = await Promise.all([
+    getCollection('artworks'),
+    getCollection('collections'),
+  ]);
+  const collectionEntry = allCollections.find((c) => c.id === firstCollection);
+  const n = collectionNumber(allArtworks, artwork, firstCollection);
+  if (collectionEntry && n) {
+    collectionLine = t('artwork.collectionLine', {
+      n,
+      name: pickLocalized(collectionEntry.data.names, locale) || collectionEntry.data.name,
+    });
+  }
+}
 
 const site = Astro.site ?? new URL('https://boleon.it');
 const canonical = new URL(Astro.url.pathname, site);
@@ -122,6 +142,7 @@ const schema = {
 
     <div class="lg:col-span-2">
       <h1 class="font-serif text-3xl leading-tight sm:text-4xl">{artwork.data.title}</h1>
+      {collectionLine && <p class="mt-2 text-sm tracking-wide opacity-70">{collectionLine}</p>}
       <p class="mt-2 text-sm tracking-widest uppercase opacity-60">
         {isPrint ? t('artwork.print') : t('artwork.original')}
       </p>

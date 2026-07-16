@@ -25,6 +25,23 @@ body {
   font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
+/* Grana di carta su tutto il sito: rumore SVG procedurale (nessuna immagine
+   da scaricare) sovrapposto in trasparenza, come un foglio fotografato da
+   vicino. Sta sotto PhotoSwipe (z 100), così lo zoom delle opere resta pulito.
+   Per usare una foto vera di carta: sostituire background-image con
+   url('/textures/carta.jpg') resa "seamless" e alzare leggermente l'opacità. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");
+  background-size: 280px 280px;
+}
+
 ::selection {
   background-color: var(--color-ink);
   color: var(--color-paper);
