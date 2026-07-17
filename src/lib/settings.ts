@@ -6,6 +6,13 @@ import cover from '../content/site-cover.json';
 import contacts from '../content/site-contacts.json';
 import shop from '../content/site-shop.json';
 
-const settings = { ...identity, ...cover, ...contacts, ...shop };
+const settings = {
+  ...identity,
+  ...cover,
+  ...contacts,
+  ...shop,
+  // Il nome può essere lasciato vuoto in Keystatic: c'è un solo artista.
+  artistName: identity.artistName || 'Boleòn',
+};
 
 export default settings;

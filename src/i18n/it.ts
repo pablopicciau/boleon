@@ -1,5 +1,6 @@
 export const it = {
   'nav.works': 'Opere',
+  'nav.menu': 'Menu',
   'nav.cart': 'Carrello',
   'nav.contact': 'Contatti',
   'nav.artist': 'L’artista',

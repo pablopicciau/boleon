@@ -2,6 +2,7 @@ import type { Dict } from './it';
 
 export const ar: Dict = {
   'nav.works': 'الأعمال',
+  'nav.menu': 'القائمة',
   'nav.cart': 'سلة التسوق',
   'nav.contact': 'تواصل',
   'nav.artist': 'الفنان',

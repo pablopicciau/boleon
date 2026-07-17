@@ -2,6 +2,7 @@ import type { Dict } from './it';
 
 export const hi: Dict = {
   'nav.works': 'कृतियाँ',
+  'nav.menu': 'मेनू',
   'nav.cart': 'कार्ट',
   'nav.contact': 'संपर्क',
   'nav.artist': 'कलाकार',

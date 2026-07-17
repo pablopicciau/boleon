@@ -2,6 +2,7 @@ import type { Dict } from './it';
 
 export const zh: Dict = {
   'nav.works': '作品',
+  'nav.menu': '菜单',
   'nav.cart': '购物车',
   'nav.contact': '联系',
   'nav.artist': '艺术家',

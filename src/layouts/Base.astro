@@ -29,7 +29,12 @@ interface Props {
 const { locale, title, description, ogImage, ogType = 'website', schema } = Astro.props;
 const t = useTranslations(locale);
 const meta = localeMeta[locale];
-const pageTitle = title ? `${title} — ${settings.artistName}` : `${settings.artistName} — ${pickLocalized(settings.taglines, locale)}`;
+const tagline = pickLocalized(settings.taglines, locale);
+const pageTitle = title
+  ? `${title} — ${settings.artistName}`
+  : tagline
+    ? `${settings.artistName} — ${tagline}`
+    : settings.artistName;
 const pageDescription = description || pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);
 const year = new Date().getFullYear();
@@ -171,8 +176,45 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
             ></span>
           </a>
           <LanguageSwitcher locale={locale} />
+          <button
+            type="button"
+            data-menu-toggle
+            class="flex size-9 items-center justify-center rounded-sm border border-neutral-400/50 sm:hidden"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-label={t('nav.menu')}
+          >
+            <svg data-menu-icon-open class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16"></path>
+            </svg>
+            <svg data-menu-icon-close class="hidden size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+              <path d="M6 6l12 12M18 6L6 18"></path>
+            </svg>
+          </button>
         </nav>
       </div>
+      <!-- Menu a tendina per il telefono: sui piccoli schermi le voci
+           dell'header non ci stanno, quindi si aprono da qui. -->
+      <nav id="mobile-menu" class="hidden border-t border-neutral-300/50 sm:hidden">
+        <div class="mx-auto flex max-w-6xl flex-col px-5 py-2">
+          {
+            [
+              { href: '/', label: t('nav.works') },
+              { href: '/galleria', label: t('nav.gallery') },
+              { href: '/artista', label: t('nav.artist') },
+              { href: '/contatto', label: t('nav.contact') },
+              { href: '/carrello', label: t('nav.cart') },
+            ].map((item) => (
+              <a
+                href={localizePath(locale, item.href)}
+                class="border-b border-neutral-300/30 py-3 text-sm tracking-widest uppercase opacity-80 last:border-b-0"
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </div>
+      </nav>
     </header>
 
     <main class="relative z-10 mx-auto w-full max-w-6xl flex-1 px-5 pt-10 pb-20">
@@ -226,6 +268,16 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
       }
       render(cartCount());
       window.addEventListener('cart:updated', (e) => render((e as CustomEvent).detail.count));
+
+      // Apertura/chiusura del menu mobile
+      const toggle = document.querySelector('[data-menu-toggle]');
+      const menu = document.getElementById('mobile-menu');
+      toggle?.addEventListener('click', () => {
+        const open = menu?.classList.toggle('hidden') === false;
+        toggle.setAttribute('aria-expanded', String(open));
+        toggle.querySelector('[data-menu-icon-open]')?.classList.toggle('hidden', open);
+        toggle.querySelector('[data-menu-icon-close]')?.classList.toggle('hidden', !open);
+      });
     </script>
   </body>
 </html>

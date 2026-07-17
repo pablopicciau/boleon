@@ -194,11 +194,14 @@ export default config({
       schema: {
         artistName: fields.text({
           label: 'Nome artista',
-          validation: { isRequired: true },
+          description: 'Facoltativo: se lo lasci vuoto viene usato "Boleòn".',
         }),
         taglines: localizedText('Tagline'),
         bios: localizedText('Breve bio', true),
-        stories: localizedText('Storia dell’artista (pagina "L’artista")', true),
+        stories: localizedText(
+          'Storia dell’artista (pagina "L’artista") — per un titolo di capitolo scrivi la riga come "## L’inizio"',
+          true
+        ),
       },
     }),
     cover: singleton({

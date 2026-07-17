@@ -13,7 +13,26 @@ const story = pickLocalized(
   (settings as { stories?: Record<string, string | null> }).stories,
   locale
 );
-const description = story.split('\n')[0] || pickLocalized(settings.bios, locale);
+
+// La storia è testo semplice: i titoli di capitolo sono righe che iniziano
+// con "## " (o righe brevi senza punteggiatura finale, per chi scrive da
+// Keystatic senza ricordare il simbolo). Il resto sono paragrafi.
+type Block = { kind: 'heading' | 'paragraph'; text: string };
+const blocks: Block[] = story
+  .split(/\n\s*\n/)
+  .map((raw) => raw.trim())
+  .filter(Boolean)
+  .map((text): Block => {
+    if (text.startsWith('## ')) return { kind: 'heading', text: text.slice(3).trim() };
+    const singleLine = !text.includes('\n');
+    if (singleLine && text.length <= 60 && !/[.!?…。؟]$/.test(text)) {
+      return { kind: 'heading', text };
+    }
+    return { kind: 'paragraph', text };
+  });
+
+const firstParagraph = blocks.find((b) => b.kind === 'paragraph')?.text ?? '';
+const description = firstParagraph.slice(0, 300) || pickLocalized(settings.bios, locale);
 
 const site = Astro.site ?? new URL('https://boleon.it');
 const sameAs = [settings.instagram, settings.facebook].filter(Boolean);
@@ -32,15 +51,19 @@ const schema = {
 
 <Base locale={locale} title={t('nav.artist')} description={description} schema={schema}>
   <section class="mx-auto max-w-2xl py-14 sm:py-20">
-    <h1 class="text-center font-hand text-4xl sm:text-5xl">{settings.artistName}</h1>
+    <h1 class="text-center font-hand text-5xl sm:text-6xl">{settings.artistName}</h1>
     {
-      story && (
-        <div class="mt-14 space-y-8">
-          {story.split('\n\n').map((paragraph) => (
-            <p class="font-hand text-xl leading-loose whitespace-pre-line opacity-90 sm:text-2xl">
-              {paragraph}
-            </p>
-          ))}
+      blocks.length > 0 && (
+        <div class="mt-14">
+          {blocks.map((block) =>
+            block.kind === 'heading' ? (
+              <h2 class="mt-14 mb-6 font-hand text-3xl first:mt-0 sm:text-4xl">{block.text}</h2>
+            ) : (
+              <p class="mb-6 text-base leading-relaxed whitespace-pre-line opacity-90 sm:text-lg sm:leading-loose">
+                {block.text}
+              </p>
+            )
+          )}
         </div>
       )
     }
