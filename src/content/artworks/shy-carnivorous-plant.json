@@ -1,0 +1,26 @@
+{
+  "title": "Shy Carnivorous Plant",
+  "titles": {
+    "it": "Pianta Carnivora Timida",
+    "en": "Shy Carnivorous Plant"
+  },
+  "year": 2026,
+  "technique": "Acrilico su carta",
+  "kind": "original",
+  "originalInquiryOnly": true,
+  "sold": false,
+  "showAvailability": true,
+  "printSizes": [],
+  "featured": false,
+  "bestseller": false,
+  "collections": [
+    "fiori"
+  ],
+  "collectionNumber": 1,
+  "sortOrder": 0,
+  "images": [
+    "../../assets/artworks/shy-carnivorous-plant/images/0.png",
+    "../../assets/artworks/shy-carnivorous-plant/images/1.png"
+  ],
+  "descriptions": {}
+}
