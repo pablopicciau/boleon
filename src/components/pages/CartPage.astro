@@ -91,6 +91,7 @@ const clientData = {
 
 <script>
   import { getCart, setQty, removeFromCart, pruneCart } from '../../scripts/cart';
+  import { track } from '../../scripts/analytics';
 
   type Catalog = Record<
     string,
@@ -180,6 +181,7 @@ const clientData = {
   elCheckout.addEventListener('click', async () => {
     const items = getCart();
     if (items.length === 0) return;
+    track('checkout_start', { items: items.reduce((n, i) => n + i.qty, 0) });
     elCheckout.disabled = true;
     const originalLabel = elCheckout.textContent;
     elCheckout.textContent = data.labels.processing;

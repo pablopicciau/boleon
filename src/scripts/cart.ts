@@ -1,3 +1,5 @@
+import { track } from './analytics';
+
 export type CartItem = { slug: string; qty: number };
 
 const KEY = 'boleon-cart';
@@ -31,6 +33,7 @@ export function addToCart(slug: string, qty: number, max: number) {
     items.push({ slug, qty: Math.max(1, Math.min(qty, max)) });
   }
   save(items);
+  track('add_to_cart', { item: slug, qty });
 }
 
 export function setQty(slug: string, qty: number, max: number) {
@@ -46,6 +49,7 @@ export function setQty(slug: string, qty: number, max: number) {
 
 export function removeFromCart(slug: string) {
   save(getCart().filter((i) => i.slug !== slug));
+  track('remove_from_cart', { item: slug });
 }
 
 /** Drops cart entries that are unavailable or unknown; returns true if anything was removed. */

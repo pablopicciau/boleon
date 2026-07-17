@@ -109,7 +109,11 @@ const collectionStories = collectionEntries
     });
     stories.forEach((s) => s.classList.toggle('hidden', s.dataset.story !== id));
     if (empty) empty.classList.toggle('hidden', shown > 0);
-    if (updateHash) history.replaceState(null, '', '#' + id);
+    if (updateHash) {
+      history.replaceState(null, '', '#' + id);
+      // Statistiche: quale linguetta/collezione viene aperta (se Umami è attivo)
+      window.umami?.track('gallery_tab', { tab: id });
+    }
   }
 
   buttons.forEach((b) => b.addEventListener('click', () => activate(b.dataset.tab, true)));

@@ -90,6 +90,8 @@ const t = useTranslations(locale);
 </Base>
 
 <script>
+  import { track } from '../../scripts/analytics';
+
   const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
   if (form) {
     const sendBtn = form.querySelector<HTMLButtonElement>('[data-c-send]')!;
@@ -118,6 +120,7 @@ const t = useTranslations(locale);
         status.textContent = form.dataset.labelSent!;
         status.className = 'text-sm text-olive';
         status.classList.remove('hidden');
+        track('contact_sent');
       } catch {
         status.textContent = form.dataset.labelError!;
         status.className = 'text-sm text-accent';

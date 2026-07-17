@@ -392,6 +392,7 @@ const schema = {
   import PhotoSwipeLightbox from 'photoswipe/lightbox';
   import 'photoswipe/style.css';
   import { addToCart } from '../../scripts/cart';
+  import { track } from '../../scripts/analytics';
 
   const lightbox = new PhotoSwipeLightbox({
     gallery: '#artwork-gallery',
@@ -402,6 +403,7 @@ const schema = {
     secondaryZoomLevel: 2.5,
     maxZoomLevel: 8,
   });
+  lightbox.on('beforeOpen', () => track('zoom'));
   lightbox.init();
 
   document.querySelectorAll<HTMLButtonElement>('[data-add-to-cart]').forEach((btn) => {
@@ -483,6 +485,7 @@ const schema = {
         messageEl.value =
           type === 'info' ? inquiryForm.dataset.msgInfo! : inquiryForm.dataset.msgOriginal!;
         resetView();
+        track('inquiry_open', { type });
         modal.showModal();
       });
     });
@@ -522,6 +525,7 @@ const schema = {
           status.textContent = inquiryForm.dataset.labelSent!;
           status.className = 'text-sm text-olive';
           status.classList.remove('hidden');
+          track('inquiry_sent', { type });
         } else {
           throw new Error(String(res.status));
         }

@@ -54,6 +54,8 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - **Pagina opera riordinata**: prima il riquadro stampe (testo `printMaterials` promozionale in alto, 7 lingue), poi la riga compatta "Originale · pezzo unico su richiesta" con i due tasti (rosso + outline).
 - **llms.txt** arricchito: stato "available on request" per gli originali su richiesta, collezioni con storie, pagine galleria/artista/contatti, titoli inglesi.
 
+- **Statistiche (Umami, senza cookie/banner)**: script in `Base.astro` attivo solo se esiste la variabile di build `PUBLIC_UMAMI_WEBSITE_ID` (da impostare nelle variabili di build Cloudflare quando l'utente crea l'account su umami.is, piano Hobby gratuito). Eventi tracciati via `src/scripts/analytics.ts` (no-op se Umami assente): add_to_cart, remove_from_cart, checkout_start, purchase (pagina /grazie), zoom (PhotoSwipe), inquiry_open/inquiry_sent (type original/info), contact_sent, gallery_tab. L'URL pagina è allegato automaticamente da Umami. Per "ogni click"/registrazioni (Clarity/GA4) servirebbe il banner cookie: scelta rimandata.
+
 ## Comandi
 
 ```sh

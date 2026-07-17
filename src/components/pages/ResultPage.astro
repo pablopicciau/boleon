@@ -36,4 +36,13 @@ const backHref = localizePath(locale, kind === 'success' ? '/' : '/carrello');
       </script>
     )
   }
+  {
+    kind === 'success' && (
+      <script>
+        import { track } from '../../scripts/analytics';
+        // A caricamento completo, così lo script di Umami è già attivo
+        window.addEventListener('load', () => track('purchase'));
+      </script>
+    )
+  }
 </Base>
