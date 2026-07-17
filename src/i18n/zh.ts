@@ -85,4 +85,5 @@ export const zh: Dict = {
   'artwork.ratioNote': '这件作品的原始比例与所选尺寸不同：印刷时将保持原始比例，多余空间保留为白色，既不裁剪也不变形。请看下方预览。',
   'artwork.previewTitle': '打印预览',
   'artwork.alsoLike': '你可能还喜欢',
+  'inquiry.notConfigured': '自动发送尚未开通。点击下方：您的邮件应用将打开，邮件内容已备好，直接发送即可。',
 };

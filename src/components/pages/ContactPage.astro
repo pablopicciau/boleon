@@ -26,6 +26,7 @@ const t = useTranslations(locale);
       data-label-sending={t('inquiry.sending')}
       data-label-sent={t('inquiry.sent')}
       data-label-error={t('inquiry.error')}
+      data-label-not-configured={t('inquiry.notConfigured')}
       class="paper-panel mt-10 flex flex-col gap-3 p-6 sm:p-8"
     >
       <input
@@ -63,7 +64,7 @@ const t = useTranslations(locale);
       <a
         data-c-fallback
         href="#"
-        class="hidden text-sm underline underline-offset-4 opacity-70 hover:opacity-100"
+        class="paper-btn-outline hidden px-8 py-3 text-center text-sm tracking-widest uppercase"
       >
         {t('inquiry.fallback')}
       </a>
@@ -121,14 +122,20 @@ const t = useTranslations(locale);
         status.className = 'text-sm text-olive';
         status.classList.remove('hidden');
         track('contact_sent');
-      } catch {
-        status.textContent = form.dataset.labelError!;
-        status.className = 'text-sm text-accent';
+      } catch (err) {
+        // 503 = modulo non ancora configurato: messaggio più gentile,
+        // il mailto qui sotto recapita comunque il messaggio all'artista
+        const notConfigured = err instanceof Error && err.message === '503';
+        status.textContent = notConfigured
+          ? form.dataset.labelNotConfigured!
+          : form.dataset.labelError!;
+        status.className = notConfigured ? 'text-sm opacity-80' : 'text-sm text-accent';
         status.classList.remove('hidden');
         const to = form.dataset.email;
         if (fallback && to) {
           const subject = [form.dataset.subject, email].filter(Boolean).join(' — ');
-          fallback.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+          const body = `${message}\n\n${name} (${email})`;
+          fallback.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
           fallback.classList.remove('hidden');
         }
         sendBtn.disabled = false;

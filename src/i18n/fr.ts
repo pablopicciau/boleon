@@ -86,4 +86,5 @@ export const fr: Dict = {
   'artwork.ratioNote': 'Cette œuvre a été créée dans des proportions différentes de ce format : le tirage conserve les proportions d’origine et l’espace restant demeure blanc, afin de ne pas rogner ni déformer la peinture. Voir l’aperçu ci-dessous.',
   'artwork.previewTitle': 'Aperçu du tirage',
   'artwork.alsoLike': 'Vous aimerez peut-être aussi',
+  'inquiry.notConfigured': 'L’envoi automatique n’est pas encore actif. Cliquez ci-dessous : votre application e-mail s’ouvrira avec le message prêt à envoyer.',
 };

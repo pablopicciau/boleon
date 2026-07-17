@@ -86,4 +86,5 @@ export const es: Dict = {
   'artwork.ratioNote': 'Esta obra nació con proporciones distintas a este formato: la impresión mantiene las proporciones originales y el espacio sobrante queda en blanco, para no recortar ni deformar la pintura. Mira la vista previa abajo.',
   'artwork.previewTitle': 'Vista previa de la impresión',
   'artwork.alsoLike': 'También te pueden gustar',
+  'inquiry.notConfigured': 'El envío automático aún no está activo. Haz clic abajo: se abrirá tu aplicación de correo con el mensaje listo para enviar.',
 };

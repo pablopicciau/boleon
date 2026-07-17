@@ -499,6 +499,7 @@ const schema = {
       data-label-sending={t('inquiry.sending')}
       data-label-sent={t('inquiry.sent')}
       data-label-error={t('inquiry.error')}
+      data-label-not-configured={t('inquiry.notConfigured')}
       class="flex flex-col gap-3 p-6 sm:p-8"
     >
       <div class="flex items-start justify-between gap-4">
@@ -548,7 +549,7 @@ const schema = {
       <a
         data-inq-fallback
         href="#"
-        class="hidden text-sm underline underline-offset-4 opacity-70 hover:opacity-100"
+        class="paper-btn-outline hidden px-8 py-3 text-center text-sm tracking-widest uppercase"
       >
         {t('inquiry.fallback')}
       </a>
@@ -770,9 +771,14 @@ const schema = {
         } else {
           throw new Error(String(res.status));
         }
-      } catch {
-        status.textContent = inquiryForm.dataset.labelError!;
-        status.className = 'text-sm text-accent';
+      } catch (err) {
+        // 503 = modulo non ancora configurato: messaggio più gentile,
+        // il mailto qui sotto recapita comunque il messaggio all'artista
+        const notConfigured = err instanceof Error && err.message === '503';
+        status.textContent = notConfigured
+          ? inquiryForm.dataset.labelNotConfigured!
+          : inquiryForm.dataset.labelError!;
+        status.className = notConfigured ? 'text-sm opacity-80' : 'text-sm text-accent';
         status.classList.remove('hidden');
         // Fallback: apre il client email verso l'artista, oggetto per tipo + email cliente
         const artworkTitle = inquiryForm.dataset.artwork ?? '';
@@ -781,7 +787,8 @@ const schema = {
         const subject = [kind, artworkTitle, email].filter(Boolean).join(' — ');
         const to = inquiryForm.dataset.email;
         if (fallback && to) {
-          fallback.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+          const body = `${message}\n\n${name} (${email})`;
+          fallback.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
           fallback.classList.remove('hidden');
         }
         sendBtn.disabled = false;

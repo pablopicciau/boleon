@@ -84,6 +84,7 @@ export const it = {
   'artwork.ratioNote': 'Questa opera nasce con proporzioni diverse da questo formato: la stampa mantiene le proporzioni originali e lo spazio che avanza resta bianco, per non tagliare né deformare il dipinto. Guarda l’anteprima qui sotto.',
   'artwork.previewTitle': 'Anteprima della stampa',
   'artwork.alsoLike': 'Potrebbero piacerti anche',
+  'inquiry.notConfigured': 'L’invio automatico non è ancora attivo. Clicca qui sotto: si aprirà la tua app email con il messaggio già pronto da inviare.',
 } as const;
 
 export type Dict = Record<keyof typeof it, string>;

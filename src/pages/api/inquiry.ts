@@ -69,13 +69,19 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   try {
     const resend = new Resend(resendKey);
-    await resend.emails.send({
+    // Attenzione: send() NON lancia un'eccezione in caso di errore,
+    // restituisce { error } — va controllato esplicitamente.
+    const { error } = await resend.emails.send({
       from: `Boleon <${from}>`,
       to,
       replyTo: email,
       subject,
       html,
     });
+    if (error) {
+      console.error('Inquiry email rejected by Resend:', error);
+      return json({ error: 'send_failed' }, 502);
+    }
     return json({ ok: true });
   } catch (err) {
     console.error('Inquiry email failed:', err);
