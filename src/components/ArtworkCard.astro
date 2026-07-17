@@ -64,13 +64,8 @@ if (firstCollection) {
     }
   </div>
   <div class="mt-4 flex items-baseline justify-between gap-3">
-    <h3 class="font-serif text-xl leading-snug font-medium">
-      {displayTitle}<span class="ms-2 text-sm font-normal opacity-50">{artwork.data.year}</span>
-    </h3>
-    <p class="shrink-0 font-serif text-lg opacity-80">{priceLabel}</p>
+    <h3 class="font-serif text-xl leading-snug font-medium">{displayTitle}</h3>
+    <p class="shrink-0 text-base opacity-80">{priceLabel}</p>
   </div>
   {collectionLine && <p class="mt-0.5 text-xs tracking-wide opacity-60">{collectionLine}</p>}
-  <p class="mt-0.5 text-xs opacity-50">
-    {artwork.data.kind === 'print' ? t('artwork.print') : t('artwork.original')}
-  </p>
 </a>

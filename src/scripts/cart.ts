@@ -1,8 +1,17 @@
 import { track } from './analytics';
 
-export type CartItem = { slug: string; qty: number };
+/**
+ * Una riga del carrello: `slug` è l'id di catalogo (pezzo base o stampa
+ * `slug::formato::supporto`); `border` è il bordo bianco extra in cm scelto
+ * per le stampe (0/assente = nessun bordo, non cambia il prezzo).
+ */
+export type CartItem = { slug: string; qty: number; border?: number };
 
 const KEY = 'boleon-cart';
+
+function sameLine(a: CartItem, slug: string, border?: number): boolean {
+  return a.slug === slug && (a.border ?? 0) === (border ?? 0);
+}
 
 export function getCart(): CartItem[] {
   try {
@@ -24,31 +33,33 @@ export function cartCount(items: CartItem[] = getCart()): number {
   return items.reduce((n, i) => n + i.qty, 0);
 }
 
-export function addToCart(slug: string, qty: number, max: number) {
+export function addToCart(slug: string, qty: number, max: number, border?: number) {
   const items = getCart();
-  const existing = items.find((i) => i.slug === slug);
+  const existing = items.find((i) => sameLine(i, slug, border));
   if (existing) {
     existing.qty = Math.min(existing.qty + qty, max);
   } else {
-    items.push({ slug, qty: Math.max(1, Math.min(qty, max)) });
+    const item: CartItem = { slug, qty: Math.max(1, Math.min(qty, max)) };
+    if (border && border > 0) item.border = border;
+    items.push(item);
   }
   save(items);
   track('add_to_cart', { item: slug, qty });
 }
 
-export function setQty(slug: string, qty: number, max: number) {
+export function setQty(slug: string, qty: number, max: number, border?: number) {
   let items = getCart();
   if (qty <= 0) {
-    items = items.filter((i) => i.slug !== slug);
+    items = items.filter((i) => !sameLine(i, slug, border));
   } else {
-    const item = items.find((i) => i.slug === slug);
+    const item = items.find((i) => sameLine(i, slug, border));
     if (item) item.qty = Math.min(qty, max);
   }
   save(items);
 }
 
-export function removeFromCart(slug: string) {
-  save(getCart().filter((i) => i.slug !== slug));
+export function removeFromCart(slug: string, border?: number) {
+  save(getCart().filter((i) => !sameLine(i, slug, border)));
   track('remove_from_cart', { item: slug });
 }
 

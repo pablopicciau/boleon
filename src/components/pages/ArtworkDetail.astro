@@ -4,12 +4,14 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import settings from '../../lib/settings';
 import {
-  availablePrintSizes,
   catalogEntries,
   collectionNumber,
   isBaseAvailable,
   isInquiryOnly,
   maxQty,
+  printFormatsFor,
+  printPrice,
+  sortArtworks,
   PRINT_ID_SEPARATOR,
   type Artwork,
 } from '../../lib/artworks';
@@ -37,20 +39,50 @@ const inquiryOriginalMessage = t('inquiry.defaultMessage', { title: displayTitle
 const inquiryInfoMessage = t('inquiry.infoMessage', { title: displayTitle });
 const description = pickLocalized(artwork.data.descriptions, locale);
 const unavailableLabel = t(isPrint ? 'artwork.soldOut' : 'artwork.sold');
-const printSizes = availablePrintSizes(artwork);
 const printMaterials = pickLocalized(
   (settings as { printMaterials?: Record<string, string | null> }).printMaterials,
   locale
 );
 
+// Stampe: formati standard offerti da quest'opera, con prezzo carta/tela
+const printFormats = printFormatsFor(artwork);
+const cover = artwork.data.images[0];
+// Proporzioni del dipinto (dalla foto di copertina), per l'avviso e l'anteprima
+const imageRatio = cover.width / cover.height;
+const printData = {
+  slug: artwork.id,
+  separator: PRINT_ID_SEPARATOR,
+  imageRatio,
+  borders: [0, 2, 3, 5],
+  formats: printFormats.map((f) => {
+    const fmtRatio = Math.max(f.width, f.height) / Math.min(f.width, f.height);
+    const imgRatio = Math.max(imageRatio, 1 / imageRatio);
+    return {
+      id: f.id,
+      label: f.label,
+      width: f.width,
+      height: f.height,
+      prices: {
+        paper: printPrice(artwork, f, 'paper'),
+        canvas: printPrice(artwork, f, 'canvas'),
+      },
+      priceLabels: {
+        paper: formatPrice(printPrice(artwork, f, 'paper'), locale),
+        canvas: formatPrice(printPrice(artwork, f, 'canvas'), locale),
+      },
+      ratioMismatch: Math.abs(fmtRatio - imgRatio) / imgRatio > 0.02,
+    };
+  }),
+};
+
 // "N° 2 · C. Notturni": numero dell'opera nella sua prima collezione
 const firstCollection = artwork.data.collections[0];
+const [allArtworks, allCollections] = await Promise.all([
+  getCollection('artworks'),
+  getCollection('collections'),
+]);
 let collectionLine: string | null = null;
 if (firstCollection) {
-  const [allArtworks, allCollections] = await Promise.all([
-    getCollection('artworks'),
-    getCollection('collections'),
-  ]);
   const collectionEntry = allCollections.find((c) => c.id === firstCollection);
   const n = collectionNumber(allArtworks, artwork, firstCollection);
   if (collectionEntry && n) {
@@ -61,9 +93,16 @@ if (firstCollection) {
   }
 }
 
+// "Potrebbero piacerti anche": prima i più venduti, poi le altre opere
+// (mescolate lato client a ogni visita)
+const others = sortArtworks(allArtworks.filter((a) => a.id !== artwork.id));
+const alsoLike = [
+  ...others.filter((a) => a.data.bestseller),
+  ...others.filter((a) => !a.data.bestseller),
+].slice(0, 8);
+
 const site = Astro.site ?? new URL('https://boleon.it');
 const canonical = new URL(Astro.url.pathname, site);
-const cover = artwork.data.images[0];
 const entries = catalogEntries(artwork);
 const schema = {
   '@context': 'https://schema.org',
@@ -73,16 +112,13 @@ const schema = {
   image: artwork.data.images.map((img) => new URL(img.src, site).href),
   ...(description ? { description } : {}),
   creator: { '@type': 'Person', name: settings.artistName },
-  dateCreated: String(artwork.data.year),
-  ...(artwork.data.technique ? { artMedium: artwork.data.technique } : {}),
   ...(artwork.data.dimensions ? { size: artwork.data.dimensions } : {}),
-  artEdition: isPrint ? (artwork.data.editionSize ?? undefined) : 1,
   offers: entries.length
     ? entries.map((e) => ({
         '@type': 'Offer',
         name:
           e.variant.kind === 'print'
-            ? `${displayTitle} — fine art print ${e.variant.size}`
+            ? `${displayTitle} — fine art print ${e.variant.size} (${e.variant.support === 'canvas' ? 'canvas' : 'paper'})`
             : displayTitle,
         price: e.price,
         priceCurrency: 'EUR',
@@ -117,126 +153,226 @@ const schema = {
 
   <div class="grid gap-10 lg:grid-cols-5">
     <div class="lg:col-span-3">
-      <div id="artwork-gallery" class="flex flex-col gap-4">
+      {/* Carosello: una foto alla volta, frecce e miniature cliccabili */}
+      <div class="relative">
+        <div id="artwork-gallery">
+          {
+            artwork.data.images.map((img, i) => (
+              <a
+                href={img.src}
+                data-pswp-width={img.width}
+                data-pswp-height={img.height}
+                data-slide={i}
+                target="_blank"
+                rel="noreferrer"
+                class:list={['block cursor-zoom-in bg-neutral-100', i > 0 && 'hidden']}
+              >
+                <Image
+                  src={img}
+                  alt={`${artwork.data.title}${i > 0 ? ` (${i + 1})` : ''}`}
+                  width={1100}
+                  class="w-full"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                />
+              </a>
+            ))
+          }
+        </div>
         {
-          artwork.data.images.map((img, i) => (
-            <a
-              href={img.src}
-              data-pswp-width={img.width}
-              data-pswp-height={img.height}
-              target="_blank"
-              rel="noreferrer"
-              class="block cursor-zoom-in bg-neutral-100"
-            >
-              <Image
-                src={img}
-                alt={`${artwork.data.title}${i > 0 ? ` (${i + 1})` : ''}`}
-                width={1100}
-                class="w-full"
-                loading={i === 0 ? 'eager' : 'lazy'}
-              />
-            </a>
-          ))
+          artwork.data.images.length > 1 && (
+            <>
+              <button
+                type="button"
+                data-slide-prev
+                aria-label="←"
+                class="absolute start-3 top-1/2 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-paper/80 text-xl shadow backdrop-blur transition hover:bg-paper"
+              >
+                <span class="rtl:rotate-180">←</span>
+              </button>
+              <button
+                type="button"
+                data-slide-next
+                aria-label="→"
+                class="absolute end-3 top-1/2 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-paper/80 text-xl shadow backdrop-blur transition hover:bg-paper"
+              >
+                <span class="rtl:rotate-180">→</span>
+              </button>
+            </>
+          )
         }
       </div>
+      {
+        artwork.data.images.length > 1 && (
+          <div class="mt-3 flex flex-wrap gap-2">
+            {artwork.data.images.map((img, i) => (
+              <button
+                type="button"
+                data-thumb={i}
+                class:list={[
+                  'block w-16 cursor-pointer overflow-hidden border-2 bg-neutral-100 transition',
+                  i === 0 ? 'border-ink' : 'border-transparent opacity-60 hover:opacity-100',
+                ]}
+              >
+                <Image
+                  src={img}
+                  alt=""
+                  width={160}
+                  class="aspect-square w-full object-cover"
+                  loading="lazy"
+                />
+              </button>
+            ))}
+          </div>
+        )
+      }
       <p class="mt-3 text-xs opacity-50">{t('artwork.zoomHint')}</p>
     </div>
 
     <div class="lg:col-span-2">
       <h1 class="font-serif text-3xl leading-tight sm:text-4xl">{displayTitle}</h1>
       {collectionLine && <p class="mt-2 text-sm tracking-wide opacity-70">{collectionLine}</p>}
-      <p class="mt-2 text-sm tracking-widest uppercase opacity-60">
-        {isPrint ? t('artwork.print') : t('artwork.original')}
-      </p>
-
-      <dl class="mt-8 space-y-3 border-y border-neutral-200 py-6 text-sm">
-        <div class="flex justify-between gap-4">
-          <dt class="opacity-60">{t('artwork.year')}</dt>
-          <dd>{artwork.data.year}</dd>
-        </div>
-        {
-          artwork.data.technique && (
-            <div class="flex justify-between gap-4">
-              <dt class="opacity-60">{t('artwork.technique')}</dt>
-              <dd class="text-end">{artwork.data.technique}</dd>
-            </div>
-          )
-        }
-        {
-          artwork.data.dimensions && (
-            <div class="flex justify-between gap-4">
-              <dt class="opacity-60">{t('artwork.dimensions')}</dt>
-              <dd>{artwork.data.dimensions}</dd>
-            </div>
-          )
-        }
-        {
-          isPrint && artwork.data.showAvailability && artwork.data.editionSize && (
-            <div class="flex justify-between gap-4">
-              <dt class="opacity-60">{t('artwork.editionOf', { n: artwork.data.editionSize })}</dt>
-              <dd>{available ? t('artwork.remaining', { n: artwork.data.stock ?? 0 }) : t('artwork.soldOut')}</dd>
-            </div>
-          )
-        }
-      </dl>
 
       {
-        printSizes.length > 0 && (
+        (artwork.data.dimensions ||
+          (isPrint && artwork.data.showAvailability && artwork.data.editionSize)) && (
+          <dl class="mt-8 space-y-3 border-y border-neutral-200 py-6 text-sm">
+            {artwork.data.dimensions && (
+              <div class="flex justify-between gap-4">
+                <dt class="opacity-60">{t('artwork.dimensions')}</dt>
+                <dd>{artwork.data.dimensions}</dd>
+              </div>
+            )}
+            {isPrint && artwork.data.showAvailability && artwork.data.editionSize && (
+              <div class="flex justify-between gap-4">
+                <dt class="opacity-60">{t('artwork.editionOf', { n: artwork.data.editionSize })}</dt>
+                <dd>
+                  {available
+                    ? t('artwork.remaining', { n: artwork.data.stock ?? 0 })
+                    : t('artwork.soldOut')}
+                </dd>
+              </div>
+            )}
+          </dl>
+        )
+      }
+
+      {
+        printFormats.length > 0 && (
           <div class="mt-8 rounded-sm border border-olive/30 bg-olive/10 p-5 sm:p-6">
             <h2 class="text-xs font-semibold tracking-[0.25em] text-olive uppercase">
               {t('artwork.prints')}
             </h2>
-            {printMaterials && (
-              <p class="mt-3 max-w-prose text-sm leading-relaxed opacity-80">{printMaterials}</p>
-            )}
-            <p data-print-price class="mt-4 font-serif text-4xl text-olive">
-              {formatPrice(printSizes[0].price, locale)}
+            <p data-print-price class="mt-4 text-4xl font-semibold text-olive">
+              {printData.formats[0].priceLabels.paper}
             </p>
-            {
-              artwork.data.showAvailability && (
-                <p data-print-availability class="mt-1 text-xs opacity-60">
-                  {printSizes[0].editionSize
-                    ? `${t('artwork.editionOf', { n: printSizes[0].editionSize })} · ${t('artwork.remaining', { n: printSizes[0].stock })}`
-                    : t('artwork.remaining', { n: printSizes[0].stock })}
-                </p>
-              )
-            }
-            <div class="mt-4 flex flex-wrap items-end gap-4">
+            <div class="mt-4 grid gap-4 sm:grid-cols-2">
               <label class="flex flex-col gap-2 text-sm">
                 <span class="opacity-60">{t('artwork.size')}</span>
                 <select data-print-size class="border border-olive/40 bg-white px-3 py-2.5">
-                  {printSizes.map((p) => (
-                    <option
-                      value={p.size}
-                      data-price={p.price}
-                      data-price-label={formatPrice(p.price, locale)}
-                      data-max={Math.min(p.stock, 10)}
-                      data-availability-label={
-                        p.editionSize
-                          ? `${t('artwork.editionOf', { n: p.editionSize })} · ${t('artwork.remaining', { n: p.stock })}`
-                          : t('artwork.remaining', { n: p.stock })
-                      }
-                    >
-                      {p.size} — {formatPrice(p.price, locale)}
+                  {printData.formats.map((f) => (
+                    <option value={f.id}>{f.label}</option>
+                  ))}
+                </select>
+              </label>
+              <label class="flex flex-col gap-2 text-sm">
+                <span class="opacity-60">{t('artwork.support')}</span>
+                <select data-print-support class="border border-olive/40 bg-white px-3 py-2.5">
+                  <option value="paper">{t('artwork.supportPaper')}</option>
+                  <option value="canvas">{t('artwork.supportCanvas')}</option>
+                </select>
+              </label>
+              <label class="flex flex-col gap-2 text-sm">
+                <span class="flex items-center gap-1.5 opacity-60">
+                  {t('artwork.border')}
+                  <button
+                    type="button"
+                    data-info-toggle="border-info"
+                    aria-expanded="false"
+                    class="flex size-4.5 cursor-pointer items-center justify-center rounded-full border border-current text-[0.65rem] leading-none opacity-80 hover:opacity-100"
+                  >
+                    i
+                  </button>
+                </span>
+                <select data-print-border class="border border-olive/40 bg-white px-3 py-2.5">
+                  {printData.borders.map((b) => (
+                    <option value={b}>
+                      {b === 0 ? t('artwork.borderNone') : t('artwork.borderCm', { n: b })}
                     </option>
                   ))}
                 </select>
               </label>
               <label class="flex flex-col gap-2 text-sm">
                 <span class="opacity-60">{t('artwork.quantity')}</span>
-                <select data-print-qty class="border border-olive/40 bg-white px-3 py-2.5"
-                ></select>
+                <select data-print-qty class="border border-olive/40 bg-white px-3 py-2.5">
+                  {Array.from({ length: 10 }, (_, i) => (
+                    <option value={i + 1}>{i + 1}</option>
+                  ))}
+                </select>
               </label>
-              <button
-                data-add-print
-                data-slug-base={artwork.id}
-                data-separator={PRINT_ID_SEPARATOR}
-                data-label={t('artwork.addToCart')}
-                data-added-label={t('artwork.addedToCart')}
-                class="cursor-pointer bg-olive px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#5c662c]"
-              >
-                {t('artwork.addToCart')}
-              </button>
+            </div>
+            <p id="border-info" class="mt-3 hidden text-xs leading-relaxed opacity-70">
+              {t('artwork.borderInfo')}
+            </p>
+            <p data-ratio-note class="mt-3 hidden text-xs leading-relaxed text-accent">
+              {t('artwork.ratioNote')}
+            </p>
+            <button
+              data-add-print
+              data-label={t('artwork.addToCart')}
+              data-added-label={t('artwork.addedToCart')}
+              class="mt-5 w-full cursor-pointer bg-olive px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#5c662c]"
+            >
+              {t('artwork.addToCart')}
+            </button>
+
+            {/* Anteprima: come apparirà il foglio stampato (proporzioni e bordi reali) */}
+            <div class="mt-5">
+              <p class="text-xs font-semibold tracking-[0.2em] uppercase opacity-60">
+                {t('artwork.previewTitle')}
+              </p>
+              <div class="mt-2 flex justify-center bg-neutral-200/60 p-4">
+                <div
+                  data-print-preview
+                  class="flex max-h-72 items-center justify-center bg-white shadow-md"
+                  style={`aspect-ratio: ${printData.formats[0].width} / ${printData.formats[0].height}; max-width: 100%;`}
+                >
+                  <img
+                    src={cover.src}
+                    alt=""
+                    class="max-h-full max-w-full"
+                    style="object-fit: contain; width: 100%; height: 100%;"
+                    loading="lazy"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Informazioni: stampa e materiali, formati, cornici */}
+            <div class="mt-5 divide-y divide-olive/20 border-t border-olive/20 text-sm">
+              {printMaterials && (
+                <details class="group py-2.5">
+                  <summary class="flex cursor-pointer items-center justify-between gap-2 font-semibold">
+                    {t('artwork.infoPrintProcess')}
+                    <span class="transition group-open:rotate-45">+</span>
+                  </summary>
+                  <p class="mt-2 leading-relaxed whitespace-pre-line opacity-80">{printMaterials}</p>
+                </details>
+              )}
+              <details class="group py-2.5">
+                <summary class="flex cursor-pointer items-center justify-between gap-2 font-semibold">
+                  {t('artwork.infoSizing')}
+                  <span class="transition group-open:rotate-45">+</span>
+                </summary>
+                <p class="mt-2 leading-relaxed opacity-80">{t('artwork.sizingInfo')}</p>
+                <p class="mt-2 leading-relaxed opacity-80">{t('artwork.borderInfo')}</p>
+              </details>
+              <details class="group py-2.5">
+                <summary class="flex cursor-pointer items-center justify-between gap-2 font-semibold">
+                  {t('artwork.infoFraming')}
+                  <span class="transition group-open:rotate-45">+</span>
+                </summary>
+                <p class="mt-2 leading-relaxed opacity-80">{t('artwork.framingInfo')}</p>
+              </details>
             </div>
           </div>
         )
@@ -262,7 +398,7 @@ const schema = {
             <p class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
               {t('artwork.original')}
             </p>
-            <p class="mt-2 font-serif text-4xl text-accent">
+            <p class="mt-2 text-4xl font-semibold text-accent">
               {available ? formatPrice(artwork.data.price ?? 0, locale) : unavailableLabel}
             </p>
 
@@ -310,6 +446,38 @@ const schema = {
       }
     </div>
   </div>
+
+  {
+    alsoLike.length > 0 && (
+      <section class="mt-16 border-t border-neutral-200 pt-10">
+        <h2 class="font-serif text-2xl sm:text-3xl">{t('artwork.alsoLike')}</h2>
+        <div
+          data-also-like
+          class="mt-6 flex snap-x gap-5 overflow-x-auto pb-3"
+        >
+          {alsoLike.map((a) => (
+            <a
+              href={localizePath(locale, `/opere/${a.id}`)}
+              class="group w-40 shrink-0 snap-start sm:w-48"
+            >
+              <div class="overflow-hidden bg-neutral-100">
+                <Image
+                  src={a.data.images[0]}
+                  alt={pickLocalized(a.data.titles, locale) || a.data.title}
+                  width={400}
+                  class="aspect-4/5 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+                  loading="lazy"
+                />
+              </div>
+              <p class="mt-2 font-serif text-sm leading-snug">
+                {pickLocalized(a.data.titles, locale) || a.data.title}
+              </p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
 
   {/* Finestra (modale) per richiesta originale / informazioni */}
   <dialog
@@ -386,6 +554,8 @@ const schema = {
       </a>
     </form>
   </dialog>
+
+  <script type="application/json" id="print-data" set:html={JSON.stringify(printData)} />
 </Base>
 
 <script>
@@ -406,6 +576,25 @@ const schema = {
   lightbox.on('beforeOpen', () => track('zoom'));
   lightbox.init();
 
+  // Carosello immagini: frecce + miniature
+  const slides = Array.from(document.querySelectorAll<HTMLElement>('#artwork-gallery [data-slide]'));
+  const thumbs = Array.from(document.querySelectorAll<HTMLElement>('[data-thumb]'));
+  if (slides.length > 1) {
+    let current = 0;
+    const show = (i: number) => {
+      current = (i + slides.length) % slides.length;
+      slides.forEach((s, j) => s.classList.toggle('hidden', j !== current));
+      thumbs.forEach((th, j) => {
+        th.classList.toggle('border-ink', j === current);
+        th.classList.toggle('border-transparent', j !== current);
+        th.classList.toggle('opacity-60', j !== current);
+      });
+    };
+    document.querySelector('[data-slide-prev]')?.addEventListener('click', () => show(current - 1));
+    document.querySelector('[data-slide-next]')?.addEventListener('click', () => show(current + 1));
+    thumbs.forEach((th) => th.addEventListener('click', () => show(parseInt(th.dataset.thumb!, 10))));
+  }
+
   document.querySelectorAll<HTMLButtonElement>('[data-add-to-cart]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const qtyInput = document.querySelector<HTMLSelectElement>('[data-qty-input]');
@@ -418,38 +607,90 @@ const schema = {
     });
   });
 
-  // Stampe in vari formati: il selettore aggiorna le quantità disponibili
+  // Stampe: formato + supporto + bordo, con prezzo, avviso proporzioni e anteprima
+  type PrintFormatData = {
+    id: string;
+    label: string;
+    width: number;
+    height: number;
+    prices: Record<string, number>;
+    priceLabels: Record<string, string>;
+    ratioMismatch: boolean;
+  };
+  const printDataEl = document.getElementById('print-data');
   const sizeSelect = document.querySelector<HTMLSelectElement>('[data-print-size]');
+  const supportSelect = document.querySelector<HTMLSelectElement>('[data-print-support]');
+  const borderSelect = document.querySelector<HTMLSelectElement>('[data-print-border]');
   const qtySelect = document.querySelector<HTMLSelectElement>('[data-print-qty]');
   const printBtn = document.querySelector<HTMLButtonElement>('[data-add-print]');
-  if (sizeSelect && qtySelect && printBtn) {
-    const priceEl = document.querySelector<HTMLElement>('[data-print-price]');
-    const availabilityEl = document.querySelector<HTMLElement>('[data-print-availability]');
-    const currentMax = () =>
-      parseInt(sizeSelect.selectedOptions[0]?.dataset.max ?? '1', 10) || 1;
-    const rebuildQty = () => {
-      const max = currentMax();
-      qtySelect.innerHTML = Array.from(
-        { length: max },
-        (_, i) => `<option value="${i + 1}">${i + 1}</option>`
-      ).join('');
-      // Il prezzo grande e la disponibilità seguono il formato selezionato
-      const label = sizeSelect.selectedOptions[0]?.dataset.priceLabel;
-      if (priceEl && label) priceEl.textContent = label;
-      const availabilityLabel = sizeSelect.selectedOptions[0]?.dataset.availabilityLabel;
-      if (availabilityEl && availabilityLabel) availabilityEl.textContent = availabilityLabel;
+  if (printDataEl && sizeSelect && supportSelect && borderSelect && qtySelect && printBtn) {
+    const data = JSON.parse(printDataEl.textContent!) as {
+      slug: string;
+      separator: string;
+      imageRatio: number;
+      formats: PrintFormatData[];
     };
-    sizeSelect.addEventListener('change', rebuildQty);
-    rebuildQty();
+    const byId = new Map(data.formats.map((f) => [f.id, f]));
+    const priceEl = document.querySelector<HTMLElement>('[data-print-price]');
+    const ratioNote = document.querySelector<HTMLElement>('[data-ratio-note]');
+    const preview = document.querySelector<HTMLElement>('[data-print-preview]');
+    const previewImg = preview?.querySelector('img');
+
+    const refresh = () => {
+      const fmt = byId.get(sizeSelect.value) ?? data.formats[0];
+      const support = supportSelect.value === 'canvas' ? 'canvas' : 'paper';
+      if (priceEl) priceEl.textContent = fmt.priceLabels[support];
+      ratioNote?.classList.toggle('hidden', !fmt.ratioMismatch);
+      if (preview) {
+        // Il foglio segue l'orientamento del dipinto (come farebbe la stamperia)
+        const landscape = data.imageRatio > 1;
+        const w = landscape ? Math.max(fmt.width, fmt.height) : Math.min(fmt.width, fmt.height);
+        const h = landscape ? Math.min(fmt.width, fmt.height) : Math.max(fmt.width, fmt.height);
+        preview.style.aspectRatio = `${w} / ${h}`;
+        // Bordo bianco extra in scala: b cm rispetto alla larghezza del foglio
+        const b = parseInt(borderSelect.value, 10) || 0;
+        preview.style.padding = `${(b / w) * 100}%`;
+        if (previewImg) {
+          previewImg.style.width = '100%';
+          previewImg.style.height = '100%';
+        }
+      }
+    };
+    sizeSelect.addEventListener('change', refresh);
+    supportSelect.addEventListener('change', refresh);
+    borderSelect.addEventListener('change', refresh);
+    refresh();
 
     printBtn.addEventListener('click', () => {
-      const id = `${printBtn.dataset.slugBase}${printBtn.dataset.separator}${sizeSelect.value}`;
-      addToCart(id, parseInt(qtySelect.value, 10) || 1, currentMax());
+      const support = supportSelect.value === 'canvas' ? 'canvas' : 'paper';
+      const id = [data.slug, sizeSelect.value, support].join(data.separator);
+      const border = parseInt(borderSelect.value, 10) || 0;
+      addToCart(id, parseInt(qtySelect.value, 10) || 1, 10, border);
       printBtn.textContent = printBtn.dataset.addedLabel!;
       setTimeout(() => {
         printBtn.textContent = printBtn.dataset.label!;
       }, 1800);
     });
+  }
+
+  // Popover "i" del bordo bianco
+  document.querySelectorAll<HTMLButtonElement>('[data-info-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.infoToggle!);
+      const open = target?.classList.toggle('hidden') === false;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+  });
+
+  // "Potrebbero piacerti anche": ordine casuale a ogni visita
+  const alsoLikeRow = document.querySelector<HTMLElement>('[data-also-like]');
+  if (alsoLikeRow) {
+    const cards = Array.from(alsoLikeRow.children);
+    for (let i = cards.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [cards[i], cards[j]] = [cards[j], cards[i]];
+    }
+    cards.forEach((c) => alsoLikeRow.appendChild(c));
   }
 
   // Finestra "richiesta originale / informazioni": apertura, precompilazione, invio.

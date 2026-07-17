@@ -24,8 +24,15 @@ const SHIPPING_COUNTRIES: Stripe.Checkout.SessionCreateParams.ShippingAddressCol
   ];
 
 type CheckoutPayload = {
-  items?: { slug?: string; qty?: number }[];
+  items?: { slug?: string; qty?: number; border?: number }[];
   locale?: string;
+};
+
+// Etichette dei supporti di stampa nelle email/ricevute Stripe (in italiano,
+// sono per l'artista e per il laboratorio di stampa)
+const SUPPORT_LABELS: Record<string, string> = {
+  paper: 'carta fine art',
+  canvas: 'tela artistica',
 };
 
 const json = (body: unknown, status = 200) =>
@@ -78,6 +85,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
     const artwork = bySlug.get(entry.slug)!;
     const isPrintVariant = entry.variant.kind === 'print';
+    // Bordo bianco extra scelto dal cliente (solo stampe, non cambia il prezzo)
+    const border =
+      isPrintVariant && typeof item.border === 'number' && item.border > 0 && item.border <= 10
+        ? Math.round(item.border)
+        : 0;
     lineItems.push({
       quantity: qty,
       price_data: {
@@ -93,17 +105,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
               : artwork.data.kind === 'print'
                 ? 'Stampa - edizione limitata'
                 : 'Opera originale',
-            artwork.data.technique,
-            isPrintVariant ? null : artwork.data.dimensions,
-            String(artwork.data.year),
+            isPrintVariant ? SUPPORT_LABELS[entry.variant.support ?? ''] : artwork.data.dimensions,
+            border ? `bordo bianco ${border} cm per lato` : null,
           ]
             .filter(Boolean)
             .join(' · '),
-          metadata: { slug: entry.id },
+          metadata: { slug: entry.id, ...(border ? { border: `${border}cm` } : {}) },
         },
       },
     });
-    summary.push(`${entry.id} x${qty}`);
+    summary.push(`${entry.id}${border ? `+b${border}` : ''} x${qty}`);
   }
 
   const stripe = new Stripe(secretKey, {

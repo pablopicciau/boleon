@@ -27,7 +27,7 @@ for (const artwork of artworks) {
       title: displayTitle,
       subtitle:
         entry.variant.kind === 'print'
-          ? `${t('artwork.size')}: ${entry.variant.size}`
+          ? `${entry.variant.size} · ${t(entry.variant.support === 'canvas' ? 'artwork.supportCanvas' : 'artwork.supportPaper')}`
           : t(artwork.data.kind === 'print' ? 'artwork.print' : 'artwork.original'),
       price: entry.price,
       max: entry.max,
@@ -48,6 +48,7 @@ const clientData = {
     processing: t('cart.processing'),
     error: t('cart.error'),
     unavailable: t('cart.unavailable'),
+    border: t('artwork.border'),
   },
 };
 ---
@@ -73,7 +74,7 @@ const clientData = {
     <div class="mt-8 flex flex-col items-end gap-4">
       <p class="text-lg">
         <span class="opacity-60">{t('cart.total')}:</span>
-        <span data-cart-total class="ms-2 font-serif text-2xl"></span>
+        <span data-cart-total class="ms-2 text-2xl font-semibold"></span>
       </p>
       <p class="text-xs opacity-50">{t('cart.shippingNote')}</p>
       <button
@@ -149,6 +150,9 @@ const clientData = {
              </select></label>`
           : '';
 
+      const borderLine = item.border
+        ? `<p class="mt-0.5 text-xs tracking-wide uppercase opacity-50">${data.labels.border}: ${item.border} cm</p>`
+        : '';
       li.innerHTML = `
         <a href="${art.url}" class="block w-20 shrink-0 bg-neutral-100">
           <img src="${art.thumb}" alt="" class="aspect-square w-full object-cover" />
@@ -156,6 +160,7 @@ const clientData = {
         <div class="min-w-0 flex-1">
           <a href="${art.url}" class="font-serif text-lg leading-snug hover:underline">${art.title}</a>
           <p class="mt-0.5 text-xs tracking-wide uppercase opacity-50">${art.subtitle}</p>
+          ${borderLine}
           <p class="mt-1 text-sm opacity-60">${fmt.format(art.price)}</p>
           <div class="mt-2 flex items-center gap-4">
             ${qtyControl}
@@ -165,11 +170,11 @@ const clientData = {
         <p class="shrink-0 text-end">${fmt.format(art.price * qty)}</p>`;
 
       li.querySelector('[data-row-qty]')?.addEventListener('change', (e) => {
-        setQty(item.slug, parseInt((e.target as HTMLSelectElement).value, 10), art.max);
+        setQty(item.slug, parseInt((e.target as HTMLSelectElement).value, 10), art.max, item.border);
         render();
       });
       li.querySelector('[data-row-remove]')!.addEventListener('click', () => {
-        removeFromCart(item.slug);
+        removeFromCart(item.slug, item.border);
         render();
       });
 

@@ -2,9 +2,10 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import settings from '../lib/settings';
 import {
-  availablePrintSizes,
   isBaseAvailable,
   isInquiryOnly,
+  printFormatsFor,
+  printPrice,
   sortArtworks,
 } from '../lib/artworks';
 
@@ -31,19 +32,17 @@ export const GET: APIRoute = async ({ site }) => {
         : a.data.kind === 'original'
           ? 'original sold'
           : 'sold out';
-    const prints = availablePrintSizes(a)
-      .map((p) => `${p.size} €${p.price}`)
+    const prints = printFormatsFor(a)
+      .map((f) => `${f.label} from €${printPrice(a, f, 'paper')}`)
       .join(', ');
     const status = prints
-      ? `${baseStatus}; museum-grade fine art prints (pigment giclée, signed and numbered): ${prints}`
+      ? `${baseStatus}; museum-grade fine art prints (pigment giclée, signed and numbered, on cotton paper or artist canvas, optional extra white border for framing): ${prints}`
       : baseStatus;
     const desc = a.data.descriptions.en || a.data.descriptions.it || '';
     const coll = a.data.collections
       .map((c) => collectionName.get(c) ?? c)
       .join(', ');
     const details = [
-      `${a.data.year}`,
-      a.data.technique,
       a.data.dimensions,
       a.data.kind === 'original' ? 'original artwork (unique piece)' : 'limited edition print',
       coll ? `collection: ${coll}` : '',
@@ -68,7 +67,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   const body = `# ${settings.artistName}
 
-> ${settings.taglines.en || settings.taglines.it} — online gallery and shop of the artist ${settings.artistName}, a mysterious Italian artist. Original artworks are unique pieces available on request via the site contact form; museum-grade fine art prints (pigment giclée on 100% cotton archival paper or artist canvas, signed and numbered) are purchasable online in sizes A4 to A0, with worldwide shipping and secure Stripe checkout.
+> ${[settings.taglines.en || settings.taglines.it, `online gallery and shop of the artist ${settings.artistName}, a mysterious Italian artist`].filter(Boolean).join(' — ')}. Original artworks are unique pieces available on request via the site contact form; museum-grade fine art prints (pigment giclée on 100% cotton archival paper or artist canvas, signed and numbered) are purchasable online in European A sizes (A4–A0) and US/Canada inch sizes (8×10 to 24×36), with an optional extra white border for framing, worldwide shipping and secure Stripe checkout.
 
 ${story}
 

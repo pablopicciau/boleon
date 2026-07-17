@@ -1,4 +1,13 @@
 import { config, fields, collection, singleton } from '@keystatic/core';
+import shopSettings from './src/content/site-shop.json';
+
+// I formati standard delle stampe (definiti in Impostazioni → Vendita e stampe)
+// diventano caselle da spuntare sulla scheda di ogni opera.
+const printFormatOptions = (shopSettings.printFormats ?? []).map((f) => ({
+  label: f.label,
+  value: f.id,
+}));
+const allPrintFormatIds = printFormatOptions.map((o) => o.value);
 
 const localizedText = (label: string, multiline = false) =>
   fields.object(
@@ -31,18 +40,10 @@ export default config({
       slugField: 'title',
       path: 'src/content/artworks/*',
       format: { data: 'json' },
-      columns: ['year', 'kind', 'price'],
+      columns: ['kind'],
       schema: {
         title: fields.slug({ name: { label: 'Titolo' } }),
         titles: localizedText('Titolo tradotto (opzionale)'),
-        year: fields.integer({
-          label: 'Anno',
-          validation: { isRequired: true },
-        }),
-        technique: fields.text({
-          label: 'Tecnica',
-          description: 'Es. "Olio su tela", "Acrilico su legno"…',
-        }),
         dimensions: fields.text({
           label: 'Dimensioni',
           description: 'Es. "70 × 100 cm"',
@@ -68,8 +69,9 @@ export default config({
           validation: { min: 0 },
         }),
         sold: fields.checkbox({
-          label: 'Venduta',
-          description: 'Solo per le opere originali: spunta dopo la vendita.',
+          label: 'Originale venduto',
+          description:
+            'Spunta quando il pezzo unico è stato venduto: le stampe restano in vendita.',
         }),
         editionSize: fields.integer({
           label: 'Tiratura',
@@ -82,38 +84,28 @@ export default config({
         showAvailability: fields.checkbox({
           label: 'Mostra la disponibilità ai visitatori',
           description:
-            'Se attivo, il sito mostra quante copie restano (del pezzo base e di ogni formato di stampa qui sotto), es. "7 di 30 disponibili". Se disattivo, questi numeri restano privati.',
+            'Se attivo, il sito mostra quante copie restano del pezzo base, es. "7 di 30 disponibili". Se disattivo, questi numeri restano privati.',
         }),
-        printSizes: fields.array(
-          fields.object({
-            size: fields.text({
-              label: 'Formato',
-              description: 'Es. "30 × 40 cm"',
-              validation: { isRequired: true },
-            }),
-            price: fields.number({
-              label: 'Prezzo (EUR)',
-              validation: { isRequired: true, min: 1 },
-            }),
-            stock: fields.integer({
-              label: 'Copie disponibili',
-              description: 'A 0 il formato risulta esaurito.',
-              defaultValue: 0,
-            }),
-            editionSize: fields.integer({
-              label: 'Tiratura',
-              description:
-                'Facoltativo: numero totale di copie di questo formato. Vuoto = edizione aperta (si mostrano solo le copie rimaste, non il totale).',
-            }),
-          }),
-          {
-            label: 'Stampe in vari formati',
-            description:
-              'Opzionale: formati in cui l’opera è ordinabile come stampa, oltre all’eventuale originale.',
-            itemLabel: (props) =>
-              `${props.fields.size.value || 'Formato'} — ${props.fields.price.value ?? '?'} €`,
-          }
-        ),
+        printsEnabled: fields.checkbox({
+          label: 'Stampe in vendita',
+          description:
+            'Se attivo, l’opera è ordinabile come stampa fine art nei formati scelti qui sotto, ai prezzi standard di "Vendita e stampe".',
+          defaultValue: true,
+        }),
+        printFormats: fields.multiselect({
+          label: 'Formati di stampa offerti',
+          description:
+            'I prezzi di ogni formato si impostano una volta sola in Sito → Vendita e stampe, uguali per tutte le opere.',
+          options: printFormatOptions,
+          defaultValue: allPrintFormatIds,
+        }),
+        printPricePercent: fields.number({
+          label: 'Aumento prezzo stampe (%)',
+          description:
+            'Percentuale in più rispetto ai prezzi standard, solo per questa opera. 0 = prezzi standard, 20 = +20%.',
+          defaultValue: 0,
+          validation: { min: 0, max: 500 },
+        }),
         featured: fields.checkbox({
           label: 'In evidenza',
           description: 'Mostra l’opera nella sezione in evidenza della home.',
@@ -246,6 +238,47 @@ export default config({
       format: { data: 'json' },
       schema: {
         printMaterials: localizedText('Materiali di stampa (mostrato sotto i formati)', true),
+        printFormats: fields.array(
+          fields.object({
+            id: fields.text({
+              label: 'Codice',
+              description: 'Identificativo breve, senza spazi (es. "a4", "16x20"). Non cambiarlo dopo la creazione.',
+              validation: { isRequired: true },
+            }),
+            label: fields.text({
+              label: 'Nome mostrato',
+              description: 'Es. "A4 · 21 × 29,7 cm"',
+              validation: { isRequired: true },
+            }),
+            width: fields.number({
+              label: 'Larghezza (cm)',
+              validation: { isRequired: true, min: 1 },
+            }),
+            height: fields.number({
+              label: 'Altezza (cm)',
+              validation: { isRequired: true, min: 1 },
+            }),
+            price: fields.number({
+              label: 'Prezzo su carta (EUR)',
+              description: 'Prezzo standard, uguale per tutte le opere (ogni opera può aggiungere una % dalla sua scheda).',
+              validation: { isRequired: true, min: 1 },
+            }),
+          }),
+          {
+            label: 'Formati e prezzi standard delle stampe',
+            description:
+              'Valgono per tutte le opere. Dopo aver aggiunto un formato nuovo, spuntalo nelle schede delle opere che lo offrono.',
+            itemLabel: (props) =>
+              `${props.fields.label.value || props.fields.id.value || 'Formato'} — ${props.fields.price.value ?? '?'} €`,
+          }
+        ),
+        canvasSurchargePercent: fields.number({
+          label: 'Sovrapprezzo tela (%)',
+          description:
+            'Quanto costa in più la stampa su tela artistica rispetto alla carta (es. 60 = +60%).',
+          defaultValue: 60,
+          validation: { min: 0, max: 500 },
+        }),
       },
     }),
   },

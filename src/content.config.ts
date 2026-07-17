@@ -20,8 +20,6 @@ const artworks = defineCollection({
       title: z.string(),
       // Titolo tradotto per lingua (opzionale): se vuoto usa il titolo qui sopra
       titles: localized,
-      year: z.number(),
-      technique: z.string().default(''),
       dimensions: z.string().default(''),
       kind: z.enum(['original', 'print']),
       price: z.number().nullable().optional(),
@@ -40,19 +38,13 @@ const artworks = defineCollection({
       sortOrder: z.number().default(0),
       images: z.array(image()).min(1),
       descriptions: localized,
-      // Se true, il sito mostra ai visitatori quante copie restano (pezzo base e ogni formato di stampa)
+      // Se true, il sito mostra ai visitatori quante copie restano del pezzo base
       showAvailability: z.boolean().default(false),
-      // Stampe dell'opera ordinabili in vari formati (opzionale, si affianca all'originale)
-      printSizes: z
-        .array(
-          z.object({
-            size: z.string(),
-            price: z.number(),
-            stock: z.number().default(0),
-            editionSize: z.number().nullable().optional(),
-          })
-        )
-        .default([]),
+      // Stampe fine art: i formati/prezzi standard vivono in site-shop.json;
+      // qui l'opera dice solo se le offre, in quali formati e con che aumento %
+      printsEnabled: z.boolean().default(true),
+      printFormats: z.array(z.string()).default([]),
+      printPricePercent: z.number().default(0),
     }),
 });
 
