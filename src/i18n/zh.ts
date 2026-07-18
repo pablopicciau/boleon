@@ -82,7 +82,7 @@ export const zh: Dict = {
   'artwork.infoPrintProcess': '印刷工艺与材料',
   'artwork.infoFraming': '装裱',
   'artwork.framingInfo': '印刷品不带画框寄送，您可以为自己的空间挑选最合适的画框。A 系列和英寸规格对应最常见的标准画框；借助额外白边，还可装入更大的画框或搭配卡纸。',
-  'artwork.ratioNote': '这件作品的原始比例与所选尺寸不同：印刷时将保持原始比例，多余空间保留为白色，既不裁剪也不变形。请看下方预览。',
+  'artwork.ratioNote': '这件作品的原始比例与所选尺寸不同：印刷时将保持原始比例，多余空间保留为白色，既不裁剪也不变形。打开打印预览查看效果。',
   'artwork.previewTitle': '打印预览',
   'artwork.alsoLike': '你可能还喜欢',
   'inquiry.notConfigured': '自动发送尚未开通。点击下方：您的邮件应用将打开，邮件内容已备好，直接发送即可。',

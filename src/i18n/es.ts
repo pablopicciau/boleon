@@ -83,7 +83,7 @@ export const es: Dict = {
   'artwork.infoPrintProcess': 'Impresión y materiales',
   'artwork.infoFraming': 'Enmarcado',
   'artwork.framingInfo': 'Las láminas se envían sin marco, para que elijas el perfecto para tu espacio. Los formatos de la serie A y en pulgadas corresponden a los marcos estándar más comunes; con el borde blanco extra también puedes montarlas en marcos más grandes o con paspartú.',
-  'artwork.ratioNote': 'Esta obra nació con proporciones distintas a este formato: la impresión mantiene las proporciones originales y el espacio sobrante queda en blanco, para no recortar ni deformar la pintura. Mira la vista previa abajo.',
+  'artwork.ratioNote': 'Esta obra nació con proporciones distintas a este formato: la impresión mantiene las proporciones originales y el espacio sobrante queda en blanco, para no recortar ni deformar la pintura. Abre la vista previa de la impresión para ver el resultado.',
   'artwork.previewTitle': 'Vista previa de la impresión',
   'artwork.alsoLike': 'También te pueden gustar',
   'inquiry.notConfigured': 'El envío automático aún no está activo. Haz clic abajo: se abrirá tu aplicación de correo con el mensaje listo para enviar.',

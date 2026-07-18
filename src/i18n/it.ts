@@ -81,7 +81,7 @@ export const it = {
   'artwork.infoPrintProcess': 'Stampa e materiali',
   'artwork.infoFraming': 'Cornici',
   'artwork.framingInfo': 'Le stampe sono spedite senza cornice, così puoi scegliere quella perfetta per i tuoi spazi. I formati della serie A e quelli in pollici corrispondono alle cornici standard più diffuse; con il bordo bianco extra puoi montarle anche in cornici più grandi o con passe-partout.',
-  'artwork.ratioNote': 'Questa opera nasce con proporzioni diverse da questo formato: la stampa mantiene le proporzioni originali e lo spazio che avanza resta bianco, per non tagliare né deformare il dipinto. Guarda l’anteprima qui sotto.',
+  'artwork.ratioNote': 'Questa opera nasce con proporzioni diverse da questo formato: la stampa mantiene le proporzioni originali e lo spazio che avanza resta bianco, per non tagliare né deformare il dipinto. Apri l’anteprima di stampa per vedere il risultato.',
   'artwork.previewTitle': 'Anteprima della stampa',
   'artwork.alsoLike': 'Potrebbero piacerti anche',
   'inquiry.notConfigured': 'L’invio automatico non è ancora attivo. Clicca qui sotto: si aprirà la tua app email con il messaggio già pronto da inviare.',

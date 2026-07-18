@@ -83,7 +83,7 @@ export const fr: Dict = {
   'artwork.infoPrintProcess': 'Impression et matériaux',
   'artwork.infoFraming': 'Encadrement',
   'artwork.framingInfo': 'Les tirages sont expédiés sans cadre, pour que vous choisissiez celui qui convient à votre intérieur. Les formats de la série A et en pouces correspondent aux cadres standard les plus courants ; avec le bord blanc supplémentaire, vous pouvez aussi les monter dans des cadres plus grands ou avec passe-partout.',
-  'artwork.ratioNote': 'Cette œuvre a été créée dans des proportions différentes de ce format : le tirage conserve les proportions d’origine et l’espace restant demeure blanc, afin de ne pas rogner ni déformer la peinture. Voir l’aperçu ci-dessous.',
+  'artwork.ratioNote': 'Cette œuvre a été créée dans des proportions différentes de ce format : le tirage conserve les proportions d’origine et l’espace restant demeure blanc, afin de ne pas rogner ni déformer la peinture. Ouvrez l’aperçu du tirage pour voir le résultat.',
   'artwork.previewTitle': 'Aperçu du tirage',
   'artwork.alsoLike': 'Vous aimerez peut-être aussi',
   'inquiry.notConfigured': 'L’envoi automatique n’est pas encore actif. Cliquez ci-dessous : votre application e-mail s’ouvrira avec le message prêt à envoyer.',

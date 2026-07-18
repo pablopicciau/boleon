@@ -83,7 +83,7 @@ export const en: Dict = {
   'artwork.infoPrintProcess': 'Print process & materials',
   'artwork.infoFraming': 'Framing',
   'artwork.framingInfo': 'Prints ship unframed, so you can pick the perfect frame for your space. A-series and inch sizes match the most common standard frames; with the extra white border you can also mount them in larger frames or with a passe-partout.',
-  'artwork.ratioNote': 'This artwork was created in different proportions from this size: the print keeps the original proportions and the remaining space stays white, so the painting is neither cropped nor distorted. See the preview below.',
+  'artwork.ratioNote': 'This artwork was created in different proportions from this size: the print keeps the original proportions and the remaining space stays white, so the painting is neither cropped nor distorted. Open the print preview to see the result.',
   'artwork.previewTitle': 'Print preview',
   'artwork.alsoLike': 'You may also like',
   'inquiry.notConfigured': 'Automatic sending is not active yet. Click below: your email app will open with the message ready to send.',
