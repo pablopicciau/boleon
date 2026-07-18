@@ -10,6 +10,8 @@ export type PrintFormat = {
   width: number;
   height: number;
   price: number;
+  /** Gruppo del menu a tendina: 'a' (serie A), 'eu' (standard europei), 'in' (pollici USA/Canada) */
+  group?: string;
 };
 
 export const PRINT_SUPPORTS = ['paper', 'canvas'] as const;

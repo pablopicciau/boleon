@@ -87,4 +87,7 @@ export const en: Dict = {
   'artwork.previewTitle': 'Print preview',
   'artwork.alsoLike': 'You may also like',
   'inquiry.notConfigured': 'Automatic sending is not active yet. Click below: your email app will open with the message ready to send.',
+  'artwork.groupA': 'International sizes (A series)',
+  'artwork.groupEu': 'European standards (frames)',
+  'artwork.groupIn': 'Inches (US/Canada)',
 };

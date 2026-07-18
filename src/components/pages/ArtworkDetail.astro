@@ -54,12 +54,18 @@ const printData = {
   separator: PRINT_ID_SEPARATOR,
   imageRatio,
   borders: [0, 2, 3, 5],
+  // Unità di misura iniziale: pollici per il pubblico anglofono, cm per gli altri
+  defaultUnit: locale === 'en' ? 'in' : 'cm',
+  lang: locale,
   formats: printFormats.map((f) => {
     const fmtRatio = Math.max(f.width, f.height) / Math.min(f.width, f.height);
     const imgRatio = Math.max(imageRatio, 1 / imageRatio);
     return {
       id: f.id,
       label: f.label,
+      // "A4", "A3"… davanti alle misure; gli altri formati sono solo misure
+      name: f.group === 'a' ? f.label.split('·')[0].trim() : '',
+      group: f.group ?? 'eu',
       width: f.width,
       height: f.height,
       prices: {
@@ -151,7 +157,11 @@ const schema = {
     {t('artwork.backToWorks')}
   </a>
 
-  <div class="grid gap-10 lg:grid-cols-5">
+  {/* Titolo sopra il quadro */}
+  <h1 class="font-serif text-3xl leading-tight sm:text-4xl">{displayTitle}</h1>
+  {collectionLine && <p class="mt-2 text-sm tracking-wide opacity-70">{collectionLine}</p>}
+
+  <div class="mt-8 grid gap-10 lg:grid-cols-5">
     <div class="lg:col-span-3">
       {/* Carosello: una foto alla volta, frecce e miniature cliccabili */}
       <div class="relative">
@@ -179,24 +189,22 @@ const schema = {
           }
         </div>
         {
+          /* Zone invisibili ai bordi: toccando i lati della foto si scorre,
+             il centro resta per lo zoom. Nessuna freccia disegnata sopra. */
           artwork.data.images.length > 1 && (
             <>
               <button
                 type="button"
                 data-slide-prev
                 aria-label="←"
-                class="absolute start-3 top-1/2 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-paper/80 text-xl shadow backdrop-blur transition hover:bg-paper"
-              >
-                <span class="rtl:rotate-180">←</span>
-              </button>
+                class="absolute inset-y-0 start-0 z-10 w-1/6 cursor-pointer"
+              />
               <button
                 type="button"
                 data-slide-next
                 aria-label="→"
-                class="absolute end-3 top-1/2 flex size-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-paper/80 text-xl shadow backdrop-blur transition hover:bg-paper"
-              >
-                <span class="rtl:rotate-180">→</span>
-              </button>
+                class="absolute inset-y-0 end-0 z-10 w-1/6 cursor-pointer"
+              />
             </>
           )
         }
@@ -229,9 +237,6 @@ const schema = {
     </div>
 
     <div class="lg:col-span-2">
-      <h1 class="font-serif text-3xl leading-tight sm:text-4xl">{displayTitle}</h1>
-      {collectionLine && <p class="mt-2 text-sm tracking-wide opacity-70">{collectionLine}</p>}
-
       {
         (artwork.data.dimensions ||
           (isPrint && artwork.data.showAvailability && artwork.data.editionSize)) && (
@@ -267,11 +272,31 @@ const schema = {
             </p>
             <div class="mt-4 grid gap-4 sm:grid-cols-2">
               <label class="flex flex-col gap-2 text-sm">
-                <span class="opacity-60">{t('artwork.size')}</span>
+                <span class="flex items-center justify-between gap-2">
+                  <span class="opacity-60">{t('artwork.size')}</span>
+                  {/* Selettore unità: le misure nel menu si mostrano in cm o pollici */}
+                  <span class="flex overflow-hidden rounded-sm border border-olive/40 text-xs">
+                    <button type="button" data-unit="cm" class="cursor-pointer px-2 py-0.5">cm</button>
+                    <button type="button" data-unit="in" class="cursor-pointer border-s border-olive/40 px-2 py-0.5">in</button>
+                  </span>
+                </span>
                 <select data-print-size class="border border-olive/40 bg-white px-3 py-2.5">
-                  {printData.formats.map((f) => (
-                    <option value={f.id}>{f.label}</option>
-                  ))}
+                  {
+                    (['a', 'eu', 'in'] as const).map((g) => {
+                      const inGroup = printData.formats.filter((f) => f.group === g);
+                      if (inGroup.length === 0) return null;
+                      const groupLabel = t(
+                        g === 'a' ? 'artwork.groupA' : g === 'eu' ? 'artwork.groupEu' : 'artwork.groupIn'
+                      );
+                      return (
+                        <optgroup label={groupLabel}>
+                          {inGroup.map((f) => (
+                            <option value={f.id}>{f.label}</option>
+                          ))}
+                        </optgroup>
+                      );
+                    })
+                  }
                 </select>
               </label>
               <label class="flex flex-col gap-2 text-sm">
@@ -612,6 +637,8 @@ const schema = {
   type PrintFormatData = {
     id: string;
     label: string;
+    name: string;
+    group: string;
     width: number;
     height: number;
     prices: Record<string, number>;
@@ -629,9 +656,41 @@ const schema = {
       slug: string;
       separator: string;
       imageRatio: number;
+      defaultUnit: 'cm' | 'in';
+      lang: string;
       formats: PrintFormatData[];
     };
     const byId = new Map(data.formats.map((f) => [f.id, f]));
+
+    // Misure in cm o pollici, a scelta del visitatore
+    let unit: 'cm' | 'in' = data.defaultUnit;
+    const unitBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-unit]'));
+    const fmtNum = (n: number) => {
+      const rounded = Math.round(n * 10) / 10;
+      return rounded.toLocaleString(data.lang);
+    };
+    const dimsLabel = (f: PrintFormatData) =>
+      unit === 'in'
+        ? `${fmtNum(f.width / 2.54)} × ${fmtNum(f.height / 2.54)} in`
+        : `${fmtNum(f.width)} × ${fmtNum(f.height)} cm`;
+    const applyUnit = () => {
+      unitBtns.forEach((b) => {
+        const active = b.dataset.unit === unit;
+        b.classList.toggle('bg-olive', active);
+        b.classList.toggle('text-white', active);
+      });
+      sizeSelect.querySelectorAll('option').forEach((opt) => {
+        const f = byId.get(opt.value);
+        if (f) opt.textContent = f.name ? `${f.name} · ${dimsLabel(f)}` : dimsLabel(f);
+      });
+    };
+    unitBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        unit = b.dataset.unit === 'in' ? 'in' : 'cm';
+        applyUnit();
+      })
+    );
+    applyUnit();
     const priceEl = document.querySelector<HTMLElement>('[data-print-price]');
     const ratioNote = document.querySelector<HTMLElement>('[data-ratio-note]');
     const preview = document.querySelector<HTMLElement>('[data-print-preview]');

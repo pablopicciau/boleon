@@ -87,4 +87,7 @@ export const ar: Dict = {
   'artwork.previewTitle': 'معاينة المطبوعة',
   'artwork.alsoLike': 'قد يعجبك أيضاً',
   'inquiry.notConfigured': 'الإرسال التلقائي غير مفعّل بعد. انقر أدناه: سيفتح تطبيق البريد لديك والرسالة جاهزة للإرسال.',
+  'artwork.groupA': 'مقاسات دولية (سلسلة A)',
+  'artwork.groupEu': 'مقاسات أوروبية (إطارات)',
+  'artwork.groupIn': 'بوصة (الولايات المتحدة/كندا)',
 };

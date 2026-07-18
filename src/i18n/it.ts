@@ -85,6 +85,9 @@ export const it = {
   'artwork.previewTitle': 'Anteprima della stampa',
   'artwork.alsoLike': 'Potrebbero piacerti anche',
   'inquiry.notConfigured': 'L’invio automatico non è ancora attivo. Clicca qui sotto: si aprirà la tua app email con il messaggio già pronto da inviare.',
+  'artwork.groupA': 'Formati internazionali (serie A)',
+  'artwork.groupEu': 'Standard europei (cornici)',
+  'artwork.groupIn': 'Pollici (USA/Canada)',
 } as const;
 
 export type Dict = Record<keyof typeof it, string>;

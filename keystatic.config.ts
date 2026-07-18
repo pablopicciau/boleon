@@ -245,6 +245,16 @@ export default config({
               description: 'Identificativo breve, senza spazi (es. "a4", "16x20"). Non cambiarlo dopo la creazione.',
               validation: { isRequired: true },
             }),
+            group: fields.select({
+              label: 'Gruppo',
+              description: 'In quale gruppo del menu a tendina compare il formato.',
+              options: [
+                { label: 'Serie A (internazionale)', value: 'a' },
+                { label: 'Standard europei (cornici)', value: 'eu' },
+                { label: 'Pollici (USA/Canada)', value: 'in' },
+              ],
+              defaultValue: 'eu',
+            }),
             label: fields.text({
               label: 'Nome mostrato',
               description: 'Es. "A4 · 21 × 29,7 cm"',

@@ -86,4 +86,7 @@ export const zh: Dict = {
   'artwork.previewTitle': '打印预览',
   'artwork.alsoLike': '你可能还喜欢',
   'inquiry.notConfigured': '自动发送尚未开通。点击下方：您的邮件应用将打开，邮件内容已备好，直接发送即可。',
+  'artwork.groupA': '国际标准（A 系列）',
+  'artwork.groupEu': '欧洲标准（画框）',
+  'artwork.groupIn': '英寸（美国/加拿大）',
 };

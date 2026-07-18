@@ -87,4 +87,7 @@ export const es: Dict = {
   'artwork.previewTitle': 'Vista previa de la impresión',
   'artwork.alsoLike': 'También te pueden gustar',
   'inquiry.notConfigured': 'El envío automático aún no está activo. Haz clic abajo: se abrirá tu aplicación de correo con el mensaje listo para enviar.',
+  'artwork.groupA': 'Formatos internacionales (serie A)',
+  'artwork.groupEu': 'Estándares europeos (marcos)',
+  'artwork.groupIn': 'Pulgadas (EE. UU./Canadá)',
 };

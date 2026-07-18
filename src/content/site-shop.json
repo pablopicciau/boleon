@@ -11,6 +11,7 @@
   "printFormats": [
     {
       "id": "a4",
+      "group": "a",
       "label": "A4 · 21 × 29,7 cm",
       "width": 21,
       "height": 29.7,
@@ -18,6 +19,7 @@
     },
     {
       "id": "a3",
+      "group": "a",
       "label": "A3 · 29,7 × 42 cm",
       "width": 29.7,
       "height": 42,
@@ -25,6 +27,7 @@
     },
     {
       "id": "a2",
+      "group": "a",
       "label": "A2 · 42 × 59,4 cm",
       "width": 42,
       "height": 59.4,
@@ -32,6 +35,7 @@
     },
     {
       "id": "a1",
+      "group": "a",
       "label": "A1 · 59,4 × 84,1 cm",
       "width": 59.4,
       "height": 84.1,
@@ -39,13 +43,63 @@
     },
     {
       "id": "a0",
+      "group": "a",
       "label": "A0 · 84,1 × 118,9 cm",
       "width": 84.1,
       "height": 118.9,
       "price": 330
     },
     {
+      "id": "13x18",
+      "group": "eu",
+      "label": "13 × 18 cm",
+      "width": 13,
+      "height": 18,
+      "price": 30
+    },
+    {
+      "id": "30x40",
+      "group": "eu",
+      "label": "30 × 40 cm",
+      "width": 30,
+      "height": 40,
+      "price": 70
+    },
+    {
+      "id": "40x50",
+      "group": "eu",
+      "label": "40 × 50 cm",
+      "width": 40,
+      "height": 50,
+      "price": 105
+    },
+    {
+      "id": "50x70",
+      "group": "eu",
+      "label": "50 × 70 cm",
+      "width": 50,
+      "height": 70,
+      "price": 150
+    },
+    {
+      "id": "70x100",
+      "group": "eu",
+      "label": "70 × 100 cm",
+      "width": 70,
+      "height": 100,
+      "price": 260
+    },
+    {
+      "id": "5x7",
+      "group": "in",
+      "label": "5 × 7 in · 12,7 × 17,8 cm",
+      "width": 12.7,
+      "height": 17.8,
+      "price": 30
+    },
+    {
       "id": "8x10",
+      "group": "in",
       "label": "8 × 10 in · 20,3 × 25,4 cm",
       "width": 20.3,
       "height": 25.4,
@@ -53,6 +107,7 @@
     },
     {
       "id": "11x14",
+      "group": "in",
       "label": "11 × 14 in · 27,9 × 35,6 cm",
       "width": 27.9,
       "height": 35.6,
@@ -60,6 +115,7 @@
     },
     {
       "id": "12x16",
+      "group": "in",
       "label": "12 × 16 in · 30,5 × 40,6 cm",
       "width": 30.5,
       "height": 40.6,
@@ -67,6 +123,7 @@
     },
     {
       "id": "16x20",
+      "group": "in",
       "label": "16 × 20 in · 40,6 × 50,8 cm",
       "width": 40.6,
       "height": 50.8,
@@ -74,6 +131,7 @@
     },
     {
       "id": "18x24",
+      "group": "in",
       "label": "18 × 24 in · 45,7 × 61 cm",
       "width": 45.7,
       "height": 61,
@@ -81,6 +139,7 @@
     },
     {
       "id": "24x36",
+      "group": "in",
       "label": "24 × 36 in · 61 × 91,4 cm",
       "width": 61,
       "height": 91.4,

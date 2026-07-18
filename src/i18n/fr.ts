@@ -87,4 +87,7 @@ export const fr: Dict = {
   'artwork.previewTitle': 'Aperçu du tirage',
   'artwork.alsoLike': 'Vous aimerez peut-être aussi',
   'inquiry.notConfigured': 'L’envoi automatique n’est pas encore actif. Cliquez ci-dessous : votre application e-mail s’ouvrira avec le message prêt à envoyer.',
+  'artwork.groupA': 'Formats internationaux (série A)',
+  'artwork.groupEu': 'Standards européens (cadres)',
+  'artwork.groupIn': 'Pouces (États-Unis/Canada)',
 };

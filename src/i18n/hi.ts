@@ -87,4 +87,7 @@ export const hi: Dict = {
   'artwork.previewTitle': 'प्रिंट पूर्वावलोकन',
   'artwork.alsoLike': 'आपको ये भी पसंद आ सकती हैं',
   'inquiry.notConfigured': 'स्वचालित भेजना अभी सक्रिय नहीं है। नीचे क्लिक करें: आपका ईमेल ऐप तैयार संदेश के साथ खुल जाएगा।',
+  'artwork.groupA': 'अंतरराष्ट्रीय आकार (A सीरीज़)',
+  'artwork.groupEu': 'यूरोपीय मानक (फ्रेम)',
+  'artwork.groupIn': 'इंच (यूएस/कनाडा)',
 };
