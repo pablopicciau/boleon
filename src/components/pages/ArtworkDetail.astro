@@ -80,6 +80,9 @@ const printData = {
     };
   }),
 };
+// Il formato preselezionato è il più economico, così il prezzo mostrato
+// all'apertura coincide con il "da …" delle card della galleria
+const defaultFormat = [...printData.formats].sort((a, b) => a.prices.paper - b.prices.paper)[0];
 
 // "N° 2 · C. Notturni": numero dell'opera nella sua prima collezione
 const firstCollection = artwork.data.collections[0];
@@ -268,7 +271,7 @@ const schema = {
               {t('artwork.prints')}
             </h2>
             <p data-print-price class="mt-4 text-4xl font-semibold text-olive">
-              {printData.formats[0].priceLabels.paper}
+              {defaultFormat.priceLabels.paper}
             </p>
             <div class="mt-4 grid gap-4 sm:grid-cols-2">
               <label class="flex flex-col gap-2 text-sm">
@@ -291,7 +294,9 @@ const schema = {
                       return (
                         <optgroup label={groupLabel}>
                           {inGroup.map((f) => (
-                            <option value={f.id}>{f.label}</option>
+                            <option value={f.id} selected={f.id === defaultFormat.id}>
+                              {f.label}
+                            </option>
                           ))}
                         </optgroup>
                       );
@@ -359,7 +364,7 @@ const schema = {
                 <div
                   data-print-preview
                   class="flex max-h-72 items-center justify-center bg-white shadow-md"
-                  style={`aspect-ratio: ${printData.formats[0].width} / ${printData.formats[0].height}; max-width: 100%;`}
+                  style={`aspect-ratio: ${defaultFormat.width} / ${defaultFormat.height}; max-width: 100%;`}
                 >
                   <img
                     src={cover.src}
