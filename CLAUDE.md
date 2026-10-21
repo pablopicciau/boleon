@@ -67,6 +67,10 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 3. **Newsletter**: Resend Audiences (gratis fino a 1.000 contatti). Da fare: modulo iscrizione sul sito (7 lingue) → endpoint `/api/subscribe` che aggiunge il contatto all'Audience + riga privacy; l'invio degli annunci si fa dal pannello Resend (Broadcasts), senza codice. Dipende dal punto 1.
 4. **Commenti con verifica email**: Cloudflare D1 (database gratuito) + `/api/comments` + codice di verifica a 6 cifre via Resend + Turnstile anti-spam + moderazione (pending finché l'artista non approva da /gestione). 2–3 sessioni di lavoro. Dipende dal punto 1.
 
+## Marketing e visibilità
+
+Piano completo e aggiornabile in `docs/piano-marketing.md` (SEO Google + Bing/AI, Pinterest, image SEO, marketplace, newsletter, costruzione del nome "Boleòn" come entità). Da rivedere e spuntare man mano insieme all'utente.
+
 ## Comandi
 
 ```sh
