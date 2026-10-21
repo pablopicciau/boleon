@@ -39,7 +39,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const resendKey = getEnv(locals, 'RESEND_API_KEY');
-    const to = getEnv(locals, 'ORDER_NOTIFICATION_EMAIL');
+    // Stessa logica del modulo contatti: se non è impostato un indirizzo
+    // dedicato, le notifiche d'ordine arrivano all'email dell'artista.
+    const to = getEnv(locals, 'ORDER_NOTIFICATION_EMAIL') ?? 'boleon.art@gmail.com';
     const from = getEnv(locals, 'RESEND_FROM_EMAIL') ?? 'onboarding@resend.dev';
 
     if (resendKey && to) {
