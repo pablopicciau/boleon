@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import { useTranslations, defaultLocale } from '../i18n';
+
+export const prerender = true;
+
+// Pagina mostrata per gli URL inesistenti. Testo in italiano (lingua di default):
+// l'URL è sconosciuto, quindi non c'è una lingua da cui partire.
+const t = useTranslations(defaultLocale);
+---
+
+<Base locale={defaultLocale} title={t('notFound.title')} description={t('notFound.text')}>
+  <section class="mx-auto flex max-w-xl flex-col items-center py-20 text-center sm:py-28">
+    <p class="font-hand text-7xl text-accent sm:text-8xl">404</p>
+    <h1 class="mt-4 font-hand text-3xl sm:text-4xl">{t('notFound.title')}</h1>
+    <p class="mx-auto mt-5 max-w-prose leading-relaxed opacity-70">{t('notFound.text')}</p>
+    <a
+      href="/"
+      class="paper-btn mt-9 inline-block px-8 py-3 text-sm tracking-widest text-white uppercase"
+    >
+      {t('notFound.home')}
+    </a>
+  </section>
+</Base>
