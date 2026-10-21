@@ -1,0 +1,120 @@
+---
+import Base from '../layouts/Base.astro';
+import settings from '../lib/settings';
+import { defaultLocale } from '../i18n';
+
+export const prerender = true;
+
+// Pagina legale (Privacy + spedizioni/resi) in italiano, lingua dell'artista.
+// Base pensata per questo sito: da far verificare da un consulente per
+// esigenze particolari (es. partita IVA).
+const email = settings.contactEmail || 'boleon.art@gmail.com';
+---
+
+<Base
+  locale={defaultLocale}
+  title="Note legali e Privacy"
+  description="Informativa privacy, cookie, pagamenti, spedizioni e resi di boleon.it."
+>
+  <article class="prose-legal mx-auto max-w-2xl py-14 sm:py-20">
+    <h1 class="font-hand text-3xl sm:text-4xl">Note legali e Privacy</h1>
+    <p class="mt-6 leading-relaxed opacity-80">
+      Questa pagina spiega come trattiamo i tuoi dati e come funzionano acquisti,
+      spedizioni e resi su questo sito.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Titolare e contatti</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Il sito è gestito dall'artista <strong>Boleòn</strong>. Per qualsiasi
+      richiesta sui tuoi dati, sugli ordini o su questo sito puoi scrivere a
+      <a class="underline underline-offset-4" href={`mailto:${email}`}>{email}</a>.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Dati che raccogliamo e perché</h2>
+    <ul class="mt-3 list-disc space-y-2 pl-5 leading-relaxed opacity-80">
+      <li>
+        <strong>Modulo di contatto / richiesta:</strong> quando ci scrivi
+        raccogliamo nome, email e messaggio, solo per risponderti. L'email viene
+        recapitata tramite il servizio Resend.
+      </li>
+      <li>
+        <strong>Acquisti:</strong> i pagamenti sono gestiti da Stripe. I dati
+        della carta sono trattati direttamente da Stripe e non passano né vengono
+        conservati da questo sito. Per spedire l'ordine raccogliamo nome e
+        indirizzo di spedizione (inseriti durante il pagamento).
+      </li>
+      <li>
+        <strong>Statistiche di visita:</strong> usiamo Umami, uno strumento
+        <strong>senza cookie</strong> e in forma anonima, che non identifica le
+        singole persone. Serve solo a capire quante visite riceve il sito e da
+        quali Paesi.
+      </li>
+    </ul>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Non vendiamo né cediamo i tuoi dati a terzi per finalità di marketing.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Cookie</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Questo sito <strong>non usa cookie di profilazione o pubblicitari</strong>:
+      per questo non vedi banner sui cookie. Usiamo solo l'archiviazione locale
+      del browser (localStorage) per ricordare il contenuto del carrello, che
+      resta sul tuo dispositivo e non viene inviata a noi.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Servizi di cui ci serviamo</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Per far funzionare il sito ci appoggiamo a questi servizi, ciascuno con la
+      propria informativa privacy: <strong>Stripe</strong> (pagamenti),
+      <strong>Resend</strong> (invio email), <strong>Cloudflare</strong> (hosting
+      e sicurezza), <strong>Umami</strong> (statistiche anonime senza cookie).
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Per quanto tempo conserviamo i dati</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Conserviamo le email delle richieste per il tempo necessario a risponderti
+      e a gestire un eventuale ordine; i dati degli ordini per gli obblighi
+      fiscali e di assistenza. Puoi chiederci la cancellazione in qualsiasi
+      momento.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">I tuoi diritti</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Hai il diritto di accedere ai tuoi dati, correggerli, chiederne la
+      cancellazione o limitarne l'uso e di opporti al trattamento. Per esercitarli
+      scrivi a <a class="underline underline-offset-4" href={`mailto:${email}`}>{email}</a>.
+      Puoi inoltre rivolgerti all'autorità per la protezione dei dati competente.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Spedizioni</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Spediamo in molti Paesi del mondo. Tempi e costi vengono confermati dopo
+      l'ordine, in base alla destinazione. Le stampe sono realizzate su richiesta
+      (print-on-demand), quindi i tempi di preparazione possono essere più lunghi
+      di un prodotto a magazzino.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Resi e diritto di recesso</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Se sei un consumatore nell'Unione Europea hai in genere diritto di recedere
+      entro <strong>14 giorni</strong> dalla consegna. Fanno eccezione i beni
+      realizzati su misura o chiaramente personalizzati (ad esempio alcune stampe
+      prodotte su richiesta), per i quali il recesso può non applicarsi. Per
+      qualsiasi problema con un ordine scrivici a
+      <a class="underline underline-offset-4" href={`mailto:${email}`}>{email}</a>:
+      troveremo una soluzione.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Aggiornamenti</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Questa pagina può essere aggiornata nel tempo. Ultimo aggiornamento:
+      21 ottobre 2026.
+    </p>
+
+    <p class="mt-10 text-xs leading-relaxed opacity-50">
+      Questo testo è una base pensata per questo sito. Per esigenze specifiche
+      (es. apertura di partita IVA o obblighi particolari) è consigliabile una
+      verifica con un consulente.
+    </p>
+  </article>
+</Base>

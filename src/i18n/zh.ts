@@ -11,6 +11,7 @@ export const zh: Dict = {
   'gallery.bestSellers': '热销作品',
   'gallery.empty': '此系列暂无作品。',
   'artwork.collectionLine': 'N° {n} · C. {name}',
+  'footer.legal': '法律声明',
   'notFound.title': '页面未找到',
   'notFound.text': '您访问的页面不存在或已被移动。',
   'notFound.home': '返回首页',

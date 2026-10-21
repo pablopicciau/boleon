@@ -11,6 +11,7 @@ export const es: Dict = {
   'gallery.bestSellers': 'Los más vendidos',
   'gallery.empty': 'Aún no hay obras en esta colección.',
   'artwork.collectionLine': 'N° {n} · C. {name}',
+  'footer.legal': 'Aviso legal',
   'notFound.title': 'Página no encontrada',
   'notFound.text': 'La página que buscas no existe o ha sido movida.',
   'notFound.home': 'Volver al inicio',

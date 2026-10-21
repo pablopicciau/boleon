@@ -9,6 +9,7 @@ export const it = {
   'gallery.bestSellers': 'I più venduti',
   'gallery.empty': 'Nessuna opera in questa collezione, per ora.',
   'artwork.collectionLine': 'N° {n} · C. {name}',
+  'footer.legal': 'Note legali',
   'notFound.title': 'Pagina non trovata',
   'notFound.text': 'La pagina che cerchi non esiste o è stata spostata.',
   'notFound.home': 'Torna alla home',

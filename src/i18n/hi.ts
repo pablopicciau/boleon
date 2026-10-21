@@ -11,6 +11,7 @@ export const hi: Dict = {
   'gallery.bestSellers': 'सबसे अधिक बिकने वाली',
   'gallery.empty': 'इस संग्रह में अभी कोई कृति नहीं है।',
   'artwork.collectionLine': 'N° {n} · C. {name}',
+  'footer.legal': 'कानूनी सूचना',
   'notFound.title': 'पृष्ठ नहीं मिला',
   'notFound.text': 'आप जिस पृष्ठ को खोज रहे हैं वह मौजूद नहीं है या हटा दिया गया है।',
   'notFound.home': 'होम पर वापस जाएँ',
