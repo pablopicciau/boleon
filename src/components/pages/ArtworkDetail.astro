@@ -46,6 +46,7 @@ const printMaterials = pickLocalized(
 // Preordine: le stampe non sono ancora disponibili (interruttore globale in "Vendita e stampe")
 const preorder = (settings as { preorder?: boolean }).preorder ?? false;
 const printAddLabel = preorder ? t('artwork.preorder') : t('artwork.addToCart');
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
 // Stampe: formati standard offerti da quest'opera, con prezzo carta/tela
 const printFormats = printFormatsFor(artwork);
@@ -602,6 +603,7 @@ const schema = {
         rows="4"
         class="border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"
       ></textarea>
+      {turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey} />}
       <button
         type="submit"
         data-inq-send
@@ -870,6 +872,9 @@ const schema = {
       status.classList.add('hidden');
       fallback?.classList.add('hidden');
       try {
+        const tsToken =
+          (inquiryForm.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement | null)
+            ?.value ?? '';
         const res = await fetch('/api/inquiry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -880,6 +885,7 @@ const schema = {
             message,
             artwork: inquiryForm.dataset.artwork,
             url: location.href,
+            turnstile: tsToken,
           }),
         });
         if (res.ok) {
@@ -894,6 +900,8 @@ const schema = {
           throw new Error(String(res.status));
         }
       } catch (err) {
+        // Rigenera il captcha anti-spam per un eventuale nuovo invio
+        (window as unknown as { turnstile?: { reset?: () => void } }).turnstile?.reset?.();
         // 503 = modulo non ancora configurato: messaggio più gentile,
         // il mailto qui sotto recapita comunque il messaggio all'artista
         const notConfigured = err instanceof Error && err.message === '503';

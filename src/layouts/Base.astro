@@ -55,6 +55,10 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
 // PUBLIC_UMAMI_WEBSITE_ID su Cloudflare.
 const umamiWebsiteId =
   import.meta.env.PUBLIC_UMAMI_WEBSITE_ID || '035c3753-0169-4b3e-a1c0-58edbd96fc12';
+
+// Anti-spam Turnstile: lo script si carica solo se è impostata la chiave
+// pubblica (variabile di build PUBLIC_TURNSTILE_SITE_KEY su Cloudflare).
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <!doctype html>
@@ -99,6 +103,17 @@ const umamiWebsiteId =
           defer
           src="https://cloud.umami.is/script.js"
           data-website-id={umamiWebsiteId}
+        />
+      )
+    }
+
+    {
+      /* Anti-spam Turnstile: attivo se è impostata la chiave pubblica */
+      turnstileSiteKey && (
+        <script
+          is:inline
+          defer
+          src="https://challenges.cloudflare.com/turnstile/v0/api.js"
         />
       )
     }

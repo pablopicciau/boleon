@@ -9,6 +9,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <Base locale={locale} title={t('contact.title')} description={t('contact.intro')}>
@@ -53,6 +54,7 @@ const t = useTranslations(locale);
         rows="5"
         placeholder={t('inquiry.message')}
         class="border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"></textarea>
+      {turnstileSiteKey && <div class="cf-turnstile" data-sitekey={turnstileSiteKey} />}
       <button
         type="submit"
         data-c-send
@@ -120,10 +122,20 @@ const t = useTranslations(locale);
       status.classList.add('hidden');
       fallback?.classList.add('hidden');
       try {
+        const tsToken =
+          (form.querySelector('[name="cf-turnstile-response"]') as HTMLInputElement | null)?.value ??
+          '';
         const res = await fetch('/api/inquiry', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type: 'info', name, email, message, url: location.href }),
+          body: JSON.stringify({
+            type: 'info',
+            name,
+            email,
+            message,
+            url: location.href,
+            turnstile: tsToken,
+          }),
         });
         if (!res.ok) throw new Error(String(res.status));
         form
@@ -134,6 +146,8 @@ const t = useTranslations(locale);
         status.classList.remove('hidden');
         track('contact_sent');
       } catch (err) {
+        // Rigenera il captcha anti-spam per un eventuale nuovo invio
+        (window as unknown as { turnstile?: { reset?: () => void } }).turnstile?.reset?.();
         // 503 = modulo non ancora configurato: messaggio più gentile,
         // il mailto qui sotto recapita comunque il messaggio all'artista
         const notConfigured = err instanceof Error && err.message === '503';

@@ -11,7 +11,27 @@ type InquiryPayload = {
   message?: string;
   artwork?: string;
   url?: string;
+  turnstile?: string;
 };
+
+// Verifica anti-spam con Cloudflare Turnstile. In caso di errore di rete non
+// blocchiamo l'utente legittimo (fail-open); blocchiamo solo se Turnstile dice
+// esplicitamente che il token non è valido.
+async function verifyTurnstile(secret: string, token: string, request: Request): Promise<boolean> {
+  try {
+    const body = new URLSearchParams({ secret, response: token });
+    const ip = request.headers.get('CF-Connecting-IP');
+    if (ip) body.set('remoteip', ip);
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body,
+    });
+    const data = (await res.json()) as { success?: boolean };
+    return data.success === true;
+  } catch {
+    return true;
+  }
+}
 
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
@@ -43,6 +63,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   if (!name || !EMAIL_RE.test(email) || !message) {
     return json({ error: 'invalid_fields' }, 400);
+  }
+
+  // Anti-spam: attivo solo se è impostata la chiave segreta Turnstile su Cloudflare.
+  const turnstileSecret = getEnv(locals, 'TURNSTILE_SECRET_KEY');
+  if (turnstileSecret) {
+    const token = clean(payload.turnstile, 3000);
+    const ok = token && (await verifyTurnstile(turnstileSecret, token, request));
+    if (!ok) return json({ error: 'captcha_failed' }, 403);
   }
 
   const resendKey = getEnv(locals, 'RESEND_API_KEY');
