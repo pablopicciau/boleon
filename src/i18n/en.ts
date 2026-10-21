@@ -46,7 +46,7 @@ export const en: Dict = {
   'artwork.soldOut': 'Sold out',
   'artwork.buyOriginal': 'Buy the original',
   'artwork.preorder': 'Pre-order',
-  'artwork.preorderNotice': 'Prints are not available yet. With a pre-order your request is registered and, as soon as they are ready, we will print and ship your order.',
+  'artwork.preorderNotice': 'These prints are available for pre-order: you complete the purchase and payment now, and you’ll receive it as soon as the print is ready (delivery takes a little longer than usual). Thank you for your patience!',
   'inquiry.orWriteTo': 'Or write directly to',
   'artwork.addToCart': 'Add to cart',
   'artwork.addedToCart': 'Added to cart ✓',

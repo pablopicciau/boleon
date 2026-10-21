@@ -44,7 +44,7 @@ export const it = {
   'artwork.soldOut': 'Esaurita',
   'artwork.buyOriginal': 'Acquista l’originale',
   'artwork.preorder': 'Preordina',
-  'artwork.preorderNotice': 'Le stampe non sono ancora disponibili. Con il preordine la tua richiesta viene registrata e, non appena saranno pronte, procederemo con la stampa e la spedizione.',
+  'artwork.preorderNotice': 'Queste stampe sono in preordine: completi l’acquisto e il pagamento adesso e la riceverai non appena la stampa sarà pronta (i tempi di consegna sono un po’ più lunghi del solito). Grazie per la pazienza!',
   'inquiry.orWriteTo': 'Oppure scrivi direttamente a',
   'artwork.addToCart': 'Aggiungi al carrello',
   'artwork.addedToCart': 'Aggiunta al carrello ✓',

@@ -45,7 +45,7 @@ export const zh: Dict = {
   'artwork.soldOut': '已售罄',
   'artwork.buyOriginal': '购买原作',
   'artwork.preorder': '预订',
-  'artwork.preorderNotice': '版画目前尚未供货。预订后您的请求将被记录,一旦备好,我们将立即印制并发货。',
+  'artwork.preorderNotice': '这些版画现为预订:您现在完成购买和付款,版画备好后即会寄出(送达时间会比平常稍长)。感谢您的耐心等待!',
   'inquiry.orWriteTo': '或直接写信至',
   'artwork.addToCart': '加入购物车',
   'artwork.addedToCart': '已加入购物车 ✓',

@@ -46,7 +46,7 @@ export const es: Dict = {
   'artwork.soldOut': 'Agotada',
   'artwork.buyOriginal': 'Comprar el original',
   'artwork.preorder': 'Reservar',
-  'artwork.preorderNotice': 'Las impresiones aún no están disponibles. Con la reserva tu pedido queda registrado y, en cuanto estén listas, procederemos con la impresión y el envío.',
+  'artwork.preorderNotice': 'Estas impresiones están en pre-reserva: completas la compra y el pago ahora, y la recibirás en cuanto la impresión esté lista (los plazos de entrega son algo más largos de lo habitual). ¡Gracias por tu paciencia!',
   'inquiry.orWriteTo': 'O escribe directamente a',
   'artwork.addToCart': 'Añadir al carrito',
   'artwork.addedToCart': 'Añadida al carrito ✓',

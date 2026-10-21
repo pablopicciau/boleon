@@ -46,7 +46,7 @@ export const fr: Dict = {
   'artwork.soldOut': 'Épuisée',
   'artwork.buyOriginal': 'Acheter l’original',
   'artwork.preorder': 'Précommander',
-  'artwork.preorderNotice': "Les tirages ne sont pas encore disponibles. Avec la précommande votre demande est enregistrée et, dès qu'ils seront prêts, nous procéderons à l'impression et à l'envoi.",
+  'artwork.preorderNotice': "Ces tirages sont en précommande : vous réglez votre achat maintenant et vous le recevrez dès que le tirage sera prêt (les délais de livraison sont un peu plus longs que d'habitude). Merci de votre patience !",
   'inquiry.orWriteTo': 'Ou écrivez directement à',
   'artwork.addToCart': 'Ajouter au panier',
   'artwork.addedToCart': 'Ajoutée au panier ✓',
