@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/translate.mjs && astro build",
+    "translate": "node scripts/translate.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
