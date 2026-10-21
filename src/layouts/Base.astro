@@ -49,6 +49,12 @@ const alternates = locales.map((l) => ({
 }));
 const xDefault = new URL(switchLocalePath(currentPath, locale, defaultLocale), site);
 const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
+
+// Statistiche visite (Umami, senza cookie). L'ID è pubblico (finisce nell'HTML):
+// sta qui come default, ma si può sovrascrivere con la variabile di build
+// PUBLIC_UMAMI_WEBSITE_ID su Cloudflare.
+const umamiWebsiteId =
+  import.meta.env.PUBLIC_UMAMI_WEBSITE_ID || '035c3753-0169-4b3e-a1c0-58edbd96fc12';
 ---
 
 <!doctype html>
@@ -84,13 +90,13 @@ const ogImageUrl = ogImage ? new URL(ogImage, site) : undefined;
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
     {
-      /* Statistiche visite (Umami, senza cookie): attive solo se l'ID è configurato */
-      import.meta.env.PUBLIC_UMAMI_WEBSITE_ID && (
+      /* Statistiche visite (Umami, senza cookie): attive se l'ID è impostato */
+      umamiWebsiteId && (
         <script
           is:inline
           defer
           src="https://cloud.umami.is/script.js"
-          data-website-id={import.meta.env.PUBLIC_UMAMI_WEBSITE_ID}
+          data-website-id={umamiWebsiteId}
         />
       )
     }
