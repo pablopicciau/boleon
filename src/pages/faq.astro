@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import { defaultLocale } from '../i18n';
+
+export const prerender = true;
+
+// FAQ in italiano, con dati strutturati FAQPage: così Google e le AI
+// (ChatGPT/Copilot/Perplexity) leggono ogni domanda/risposta e possono citarle.
+const faqs: { q: string; a: string }[] = [
+  {
+    q: 'Chi è Boleòn?',
+    a: 'Boleòn è un artista che dipinge ad acquerello e sceglie di restare anonimo: preferisce che a parlare siano le opere, non il nome di chi le firma. Crea pezzi unici e ne propone anche stampe fine art.',
+  },
+  {
+    q: 'Che cosa posso acquistare su boleon.it?',
+    a: 'Due tipi di opere: le opere originali, pezzi unici dipinti a mano, e le stampe fine art delle opere, disponibili in diversi formati.',
+  },
+  {
+    q: "Come acquisto un'opera originale?",
+    a: "L'opera originale è un pezzo unico e non si acquista direttamente online. Dalla pagina dell'opera invii una richiesta con il tasto «Originale su richiesta»: Boleòn ti risponde personalmente via email per concordare prezzo, spedizione e dettagli.",
+  },
+  {
+    q: 'Come funzionano le stampe?',
+    a: 'Sono stampe fine art realizzate su richiesta, disponibili in vari formati (dalle misure serie A alle misure in pollici), a scelta su carta fine art o su tela. Vengono spedite senza cornice, così puoi scegliere la cornice più adatta al tuo spazio.',
+  },
+  {
+    q: 'Le stampe sono subito disponibili?',
+    a: "Al momento le stampe sono in preordine: completi l'acquisto e il pagamento adesso e ricevi la stampa appena è pronta. Essendo preparata su richiesta, la lavorazione richiede un po' più di tempo del solito.",
+  },
+  {
+    q: 'Quali metodi di pagamento accettate?',
+    a: 'I pagamenti si effettuano con carta, in modo sicuro tramite Stripe. I dati della carta sono gestiti direttamente da Stripe e non vengono conservati dal sito.',
+  },
+  {
+    q: 'Spedite in tutto il mondo?',
+    a: 'Sì, Boleòn spedisce in tutto il mondo. Essendo un artista artigiano, prepara e spedisce personalmente ogni opera.',
+  },
+  {
+    q: 'Quanto costa la spedizione?',
+    a: "Il costo della spedizione viene concordato e comunicato via email dopo l'ordine, in base alla destinazione e al tipo di opera: così paghi l'effettivo, senza sovrapprezzi forfettari.",
+  },
+  {
+    q: "Quanto tempo ci vuole per ricevere l'opera?",
+    a: 'Le stampe sono preparate su richiesta: in genere servono circa 2–4 settimane tra lavorazione e spedizione. Per le opere originali i tempi si concordano direttamente con l\'artista.',
+  },
+  {
+    q: "Le opere sono firmate? C'è un certificato di autenticità?",
+    a: 'Sì: ogni opera, originale o stampa, è firmata e accompagnata da un certificato di autenticità.',
+  },
+  {
+    q: "Posso restituire un'opera?",
+    a: 'Se sei un consumatore nell\'Unione Europea hai in genere diritto di recesso entro 14 giorni dalla consegna. Fanno eccezione i beni realizzati su misura o personalizzati, come alcune stampe prodotte su richiesta. Per qualsiasi problema con un ordine scrivi all\'artista e troverete una soluzione.',
+  },
+  {
+    q: 'In quante lingue è disponibile il sito?',
+    a: 'Il sito è disponibile in 7 lingue: italiano, inglese, spagnolo, francese, cinese, hindi e arabo.',
+  },
+  {
+    q: 'Come posso contattare l\'artista?',
+    a: 'Puoi scrivere dalla pagina Contatti, usare il modulo «Richiedi informazioni» presente su ogni opera, oppure contattare Boleòn su Instagram. Le richieste arrivano direttamente all\'artista.',
+  },
+  {
+    q: 'I colori della stampa saranno identici a quelli che vedo sullo schermo?',
+    a: 'Le immagini sono curate per essere fedeli, ma ogni schermo mostra i colori in modo leggermente diverso. La stampa fine art punta a restare il più possibile vicina all\'opera originale.',
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base
+  locale={defaultLocale}
+  title="Domande frequenti (FAQ)"
+  description="Domande e risposte su opere originali, stampe fine art, spedizioni, pagamenti, resi e autenticità di Boleòn."
+  schema={schema}
+>
+  <section class="mx-auto max-w-2xl py-14 sm:py-20">
+    <h1 class="font-hand text-3xl sm:text-4xl">Domande frequenti</h1>
+    <p class="mt-6 leading-relaxed opacity-80">
+      Le risposte alle domande più comuni su opere, stampe, spedizioni e acquisti.
+      Non trovi quello che cerchi? Scrivi pure all'artista.
+    </p>
+
+    <dl class="mt-10 divide-y divide-neutral-200/70">
+      {
+        faqs.map((f) => (
+          <div class="py-6">
+            <dt class="font-hand text-xl sm:text-2xl">{f.q}</dt>
+            <dd class="mt-2 leading-relaxed opacity-80">{f.a}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</Base>
