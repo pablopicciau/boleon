@@ -36,10 +36,12 @@ const description = firstParagraph.slice(0, 300) || pickLocalized(settings.bios,
 
 const site = Astro.site ?? new URL('https://boleon.it');
 const sameAs = [settings.instagram, settings.facebook].filter(Boolean);
+const altName = settings.artistName.normalize('NFD').replace(/[̀-ͯ]/g, '');
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: settings.artistName,
+  ...(altName && altName !== settings.artistName ? { alternateName: altName } : {}),
   url: new URL(Astro.url.pathname, site).href,
   description,
   jobTitle: 'Artist',

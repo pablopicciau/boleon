@@ -39,11 +39,16 @@ const description = [tagline, bio].filter(Boolean).join(' — ');
 
 const site = Astro.site ?? new URL('https://boleon.it');
 const sameAs = [settings.instagram, settings.facebook].filter(Boolean);
+// Variante del nome senza accento ("Boleon"): così Google collega anche chi
+// cerca senza l'accento al nome ufficiale "Boleòn".
+const altName = settings.artistName.normalize('NFD').replace(/[̀-ͯ]/g, '');
+const alternateName = altName && altName !== settings.artistName ? altName : undefined;
 const schema = [
   {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: settings.artistName,
+    ...(alternateName ? { alternateName } : {}),
     url: site.href,
     description: tagline,
     inLanguage: ['it', 'en', 'es', 'fr', 'zh-Hans', 'hi', 'ar'],
@@ -52,6 +57,7 @@ const schema = [
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: settings.artistName,
+    ...(alternateName ? { alternateName } : {}),
     url: site.href,
     description: bio || tagline,
     jobTitle: 'Artist',
