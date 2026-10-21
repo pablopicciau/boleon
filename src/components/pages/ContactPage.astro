@@ -71,7 +71,18 @@ const t = useTranslations(locale);
     </form>
 
     <div class="mt-8 text-center">
-      {settings.contactEmail && <p class="text-sm opacity-60">{settings.contactEmail}</p>}
+      {
+        settings.contactEmail && (
+          <p class="text-sm">
+            <a
+              href={`mailto:${settings.contactEmail}`}
+              class="break-all underline underline-offset-4 opacity-70 hover:opacity-100"
+            >
+              {settings.contactEmail}
+            </a>
+          </p>
+        )
+      }
       {
         settings.instagram && (
           <p class="mt-3">

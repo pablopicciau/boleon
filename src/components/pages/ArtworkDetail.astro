@@ -43,6 +43,9 @@ const printMaterials = pickLocalized(
   (settings as { printMaterials?: Record<string, string | null> }).printMaterials,
   locale
 );
+// Preordine: le stampe non sono ancora disponibili (interruttore globale in "Vendita e stampe")
+const preorder = (settings as { preorder?: boolean }).preorder ?? false;
+const printAddLabel = preorder ? t('artwork.preorder') : t('artwork.addToCart');
 
 // Stampe: formati standard offerti da quest'opera, con prezzo carta/tela
 const printFormats = printFormatsFor(artwork);
@@ -346,13 +349,18 @@ const schema = {
             <p data-ratio-note class="mt-3 hidden text-xs leading-relaxed text-accent">
               {t('artwork.ratioNote')}
             </p>
+            {preorder && (
+              <p class="mt-5 rounded-sm border border-amber-400/60 bg-amber-50/80 px-4 py-3 text-xs leading-relaxed text-amber-900">
+                {t('artwork.preorderNotice')}
+              </p>
+            )}
             <button
               data-add-print
-              data-label={t('artwork.addToCart')}
+              data-label={printAddLabel}
               data-added-label={t('artwork.addedToCart')}
               class="mt-5 w-full cursor-pointer bg-olive px-8 py-3 text-sm tracking-widest text-white uppercase transition hover:bg-[#5c662c]"
             >
-              {t('artwork.addToCart')}
+              {printAddLabel}
             </button>
 
             {/* L'anteprima del foglio stampato si apre in una finestra, su richiesta */}
@@ -609,6 +617,19 @@ const schema = {
       >
         {t('inquiry.fallback')}
       </a>
+      {
+        settings.contactEmail && (
+          <p data-inq-email-plain class="hidden text-center text-sm">
+            <span class="opacity-70">{t('inquiry.orWriteTo')}</span>{' '}
+            <a
+              href={`mailto:${settings.contactEmail}`}
+              class="font-semibold break-all underline underline-offset-4"
+            >
+              {settings.contactEmail}
+            </a>
+          </p>
+        )
+      }
     </form>
   </dialog>
 
@@ -891,6 +912,8 @@ const schema = {
           const body = `${message}\n\n${name} (${email})`;
           fallback.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
           fallback.classList.remove('hidden');
+          // Mostra anche l'indirizzo in chiaro, da copiare se l'app email non si apre
+          inquiryForm.querySelector('[data-inq-email-plain]')?.classList.remove('hidden');
         }
         sendBtn.disabled = false;
         sendBtn.textContent = inquiryForm.dataset.labelSend!;

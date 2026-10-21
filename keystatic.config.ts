@@ -237,6 +237,12 @@ export default config({
       path: 'src/content/site-shop',
       format: { data: 'json' },
       schema: {
+        preorder: fields.checkbox({
+          label: 'Stampe in preordine',
+          description:
+            'Se attivo, le stampe non sono ancora disponibili: sul sito compare un avviso e il tasto diventa "Preordina". Disattiva quando sei pronto a stampare e spedire subito.',
+          defaultValue: true,
+        }),
         printMaterials: localizedText('Materiali di stampa (mostrato sotto i formati)', true),
         printFormats: fields.array(
           fields.object({
