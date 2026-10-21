@@ -44,6 +44,20 @@ export default config({
       schema: {
         title: fields.slug({ name: { label: 'Titolo' } }),
         titles: localizedText('Titolo tradotto (opzionale)'),
+        images: fields.array(
+          fields.image({
+            label: 'Immagine',
+            directory: 'src/assets/artworks',
+            publicPath: '../../assets/artworks/',
+            validation: { isRequired: true },
+          }),
+          {
+            label: 'Immagini',
+            description: 'La prima immagine è la copertina. Clicca su un’immagine per vederla e sostituirla.',
+            itemLabel: () => 'Immagine',
+            validation: { length: { min: 1 } },
+          }
+        ),
         dimensions: fields.text({
           label: 'Dimensioni',
           description: 'Es. "70 × 100 cm"',
@@ -138,20 +152,6 @@ export default config({
           description: 'Numero più basso = mostrata prima.',
           defaultValue: 0,
         }),
-        images: fields.array(
-          fields.image({
-            label: 'Immagine',
-            directory: 'src/assets/artworks',
-            publicPath: '../../assets/artworks/',
-            validation: { isRequired: true },
-          }),
-          {
-            label: 'Immagini',
-            description: 'La prima immagine è la copertina.',
-            itemLabel: () => 'Immagine',
-            validation: { length: { min: 1 } },
-          }
-        ),
         descriptions: localizedText('Descrizione', true),
       },
     }),
