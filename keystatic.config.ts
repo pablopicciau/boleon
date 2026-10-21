@@ -9,18 +9,18 @@ const printFormatOptions = (shopSettings.printFormats ?? []).map((f) => ({
 }));
 const allPrintFormatIds = printFormatOptions.map((o) => o.value);
 
+// Testo che scrivi SOLO in italiano: le altre 6 lingue vengono generate in
+// automatico quando il sito viene pubblicato (vedi scripts/translate.mjs).
 const localizedText = (label: string, multiline = false) =>
   fields.object(
     {
-      it: fields.text({ label: `${label} (Italiano)`, multiline }),
-      en: fields.text({ label: `${label} (English)`, multiline }),
-      es: fields.text({ label: `${label} (Español)`, multiline }),
-      fr: fields.text({ label: `${label} (Français)`, multiline }),
-      zh: fields.text({ label: `${label} (中文)`, multiline }),
-      hi: fields.text({ label: `${label} (हिन्दी)`, multiline }),
-      ar: fields.text({ label: `${label} (العربية)`, multiline }),
+      it: fields.text({ label, multiline }),
     },
-    { label, description: 'Se una lingua è vuota viene usato l’italiano.' }
+    {
+      label,
+      description:
+        'Scrivi solo in italiano: le altre lingue vengono tradotte da sole alla pubblicazione.',
+    }
   );
 
 export default config({
@@ -43,7 +43,6 @@ export default config({
       columns: ['kind'],
       schema: {
         title: fields.slug({ name: { label: 'Titolo' } }),
-        titles: localizedText('Titolo tradotto (opzionale)'),
         images: fields.array(
           fields.image({
             label: 'Immagine',
@@ -164,11 +163,10 @@ export default config({
       schema: {
         name: fields.slug({
           name: {
-            label: 'Nome (Italiano)',
+            label: 'Nome',
             description: 'Il nome della collezione, es. "Bianco e nero".',
           },
         }),
-        names: localizedText('Nome nelle altre lingue'),
         descriptions: localizedText('Storia della collezione', true),
         sortOrder: fields.integer({
           label: 'Ordinamento',
