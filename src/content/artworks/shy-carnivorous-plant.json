@@ -1,14 +1,5 @@
 {
   "title": "Shy Carnivorous Plant",
-  "titles": {
-    "it": "Pianta Carnivora Timida",
-    "en": "Shy Carnivorous Plant",
-    "es": "Planta carnívora tímida",
-    "fr": "Plante carnivore timide",
-    "zh": "害羞的食虫植物",
-    "hi": "शर्मीला मांसाहारी पौधा",
-    "ar": "نبتة آكلة الحشرات الخجولة"
-  },
   "kind": "original",
   "originalInquiryOnly": true,
   "sold": false,
@@ -24,7 +15,9 @@
     "../../assets/artworks/shy-carnivorous-plant/images/0.png",
     "../../assets/artworks/shy-carnivorous-plant/images/1.png"
   ],
-  "descriptions": {},
+  "descriptions": {
+    "it": ""
+  },
   "printsEnabled": true,
   "printFormats": [
     "a4",

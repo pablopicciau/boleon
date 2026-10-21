@@ -18,15 +18,8 @@
   "images": [
     "../../assets/artworks/sea-drop/cover.jpg"
   ],
-  "descriptions": {},
-  "titles": {
-    "it": "Goccia di mare",
-    "en": "Sea Drop",
-    "es": "Gota de mar",
-    "fr": "Goutte de mer",
-    "zh": "海之滴",
-    "hi": "समुद्र की बूँद",
-    "ar": "قطرة البحر"
+  "descriptions": {
+    "it": ""
   },
   "printsEnabled": true,
   "printFormats": [

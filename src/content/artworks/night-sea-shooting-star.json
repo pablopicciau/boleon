@@ -18,15 +18,8 @@
   "images": [
     "../../assets/artworks/night-sea-shooting-star/cover.jpg"
   ],
-  "descriptions": {},
-  "titles": {
-    "it": "Stella cadente sul mare notturno",
-    "en": "Night Sea Shooting Star",
-    "es": "Estrella fugaz sobre el mar nocturno",
-    "fr": "Étoile filante sur la mer nocturne",
-    "zh": "夜海流星",
-    "hi": "रात के समुद्र पर टूटता तारा",
-    "ar": "شهاب فوق بحر الليل"
+  "descriptions": {
+    "it": ""
   },
   "printsEnabled": true,
   "printFormats": [
