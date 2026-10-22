@@ -73,7 +73,7 @@ Piano completo e aggiornabile in `docs/piano-marketing.md` (SEO Google + Bing/AI
 
 ## Spedizioni (proposta 2026-10-22, da approvare)
 
-Analisi concorrenti + proposta in `docs/piano-spedizioni.md`: zone Italia/UE/Resto del mondo con tariffa fissa, soglia di spedizione gratuita (IT 90 €, UE 150 €), supplemento formati grandi fuori Europa, una spedizione per ordine, USA e UK "su richiesta" in fase 1 (dogana USA post-2025 e IVA UK sotto 135 £). Oggi il checkout NON addebita spedizione (`cart.shippingNote`: "ti contatteremo"); l'utente ha dichiarato: spedizione mondiale, costo concordato dopo l'ordine, 2–4 settimane, opere firmate + certificato.
+Analisi concorrenti + listini reali + proposta v2 in `docs/piano-spedizioni.md`: il cliente sceglie il Paese nel carrello; zone Italia 8 € (gratis ≥90 €), UE 18 € (≥150 €), Europa extra UE 25 €, Mondo 35 €, USA 35 € + dazi stimati 10% prepagati (Poste Servizio Gestione Dazi), gratis ≥300 € fuori UE; niente supplemento per formato; UK solo ordini ≥160 € (sopra 135 £ l'IVA la paga il destinatario, niente registrazione IVA UK); BR/MX/IN/CN/SA su richiesta. L'utente ha scelto USA attivi da subito con dazi inclusi e ha chiesto i preventivi reali (fatto); tela trattata come arrotolata. Oggi il checkout NON addebita spedizione (`cart.shippingNote`: "ti contatteremo"); l'utente ha dichiarato: spedizione mondiale, costo concordato dopo l'ordine, 2–4 settimane, opere firmate + certificato.
 
 ## Comandi
 
