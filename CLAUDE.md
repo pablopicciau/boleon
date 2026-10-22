@@ -71,6 +71,10 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 
 Piano completo e aggiornabile in `docs/piano-marketing.md` (SEO Google + Bing/AI, Pinterest, image SEO, marketplace, newsletter, costruzione del nome "Boleòn" come entità). Da rivedere e spuntare man mano insieme all'utente.
 
+## Spedizioni (proposta 2026-10-22, da approvare)
+
+Analisi concorrenti + proposta in `docs/piano-spedizioni.md`: zone Italia/UE/Resto del mondo con tariffa fissa, soglia di spedizione gratuita (IT 90 €, UE 150 €), supplemento formati grandi fuori Europa, una spedizione per ordine, USA e UK "su richiesta" in fase 1 (dogana USA post-2025 e IVA UK sotto 135 £). Oggi il checkout NON addebita spedizione (`cart.shippingNote`: "ti contatteremo"); l'utente ha dichiarato: spedizione mondiale, costo concordato dopo l'ordine, 2–4 settimane, opere firmate + certificato.
+
 ## Comandi
 
 ```sh
