@@ -22,7 +22,7 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - **Tailwind CSS 4** (via `@tailwindcss/vite`, stili in `src/styles/global.css`).
 - **Keystatic** come CMS: admin su `/keystatic`. In locale salva i file nel repo; in produzione GitHub mode (ogni salvataggio = commit = redeploy).
 - **PhotoSwipe 5** per lo zoom ad alta definizione delle opere.
-- **Stripe Checkout** per i pagamenti: i prezzi sono **sempre validati server-side** in `src/pages/api/checkout.ts` (mai fidarsi del carrello client). Paesi di spedizione: costante `SHIPPING_COUNTRIES` nello stesso file.
+- **Stripe Checkout** per i pagamenti: i prezzi sono **sempre validati server-side** in `src/pages/api/checkout.ts` (mai fidarsi del carrello client). Paesi, zone e calcolo della spedizione in `src/lib/shipping.ts` (vedi sezione Spedizioni).
 - **Resend** per le email di notifica ordine, inviate dal webhook Stripe (`src/pages/api/stripe-webhook.ts`, evento `checkout.session.completed`).
 - Carrello in `localStorage` (`src/scripts/cart.ts`), nessun backend per il carrello.
 - **7 lingue**: italiano default senza prefisso URL; `/en`, `/es`, `/fr`, `/zh`, `/hi`, `/ar` (arabo con layout RTL). Dizionari UI in `src/i18n/`; le descrizioni opere si traducono da Keystatic, con fallback sull'italiano se una lingua è vuota.
@@ -71,9 +71,15 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 
 Piano completo e aggiornabile in `docs/piano-marketing.md` (SEO Google + Bing/AI, Pinterest, image SEO, marketplace, newsletter, costruzione del nome "Boleòn" come entità). Da rivedere e spuntare man mano insieme all'utente.
 
-## Spedizioni (proposta 2026-10-22, da approvare)
+## Spedizioni (ATTIVE dal 2026-10-22)
 
-Analisi concorrenti + listini reali + proposta v2 in `docs/piano-spedizioni.md`: il cliente sceglie il Paese nel carrello; zone Italia 8 € (gratis ≥90 €), UE 18 € (≥150 €), Europa extra UE 25 €, Mondo 35 €, USA 35 € + dazi stimati 10% prepagati (Poste Servizio Gestione Dazi), gratis ≥300 € fuori UE; niente supplemento per formato; UK solo ordini ≥160 € (sopra 135 £ l'IVA la paga il destinatario, niente registrazione IVA UK); BR/MX/IN/CN/SA su richiesta. L'utente ha scelto USA attivi da subito con dazi inclusi e ha chiesto i preventivi reali (fatto); tela trattata come arrotolata. Oggi il checkout NON addebita spedizione (`cart.shippingNote`: "ti contatteremo"); l'utente ha dichiarato: spedizione mondiale, costo concordato dopo l'ordine, 2–4 settimane, opere firmate + certificato.
+Analisi concorrenti, listini reali e motivazioni in `docs/piano-spedizioni.md`.
+- **Logica unica** in `src/lib/shipping.ts` (modulo puro, usato dal carrello nel browser e da `checkout.ts` sul server): `ZONE_COUNTRIES` (italy, eu = 26 Paesi UE, europe = CH/NO/GB, world = CA/JP/KR/SG/AU/NZ/AE, usa = US), `quoteShipping(config, country, subtotal)` → spedizione, dazi, soglia, `belowUkMinimum`, totale; `DELIVERY_WEEKS` per i tempi. Altri Paesi (BR, MX, IN, CN, SA…) = su richiesta.
+- **Tariffe in Keystatic** (Vendita e stampe → Spedizioni, campo `shipping` di site-shop.json, letto con `normalizeShippingConfig`): Italia 8 € gratis ≥90; UE 18 € ≥150; Europa extra UE 25 € ≥300; Mondo 35 € ≥300; USA 35 € ≥300 + `usDutiesPercent` 10% del valore opere (prepagati dall'artista con il Servizio Gestione Dazi di Poste, il cliente non paga alla consegna); `ukMinOrder` 160 € (sotto 135 £ servirebbe la registrazione IVA UK). Una spedizione per ordine, nessun supplemento per formato. Tela trattata come arrotolata.
+- **Carrello** (`CartPage.astro`): menu Paese con optgroup per zona e nomi via `Intl.DisplayNames`, preselezione da `localStorage['boleon-ship-country']` o dalla regione del browser; subtotale/spedizione/dazi/totale, "ti mancano X €", tempi, avvisi dogana/USA/UK; evento Umami `shipping_country`.
+- **Checkout**: payload con `country`; 400 `invalid_country` / `uk_minimum`; Stripe `shipping_options` (fixed_amount + `delivery_estimate`), `allowed_countries: [country]`, riga "Dazi USA" separata, metadata `country/zone/shipping_eur/duties_eur`.
+- **Webhook**: email con indirizzo di spedizione (`collected_information.shipping_details`), spedizione e dazi incassati, istruzioni "come spedire".
+- FAQ e llms.txt leggono le tariffe dalle impostazioni; pagina legale con dazi, danni (ristampa gratis con foto entro 48 h) e resi (14 giorni, reso a carico del cliente). Oggi il checkout NON addebita spedizione (`cart.shippingNote`: "ti contatteremo"); l'utente ha dichiarato: spedizione mondiale, costo concordato dopo l'ordine, 2–4 settimane, opere firmate + certificato.
 
 ## Comandi
 
@@ -84,6 +90,8 @@ npm run preview   # anteprima della build
 ```
 
 Node >= 22.12. Per provare il checkout in locale: copiare `.env.example` in `.env` con le chiavi **test** di Stripe.
+
+`astro preview` NON funziona con l'adapter Cloudflare: per provare la build completa (API comprese) usare `npm run build && npx wrangler dev --port 4329`, con eventuali segreti di prova in `.dev.vars` (escluso da git).
 
 ## Struttura (punti chiave)
 
