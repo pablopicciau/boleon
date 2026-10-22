@@ -1,20 +1,23 @@
-# Boleon — sito galleria / shop
+# Boleòn — sito galleria / shop
 
-Sito statico dell'artista **Boleon**: galleria di opere con zoom ad alta definizione, shop con checkout Stripe, 7 lingue. Costi fissi ≈ 0 € (solo il dominio): hosting su Cloudflare Pages free tier.
+Sito dell'artista **Boleòn** (https://boleon.it): galleria di acquerelli con zoom ad alta definizione, originali su richiesta, stampe fine art acquistabili online con checkout Stripe e spedizione calcolata per Paese, 7 lingue. Costi fissi ≈ 0 € (solo il dominio): hosting sul piano gratuito di Cloudflare Workers.
 
 ## Stack
 
 | Componente | Tecnologia |
 |---|---|
-| Framework | [Astro 5](https://astro.build) + adapter Cloudflare |
+| Framework | [Astro 5](https://astro.build) + adapter Cloudflare (pagine prerenderizzate + endpoint API) |
 | Stile | Tailwind CSS 4 |
 | CMS | [Keystatic](https://keystatic.com) (admin su `/keystatic`) |
 | Zoom opere | PhotoSwipe 5 |
-| Pagamenti | Stripe Checkout (prezzi validati server-side) |
-| Email | Resend (notifica ordini via webhook Stripe) |
-| Hosting | Cloudflare Pages |
+| Pagamenti | Stripe Checkout (prezzi e spedizione validati server-side) |
+| Email | Resend (moduli di contatto e notifica ordini via webhook Stripe) |
+| Traduzioni | DeepL, in fase di build (`scripts/translate.mjs`) |
+| Statistiche | Umami (senza cookie) |
+| Anti-spam | Cloudflare Turnstile (attivo solo se ci sono le chiavi) |
+| Hosting | Cloudflare Workers + assets (`wrangler.toml`) |
 
-**Lingue**: italiano (default, senza prefisso URL), inglese `/en`, spagnolo `/es`, francese `/fr`, cinese `/zh`, hindi `/hi`, arabo `/ar` (con layout RTL). I testi dell'interfaccia sono in `src/i18n/`; le descrizioni delle opere si traducono da Keystatic (se una lingua è vuota viene usato l'italiano).
+**Lingue**: italiano (default, senza prefisso URL), inglese `/en`, spagnolo `/es`, francese `/fr`, cinese `/zh`, hindi `/hi`, arabo `/ar` (con layout RTL). I testi dell'interfaccia sono in `src/i18n/`; in Keystatic si scrive solo in italiano e le altre lingue le genera DeepL durante la build (senza chiave DeepL il sito usa l'italiano).
 
 ## Sviluppo locale
 
@@ -28,46 +31,47 @@ npm run dev
 
 Per provare il checkout in locale copia `.env.example` in `.env` e inserisci le chiavi **test** di Stripe.
 
+`npm run preview` non funziona con l'adapter Cloudflare: per provare la build completa (API comprese) usa `npm run build && npx wrangler dev --port 4329`, con eventuali segreti di prova in `.dev.vars` (escluso da git).
+
 ## Gestione contenuti
 
 Da `/keystatic` puoi:
 
-- **Aggiungere/modificare opere**: titolo, anno, tecnica, dimensioni, prezzo, immagini (la prima è la copertina), descrizioni nelle 7 lingue.
-- **Tipo di opera**: *originale* (pezzo unico) o *stampa/edizione limitata* (con tiratura e copie disponibili).
-- **Dopo una vendita** (ricevi un'email di notifica): spunta **Venduta** per gli originali, oppure riduci **Copie disponibili** per le stampe. Quando le copie sono 0 l'opera risulta "esaurita" e non è acquistabile.
-- **Impostazioni sito**: nome, tagline, bio, email di contatto, social.
+- **Aggiungere/modificare opere**: titolo, dimensioni, immagini (la prima è la copertina), descrizione, collezioni, flag "più venduti".
+- **Originale**: di default è *su richiesta* (il cliente invia una richiesta dalla pagina dell'opera); dopo una vendita spunta **Originale venduto**.
+- **Stampe**: formati e prezzi standard sono uguali per tutte le opere (Sito → Vendita e stampe); su ogni opera scegli i formati attivi e un eventuale aumento percentuale.
+- **Spedizioni**: tariffe e soglie di spedizione gratuita per zona, dazi USA e minimo d'ordine per il Regno Unito (Sito → Vendita e stampe → Spedizioni).
+- **Collezioni**, **copertina**, **identità** (nome, storia dell'artista) e **contatti**.
 
-Le opere attuali sono **segnaposto**: sostituiscile con le tue (foto JPG di buona qualità — più sono grandi, migliore sarà lo zoom).
+Il pannello privato `/gestione` mostra tutte le opere con il loro stato e apre la scheda Keystatic con un clic.
 
-## Deploy su Cloudflare Pages
+## Deploy su Cloudflare (Workers Builds)
 
-1. Vai su [Cloudflare Dashboard](https://dash.cloudflare.com) → **Workers & Pages** → **Create** → **Pages** → collega questo repository GitHub.
-2. Build settings: framework **Astro**, build command `npm run build`, output `dist` (rilevati in automatico).
-3. In **Settings → Environment variables** aggiungi le variabili di `.env.example`:
+1. **Workers & Pages** → progetto `boleon` collegato a questo repository, **production branch `main`**.
+2. Build command `npm run build`, deploy command `npx wrangler deploy`, variabile `NODE_VERSION=22.12.0`.
+3. **Variabili runtime** (Settings → Variables and Secrets, tipo *Secret*):
    - `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`
    - `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `ORDER_NOTIFICATION_EMAIL`
-   - `PUBLIC_SITE_URL` = URL pubblico del sito (es. `https://boleon.com`)
-4. Collega il tuo dominio in **Custom domains**.
-
-Il flag `nodejs_compat` è già configurato in `wrangler.toml`.
+   - `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`
+   - `TURNSTILE_SECRET_KEY` (facoltativa)
+4. **Variabili di build** (facoltative): `DEEPL_API_KEY`, `PUBLIC_TURNSTILE_SITE_KEY`, `PUBLIC_UMAMI_WEBSITE_ID` (l'ID Umami del sito è già nel codice).
+5. Le variabili non segrete di Keystatic e i domini `boleon.it`/`www.boleon.it` sono già in `wrangler.toml`, insieme al flag `nodejs_compat`.
 
 ### Stripe
 
-1. Crea un account su [stripe.com](https://stripe.com) e prendi la **Secret key** da *Developers → API keys*.
-2. In *Developers → Webhooks* aggiungi un endpoint: `https://TUO-DOMINIO/api/stripe-webhook`, evento **`checkout.session.completed`**; copia il **Signing secret** in `STRIPE_WEBHOOK_SECRET`.
-3. Per modificare i paesi di spedizione consentiti: `SHIPPING_COUNTRIES` in `src/pages/api/checkout.ts`.
+1. Prendi la **Secret key** da *Developers → API keys*.
+2. In *Developers → Webhooks* aggiungi l'endpoint `https://boleon.it/api/stripe-webhook`, evento **`checkout.session.completed`**; copia il **Signing secret** in `STRIPE_WEBHOOK_SECRET`.
+3. Paesi serviti, zone e calcolo della spedizione sono in `src/lib/shipping.ts`; le tariffe si cambiano da Keystatic.
 
 ### Resend
 
-1. Crea un account su [resend.com](https://resend.com), genera una API key.
-2. Verifica il tuo dominio (oppure usa `onboarding@resend.dev` come mittente per i test).
-3. `ORDER_NOTIFICATION_EMAIL` è l'indirizzo dove ricevi le notifiche dei nuovi ordini.
+1. Crea un account su [resend.com](https://resend.com) e genera una API key.
+2. Verifica il dominio (con `onboarding@resend.dev` come mittente si può scrivere solo all'email dell'account Resend).
+3. `ORDER_NOTIFICATION_EMAIL` è l'indirizzo dove arrivano le notifiche dei nuovi ordini (se manca: boleon.art@gmail.com).
 
-### Keystatic in produzione (modifica contenuti dal browser)
+### Keystatic in produzione
 
-In produzione Keystatic usa la **GitHub mode**: apri `https://TUO-DOMINIO/keystatic`, segui la procedura guidata di creazione della GitHub App sul repository e aggiungi su Cloudflare le variabili che ti fornisce (`KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET`, `KEYSTATIC_SECRET`, `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`). Ogni salvataggio diventa un commit sul repository e fa ripartire il deploy automatico.
-
-In alternativa puoi sempre modificare i contenuti in locale con `npm run dev` → `/keystatic` e poi fare push.
+Keystatic usa la **GitHub mode** (GitHub App `boleon-cms`): ogni salvataggio da `https://boleon.it/keystatic` diventa un commit e fa ripartire il deploy.
 
 ## Struttura del progetto
 
@@ -75,13 +79,20 @@ In alternativa puoi sempre modificare i contenuti in locale con `npm run dev` �
 src/
 ├── i18n/                  # dizionari UI (7 lingue) + helper
 ├── content/artworks/      # opere (JSON, gestite da Keystatic)
+├── content/collections/   # collezioni
 ├── content/site-*.json    # impostazioni sito (4 sezioni Keystatic, unite da lib/settings.ts)
-├── assets/artworks/       # immagini delle opere
-├── layouts/Base.astro     # header, footer, switcher lingua, badge carrello
-├── components/            # card opera, switcher, corpi pagina condivisi
-├── scripts/cart.ts        # carrello (localStorage)
+├── assets/                # immagini delle opere
+├── layouts/Base.astro     # header, footer, switcher lingua, badge carrello, icone
+├── components/pages/      # corpi pagina condivisi tra italiano e [lang]/
+├── lib/                   # catalogo e prezzi (artworks.ts), spedizioni (shipping.ts), impostazioni
+├── scripts/               # carrello (localStorage) e statistiche
 └── pages/
-    ├── index, opere/[slug], carrello, grazie, annullato   # italiano
-    ├── [lang]/…                                           # altre 6 lingue
-    └── api/checkout.ts, api/stripe-webhook.ts             # endpoint server
+    ├── index, opere/[slug], galleria, artista, contatto, carrello, faq, …   # italiano
+    ├── [lang]/…                                                              # altre 6 lingue
+    └── api/checkout.ts, api/stripe-webhook.ts, api/inquiry.ts               # endpoint server
+scripts/
+├── translate.mjs          # traduzioni DeepL in build
+└── generate-favicons.mjs  # icone (favicon.ico, apple-touch-icon, icon-192/512) da public/favicon.svg
+docs/                      # piano marketing e piano spedizioni
+graphify-out/              # mappa del codice per gli assistenti AI (graphify)
 ```

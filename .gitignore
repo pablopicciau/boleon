@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # variabili locali di wrangler (chiavi di prova): mai nel repository
 .dev.vars
+
+# graphify: stato locale degli hook (per sessione)
+graphify-out/cache/hook_sessions/
