@@ -41,7 +41,9 @@ const email = settings.contactEmail || 'boleon.art@gmail.com';
         <strong>Acquisti:</strong> i pagamenti sono gestiti da Stripe. I dati
         della carta sono trattati direttamente da Stripe e non passano né vengono
         conservati da questo sito. Per spedire l'ordine raccogliamo nome e
-        indirizzo di spedizione (inseriti durante il pagamento).
+        indirizzo di spedizione (inseriti durante il pagamento), che vengono
+        comunicati al corriere incaricato della consegna e, per gli Stati Uniti,
+        all'intermediario doganale di Poste Italiane.
       </li>
       <li>
         <strong>Statistiche di visita:</strong> usiamo Umami, uno strumento
@@ -67,7 +69,9 @@ const email = settings.contactEmail || 'boleon.art@gmail.com';
       Per far funzionare il sito ci appoggiamo a questi servizi, ciascuno con la
       propria informativa privacy: <strong>Stripe</strong> (pagamenti),
       <strong>Resend</strong> (invio email), <strong>Cloudflare</strong> (hosting
-      e sicurezza), <strong>Umami</strong> (statistiche anonime senza cookie).
+      e sicurezza), <strong>Umami</strong> (statistiche anonime senza cookie),
+      <strong>Poste Italiane</strong> e altri <strong>corrieri</strong> (consegna
+      degli ordini).
     </p>
 
     <h2 class="mt-10 font-hand text-2xl">Per quanto tempo conserviamo i dati</h2>
@@ -88,18 +92,41 @@ const email = settings.contactEmail || 'boleon.art@gmail.com';
 
     <h2 class="mt-10 font-hand text-2xl">Spedizioni</h2>
     <p class="mt-3 leading-relaxed opacity-80">
-      Spediamo in molti Paesi del mondo. Tempi e costi vengono confermati dopo
-      l'ordine, in base alla destinazione. Le stampe sono realizzate su richiesta
-      (print-on-demand), quindi i tempi di preparazione possono essere più lunghi
-      di un prodotto a magazzino.
+      Spediamo in Italia, in tutti i Paesi dell'Unione Europea e in alcuni Paesi
+      extra UE (l'elenco completo è nel carrello; per gli altri Paesi si può
+      chiedere un preventivo). Il costo della spedizione dipende dal Paese, viene
+      mostrato nel carrello prima del pagamento e oltre una certa soglia è
+      gratuito. Ogni opera è preparata, firmata e spedita personalmente
+      dall'artista, sempre con spedizione tracciata. Le stampe sono realizzate su
+      richiesta: i tempi indicativi, preparazione compresa, sono di 2–3 settimane
+      in Italia, 2–4 nell'Unione Europea e 3–6 nel resto del mondo.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Dazi e tasse d'importazione</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Per gli Stati Uniti i dazi d'importazione sono stimati e inclusi nel totale:
+      li versiamo noi al momento della spedizione e il destinatario non paga nulla
+      alla consegna. Per gli altri Paesi fuori dall'Unione Europea eventuali dazi,
+      IVA e spese di sdoganamento sono a carico del destinatario e si pagano alla
+      consegna. Nel Regno Unito spediamo solo ordini sopra la soglia indicata nel
+      carrello, per i quali l'IVA britannica è pagata dal destinatario.
+    </p>
+
+    <h2 class="mt-10 font-hand text-2xl">Opere danneggiate</h2>
+    <p class="mt-3 leading-relaxed opacity-80">
+      Se l'opera arriva danneggiata, inviaci una foto dell'opera e dell'imballo
+      entro 48 ore dalla consegna a
+      <a class="underline underline-offset-4" href={`mailto:${email}`}>{email}</a>:
+      la ristampiamo e la rispediamo gratuitamente.
     </p>
 
     <h2 class="mt-10 font-hand text-2xl">Resi e diritto di recesso</h2>
     <p class="mt-3 leading-relaxed opacity-80">
-      Se sei un consumatore nell'Unione Europea hai in genere diritto di recedere
-      entro <strong>14 giorni</strong> dalla consegna. Fanno eccezione i beni
-      realizzati su misura o chiaramente personalizzati (ad esempio alcune stampe
-      prodotte su richiesta), per i quali il recesso può non applicarsi. Per
+      Se sei un consumatore puoi recedere dall'acquisto entro
+      <strong>14 giorni</strong> dalla consegna, senza dover dare spiegazioni.
+      L'opera va restituita integra, nella sua confezione, e le spese di reso sono
+      a carico del cliente. Rimborsiamo l'importo pagato, compresa la spedizione
+      iniziale, entro 14 giorni dal ricevimento dell'opera restituita. Per
       qualsiasi problema con un ordine scrivici a
       <a class="underline underline-offset-4" href={`mailto:${email}`}>{email}</a>:
       troveremo una soluzione.
@@ -108,7 +135,7 @@ const email = settings.contactEmail || 'boleon.art@gmail.com';
     <h2 class="mt-10 font-hand text-2xl">Aggiornamenti</h2>
     <p class="mt-3 leading-relaxed opacity-80">
       Questa pagina può essere aggiornata nel tempo. Ultimo aggiornamento:
-      21 ottobre 2026.
+      22 ottobre 2026.
     </p>
 
     <p class="mt-10 text-xs leading-relaxed opacity-50">

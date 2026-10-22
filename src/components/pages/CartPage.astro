@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import { catalogEntries } from '../../lib/artworks';
+import settings from '../../lib/settings';
+import { DELIVERY_WEEKS, ZONE_COUNTRIES, normalizeShippingConfig } from '../../lib/shipping';
 import { localeMeta, localizePath, pickLocalized, useTranslations, type Locale } from '../../i18n';
 
 interface Props {
@@ -11,6 +13,7 @@ interface Props {
 
 const { locale } = Astro.props;
 const t = useTranslations(locale);
+const lang = localeMeta[locale].lang;
 
 const artworks = await getCollection('artworks');
 const catalog: Record<
@@ -37,10 +40,28 @@ for (const artwork of artworks) {
   }
 }
 
+// Spedizioni: tariffe da Keystatic, Paesi raggruppati per zona nel menu,
+// con i nomi dei Paesi nella lingua della pagina
+const shipping = normalizeShippingConfig((settings as { shipping?: unknown }).shipping);
+const regionNames = new Intl.DisplayNames([lang], { type: 'region' });
+const countryGroups = [
+  { label: t('cart.zoneItaly'), codes: ZONE_COUNTRIES.italy },
+  { label: t('cart.zoneEu'), codes: ZONE_COUNTRIES.eu },
+  { label: t('cart.zoneEurope'), codes: ZONE_COUNTRIES.europe },
+  { label: t('cart.zoneWorld'), codes: [...ZONE_COUNTRIES.world, ...ZONE_COUNTRIES.usa] },
+].map((group) => ({
+  label: group.label,
+  countries: group.codes
+    .map((code) => ({ code, name: regionNames.of(code) ?? code }))
+    .sort((a, b) => a.name.localeCompare(b.name, lang)),
+}));
+
 const clientData = {
   catalog,
   locale,
-  lang: localeMeta[locale].lang,
+  lang,
+  shipping,
+  delivery: DELIVERY_WEEKS,
   labels: {
     remove: t('cart.remove'),
     quantity: t('artwork.quantity'),
@@ -49,6 +70,12 @@ const clientData = {
     error: t('cart.error'),
     unavailable: t('cart.unavailable'),
     border: t('artwork.border'),
+    shippingFree: t('cart.shippingFree'),
+    freeShippingMissing: t('cart.freeShippingMissing'),
+    freeShippingReached: t('cart.freeShippingReached'),
+    ukMinimum: t('cart.ukMinimum'),
+    deliveryWeeks: t('cart.deliveryWeeks'),
+    chooseCountryFirst: t('cart.chooseCountryFirst'),
   },
 };
 ---
@@ -72,17 +99,68 @@ const clientData = {
     <ul data-cart-items class="divide-y divide-neutral-200 border-y border-neutral-200"></ul>
 
     <div class="mt-8 flex flex-col items-end gap-4">
-      <p class="text-lg">
-        <span class="opacity-60">{t('cart.total')}:</span>
-        <span data-cart-total class="ms-2 text-2xl font-semibold"></span>
-      </p>
-      <p class="text-xs opacity-50">{t('cart.shippingNote')}</p>
+      <label class="flex w-full max-w-sm flex-col gap-1.5 text-sm">
+        <span class="opacity-60">{t('cart.shipTo')}</span>
+        <select data-ship-country class="w-full border border-neutral-300 bg-white px-3 py-2.5">
+          <option value="">{t('cart.chooseCountry')}</option>
+          {
+            countryGroups.map((group) => (
+              <optgroup label={group.label}>
+                {group.countries.map((c) => (
+                  <option value={c.code}>{c.name}</option>
+                ))}
+              </optgroup>
+            ))
+          }
+        </select>
+        <span class="text-xs opacity-60">
+          {t('cart.countryMissing')}
+          <a href={localizePath(locale, '/contatto')} class="underline underline-offset-4">
+            {t('cart.writeUs')}
+          </a>
+        </span>
+      </label>
+
+      <dl class="w-full max-w-sm space-y-1.5 text-sm">
+        <div class="flex justify-between gap-4">
+          <dt class="opacity-60">{t('cart.subtotal')}</dt>
+          <dd data-cart-subtotal></dd>
+        </div>
+        <div data-row-shipping class="hidden">
+          <div class="flex justify-between gap-4">
+            <dt class="opacity-60">{t('cart.shipping')}</dt>
+            <dd data-cart-shipping></dd>
+          </div>
+        </div>
+        <div data-row-duties class="hidden">
+          <div class="flex justify-between gap-4">
+            <dt class="opacity-60">{t('cart.duties')}</dt>
+            <dd data-cart-duties></dd>
+          </div>
+        </div>
+        <div class="flex items-baseline justify-between gap-4 border-t border-neutral-200 pt-2">
+          <dt class="text-lg opacity-60">{t('cart.total')}</dt>
+          <dd data-cart-total class="text-2xl font-semibold"></dd>
+        </div>
+      </dl>
+
+      <div class="flex w-full max-w-sm flex-col gap-2 text-end">
+        <p data-free-progress class="hidden text-sm text-olive"></p>
+        <p data-delivery class="hidden text-xs opacity-60"></p>
+        <p data-customs-note class="hidden text-xs opacity-70">{t('cart.customsNotice')}</p>
+        <p data-us-note class="hidden text-xs opacity-70">{t('cart.usDutiesNotice')}</p>
+        <p data-uk-min class="hidden border border-amber-300 bg-amber-50 px-3 py-2 text-start text-xs">
+        </p>
+        <p class="text-xs opacity-50">{t('cart.shippingNote')}</p>
+      </div>
+
       <button
         data-checkout
-        class="cursor-pointer bg-ink px-10 py-3.5 text-sm tracking-widest text-white uppercase transition hover:bg-accent disabled:cursor-wait disabled:opacity-50"
+        class="cursor-pointer bg-ink px-10 py-3.5 text-sm tracking-widest text-white uppercase transition hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
       >
         {t('cart.checkout')}
       </button>
+      <p data-checkout-hint class="hidden text-xs opacity-60">{t('cart.chooseCountryFirst')}</p>
       <p data-checkout-error class="hidden text-sm text-accent"></p>
     </div>
   </div>
@@ -93,6 +171,12 @@ const clientData = {
 <script>
   import { getCart, setQty, removeFromCart, pruneCart } from '../../scripts/cart';
   import { track } from '../../scripts/analytics';
+  import {
+    quoteShipping,
+    SHIPPING_COUNTRIES,
+    type ShippingConfig,
+    type ShippingZone,
+  } from '../../lib/shipping';
 
   type Catalog = Record<
     string,
@@ -102,28 +186,110 @@ const clientData = {
     catalog: Catalog;
     locale: string;
     lang: string;
+    shipping: ShippingConfig;
+    delivery: Record<ShippingZone, [number, number]>;
     labels: Record<string, string>;
   };
 
-  const fmt = new Intl.NumberFormat(data.lang, {
+  const fmt0 = new Intl.NumberFormat(data.lang, {
     style: 'currency',
     currency: 'EUR',
     minimumFractionDigits: 0,
   });
+  const fmt2 = new Intl.NumberFormat(data.lang, { style: 'currency', currency: 'EUR' });
+  // Cifre tonde senza decimali (53 €), altrimenti con i centesimi (12,50 €)
+  const money = (n: number) => (Number.isInteger(n) ? fmt0 : fmt2).format(n);
 
-  const elEmpty = document.querySelector<HTMLElement>('[data-cart-empty]')!;
-  const elContent = document.querySelector<HTMLElement>('[data-cart-content]')!;
-  const elItems = document.querySelector<HTMLElement>('[data-cart-items]')!;
-  const elTotal = document.querySelector<HTMLElement>('[data-cart-total]')!;
-  const elNotice = document.querySelector<HTMLElement>('[data-cart-notice]')!;
-  const elCheckout = document.querySelector<HTMLButtonElement>('[data-checkout]')!;
-  const elError = document.querySelector<HTMLElement>('[data-checkout-error]')!;
+  const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(sel)!;
+  const elEmpty = $('[data-cart-empty]');
+  const elContent = $('[data-cart-content]');
+  const elItems = $('[data-cart-items]');
+  const elSubtotal = $('[data-cart-subtotal]');
+  const elRowShipping = $('[data-row-shipping]');
+  const elShipping = $('[data-cart-shipping]');
+  const elRowDuties = $('[data-row-duties]');
+  const elDuties = $('[data-cart-duties]');
+  const elTotal = $('[data-cart-total]');
+  const elFree = $('[data-free-progress]');
+  const elDelivery = $('[data-delivery]');
+  const elCustoms = $('[data-customs-note]');
+  const elUsNote = $('[data-us-note]');
+  const elUkMin = $('[data-uk-min]');
+  const elNotice = $('[data-cart-notice]');
+  const elCountry = $<HTMLSelectElement>('[data-ship-country]');
+  const elCheckout = $<HTMLButtonElement>('[data-checkout]');
+  const elHint = $('[data-checkout-hint]');
+  const elError = $('[data-checkout-error]');
+
+  // Paese di spedizione: quello scelto l'ultima volta, altrimenti quello del
+  // browser (es. "it-IT" → Italia) se lo serviamo
+  const COUNTRY_KEY = 'boleon-ship-country';
+  const served = new Set(SHIPPING_COUNTRIES);
+  function initialCountry(): string {
+    try {
+      const saved = localStorage.getItem(COUNTRY_KEY);
+      if (saved && served.has(saved)) return saved;
+    } catch {}
+    for (const l of navigator.languages ?? []) {
+      const region = l.split('-')[1]?.toUpperCase();
+      if (region) return served.has(region) ? region : '';
+    }
+    return data.locale === 'it' ? 'IT' : '';
+  }
+  elCountry.value = initialCountry();
 
   // Remove items no longer purchasable (sold meanwhile / deleted)
   if (pruneCart(new Set(Object.keys(data.catalog)))) {
     elNotice.textContent = data.labels.unavailable;
     elNotice.classList.remove('hidden');
   }
+
+  let subtotal = 0;
+
+  /** Spedizione, dazi, totale e avvisi in base al Paese scelto. */
+  function updateSummary() {
+    elSubtotal.textContent = money(subtotal);
+    const quote = elCountry.value ? quoteShipping(data.shipping, elCountry.value, subtotal) : null;
+
+    elRowShipping.classList.toggle('hidden', !quote);
+    elRowDuties.classList.toggle('hidden', !quote || quote.duties === 0);
+    elFree.classList.toggle('hidden', !quote || quote.freeOver === 0);
+    elDelivery.classList.toggle('hidden', !quote);
+    elCustoms.classList.toggle('hidden', !quote?.customsOnDelivery);
+    elUsNote.classList.toggle('hidden', quote?.zone !== 'usa');
+    elUkMin.classList.toggle('hidden', !quote?.belowUkMinimum);
+    elHint.classList.toggle('hidden', !!quote);
+    elCheckout.disabled = !quote || quote.belowUkMinimum;
+
+    if (!quote) {
+      elTotal.textContent = money(subtotal);
+      return;
+    }
+    elShipping.textContent = quote.shipping === 0 ? data.labels.shippingFree : money(quote.shipping);
+    elDuties.textContent = money(quote.duties);
+    elTotal.textContent = money(quote.total);
+    elFree.textContent =
+      quote.missingForFree > 0
+        ? data.labels.freeShippingMissing.replace('{amount}', money(quote.missingForFree))
+        : data.labels.freeShippingReached;
+    const [min, max] = data.delivery[quote.zone];
+    elDelivery.textContent = data.labels.deliveryWeeks
+      .replace('{min}', String(min))
+      .replace('{max}', String(max));
+    elUkMin.textContent = data.labels.ukMinimum.replace(
+      '{amount}',
+      money(data.shipping.ukMinOrder)
+    );
+  }
+
+  elCountry.addEventListener('change', () => {
+    try {
+      localStorage.setItem(COUNTRY_KEY, elCountry.value);
+    } catch {}
+    elError.classList.add('hidden');
+    if (elCountry.value) track('shipping_country', { country: elCountry.value });
+    updateSummary();
+  });
 
   function render() {
     const items = getCart();
@@ -132,12 +298,12 @@ const clientData = {
     if (items.length === 0) return;
 
     elItems.innerHTML = '';
-    let total = 0;
+    subtotal = 0;
     for (const item of items) {
       const art = data.catalog[item.slug];
       if (!art) continue;
       const qty = Math.min(item.qty, art.max);
-      total += art.price * qty;
+      subtotal += art.price * qty;
 
       const li = document.createElement('li');
       li.className = 'flex items-center gap-4 py-5';
@@ -161,13 +327,13 @@ const clientData = {
           <a href="${art.url}" class="font-serif text-lg leading-snug hover:underline">${art.title}</a>
           <p class="mt-0.5 text-xs tracking-wide uppercase opacity-50">${art.subtitle}</p>
           ${borderLine}
-          <p class="mt-1 text-sm opacity-60">${fmt.format(art.price)}</p>
+          <p class="mt-1 text-sm opacity-60">${money(art.price)}</p>
           <div class="mt-2 flex items-center gap-4">
             ${qtyControl}
             <button data-row-remove class="cursor-pointer text-xs tracking-widest uppercase opacity-50 transition hover:text-accent hover:opacity-100">${data.labels.remove}</button>
           </div>
         </div>
-        <p class="shrink-0 text-end">${fmt.format(art.price * qty)}</p>`;
+        <p class="shrink-0 text-end">${money(art.price * qty)}</p>`;
 
       li.querySelector('[data-row-qty]')?.addEventListener('change', (e) => {
         setQty(item.slug, parseInt((e.target as HTMLSelectElement).value, 10), art.max, item.border);
@@ -180,13 +346,21 @@ const clientData = {
 
       elItems.appendChild(li);
     }
-    elTotal.textContent = fmt.format(total);
+    updateSummary();
   }
 
   elCheckout.addEventListener('click', async () => {
     const items = getCart();
     if (items.length === 0) return;
-    track('checkout_start', { items: items.reduce((n, i) => n + i.qty, 0) });
+    if (!elCountry.value) {
+      elHint.classList.remove('hidden');
+      elCountry.focus();
+      return;
+    }
+    track('checkout_start', {
+      items: items.reduce((n, i) => n + i.qty, 0),
+      country: elCountry.value,
+    });
     elCheckout.disabled = true;
     const originalLabel = elCheckout.textContent;
     elCheckout.textContent = data.labels.processing;
@@ -195,13 +369,19 @@ const clientData = {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, locale: data.locale }),
+        body: JSON.stringify({ items, locale: data.locale, country: elCountry.value }),
       });
       const body = await res.json();
       if (!res.ok || !body.url) throw new Error(body.error || 'checkout_failed');
       window.location.href = body.url;
-    } catch {
-      elError.textContent = data.labels.error;
+    } catch (err) {
+      const code = err instanceof Error ? err.message : '';
+      elError.textContent =
+        code === 'uk_minimum'
+          ? data.labels.ukMinimum.replace('{amount}', money(data.shipping.ukMinOrder))
+          : code === 'invalid_country'
+            ? data.labels.chooseCountryFirst
+            : data.labels.error;
       elError.classList.remove('hidden');
       elCheckout.disabled = false;
       elCheckout.textContent = originalLabel;

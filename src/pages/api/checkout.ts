@@ -3,7 +3,9 @@ import { getCollection } from 'astro:content';
 import Stripe from 'stripe';
 import { catalogEntries, type CatalogEntry } from '../../lib/artworks';
 import { getEnv } from '../../lib/env';
-import { defaultLocale, locales, localizePath, type Locale } from '../../i18n';
+import settings from '../../lib/settings';
+import { DELIVERY_WEEKS, normalizeShippingConfig, quoteShipping } from '../../lib/shipping';
+import { defaultLocale, locales, localizePath, useTranslations, type Locale } from '../../i18n';
 
 export const prerender = false;
 
@@ -16,16 +18,14 @@ const STRIPE_LOCALES: Partial<Record<Locale, Stripe.Checkout.SessionCreateParams
   zh: 'zh',
 };
 
-const SHIPPING_COUNTRIES: Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry[] =
-  [
-    'IT', 'FR', 'DE', 'ES', 'PT', 'AT', 'BE', 'NL', 'LU', 'IE', 'GB', 'CH',
-    'SE', 'DK', 'FI', 'NO', 'PL', 'CZ', 'GR', 'US', 'CA', 'MX', 'BR', 'JP',
-    'CN', 'IN', 'AU', 'NZ', 'AE', 'SA',
-  ];
+// I Paesi serviti e le zone di spedizione stanno in src/lib/shipping.ts; le
+// tariffe in site-shop.json (Keystatic → Sito → Vendita e stampe → Spedizioni).
 
 type CheckoutPayload = {
   items?: { slug?: string; qty?: number; border?: number }[];
   locale?: string;
+  /** Paese di spedizione scelto nel carrello (codice ISO a 2 lettere). */
+  country?: string;
 };
 
 // Etichette dei supporti di stampa nelle email/ricevute Stripe (in italiano,
@@ -71,8 +71,16 @@ export const POST: APIRoute = async ({ request, locals }) => {
     for (const entry of catalogEntries(artwork)) entryById.set(entry.id, entry);
   }
 
+  const country = typeof payload.country === 'string' ? payload.country.toUpperCase() : '';
+  const shippingConfig = normalizeShippingConfig((settings as { shipping?: unknown }).shipping);
+  // Paese non servito (o mancante): niente checkout, il cliente deve scrivere
+  if (!quoteShipping(shippingConfig, country, 0)) {
+    return json({ error: 'invalid_country' }, 400);
+  }
+
   const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
   const summary: string[] = [];
+  let subtotal = 0;
 
   for (const item of items) {
     const entry = item.slug ? entryById.get(item.slug) : undefined;
@@ -115,7 +123,32 @@ export const POST: APIRoute = async ({ request, locals }) => {
       },
     });
     summary.push(`${entry.id}${border ? `+b${border}` : ''} x${qty}`);
+    subtotal += entry.price * qty;
   }
+
+  // Spedizione e dazi ricalcolati qui, mai presi dal carrello
+  const quote = quoteShipping(shippingConfig, country, subtotal)!;
+  if (quote.belowUkMinimum) {
+    return json({ error: 'uk_minimum', min: shippingConfig.ukMinOrder }, 400);
+  }
+  const t = useTranslations(locale);
+  if (quote.duties > 0) {
+    // Dazi USA: li versa l'artista alla spedizione (Servizio Gestione Dazi di
+    // Poste), quindi il cliente li paga qui e alla consegna non paga nulla.
+    lineItems.push({
+      quantity: 1,
+      price_data: {
+        currency: 'eur',
+        unit_amount: Math.round(quote.duties * 100),
+        product_data: {
+          name: t('checkout.dutiesName'),
+          description: t('checkout.dutiesDesc'),
+          metadata: { slug: 'us-duties' },
+        },
+      },
+    });
+  }
+  const [minWeeks, maxWeeks] = DELIVERY_WEEKS[quote.zone];
 
   const stripe = new Stripe(secretKey, {
     httpClient: Stripe.createFetchHttpClient(),
@@ -128,10 +161,34 @@ export const POST: APIRoute = async ({ request, locals }) => {
       mode: 'payment',
       line_items: lineItems,
       locale: STRIPE_LOCALES[locale] ?? 'auto',
-      shipping_address_collection: { allowed_countries: SHIPPING_COUNTRIES },
+      // Solo il Paese scelto nel carrello: la tariffa dipende da lì
+      shipping_address_collection: {
+        allowed_countries: [
+          quote.country as Stripe.Checkout.SessionCreateParams.ShippingAddressCollection.AllowedCountry,
+        ],
+      },
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: Math.round(quote.shipping * 100), currency: 'eur' },
+            display_name: t('checkout.shippingName'),
+            delivery_estimate: {
+              minimum: { unit: 'week', value: minWeeks },
+              maximum: { unit: 'week', value: maxWeeks },
+            },
+          },
+        },
+      ],
       success_url: `${origin}${localizePath(locale, '/grazie')}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}${localizePath(locale, '/annullato')}`,
-      metadata: { items: summary.join(', ').slice(0, 490) },
+      metadata: {
+        items: summary.join(', ').slice(0, 490),
+        country: quote.country,
+        zone: quote.zone,
+        shipping_eur: quote.shipping.toFixed(2),
+        duties_eur: quote.duties.toFixed(2),
+      },
     });
     return json({ url: session.url });
   } catch (err) {

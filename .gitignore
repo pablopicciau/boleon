@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# variabili locali di wrangler (chiavi di prova): mai nel repository
+.dev.vars

@@ -8,6 +8,7 @@ import {
   printPrice,
   sortArtworks,
 } from '../lib/artworks';
+import { DELIVERY_WEEKS, normalizeShippingConfig, type ZoneRate } from '../lib/shipping';
 
 export const prerender = true;
 
@@ -59,15 +60,24 @@ export const GET: APIRoute = async ({ site }) => {
     return `- ${c.data.names?.en || c.data.name}${desc ? `: ${desc}` : ''}`;
   });
 
+  // Testi del sito: in Keystatic c'è solo l'italiano, le altre lingue le
+  // aggiunge la traduzione automatica in build (quindi possono mancare)
+  const bios = settings.bios as Record<string, string | undefined>;
+  const taglines = settings.taglines as Record<string, string | undefined>;
   const story =
     (settings as { stories?: Record<string, string | null> }).stories?.en ||
-    settings.bios.en ||
-    settings.bios.it ||
+    bios.en ||
+    bios.it ||
     '';
+
+  // Spedizioni: stesse tariffe del carrello (Keystatic → Vendita e stampe)
+  const ship = normalizeShippingConfig((settings as { shipping?: unknown }).shipping);
+  const rate = (z: ZoneRate) => `€${z.price}${z.freeOver > 0 ? ` (free over €${z.freeOver})` : ''}`;
+  const weeks = ([min, max]: [number, number]) => `${min}–${max} weeks`;
 
   const body = `# ${settings.artistName}
 
-> ${[settings.taglines.en || settings.taglines.it, `online gallery and shop of the artist ${settings.artistName}, a mysterious Italian artist`].filter(Boolean).join(' — ')}. Original artworks are unique pieces available on request via the site contact form; museum-grade fine art prints (pigment giclée on 100% cotton archival paper or artist canvas, signed and numbered, each with a certificate of authenticity) are purchasable online in European A sizes (A4–A0) and US/Canada inch sizes (8×10 to 24×36), with an optional extra white border for framing, worldwide shipping and secure Stripe checkout.
+> ${[taglines.en || taglines.it,`online gallery and shop of the artist ${settings.artistName}, a mysterious Italian artist`].filter(Boolean).join(' — ')}. Original artworks are unique pieces available on request via the site contact form; museum-grade fine art prints (pigment giclée on 100% cotton archival paper or artist canvas, signed and numbered, each with a certificate of authenticity) are purchasable online in European A sizes (A4–A0) and US/Canada inch sizes (8×10 to 24×36), with an optional extra white border for framing, tracked shipping to Italy, the EU, Switzerland, Norway, the UK, the USA (import duties included), Canada, Japan, South Korea, Singapore, Australia, New Zealand and the UAE, and secure Stripe checkout.
 
 ${story}
 
@@ -91,11 +101,12 @@ ${collectionLines.join('\n')}
 - **How do I buy an original?** From the artwork page send a request ("Original on request"); Boleòn replies personally by email to arrange price, shipping and details.
 - **Are prints available now?** Prints are currently available for pre-order: you pay now and receive the print once it is ready (made on request, so it takes a little longer).
 - **How can I pay?** Secure card payment via Stripe; card data never passes through the site.
-- **Do you ship worldwide?** Yes. Boleòn is a solo artisan and personally prepares and ships every piece.
-- **How much is shipping?** Agreed and communicated by email after the order, based on destination and artwork — you pay the actual cost, with no flat surcharge.
-- **How long does delivery take?** Prints are made on request, usually about 2–4 weeks for production and shipping; original artwork timelines are arranged directly with the artist.
+- **Where do you ship?** Italy, all EU countries, Switzerland, Norway, the UK (orders from €${ship.ukMinOrder}), the USA, Canada, Japan, South Korea, Singapore, Australia, New Zealand and the UAE; other countries on request. Boleòn is a solo artisan and personally prepares, signs and ships every piece, always with tracking.
+- **How much is shipping?** Shown in the cart before payment, based on the destination country: Italy ${rate(ship.zones.italy)}, EU ${rate(ship.zones.eu)}, Switzerland, Norway and UK ${rate(ship.zones.europe)}, rest of the world ${rate(ship.zones.world)}, USA ${rate(ship.zones.usa)} plus import duties already included in the total. One shipping fee per order, even with several prints.
+- **How long does delivery take?** Prints are made on request, signed and shipped by the artist: usually ${weeks(DELIVERY_WEEKS.italy)} in Italy, ${weeks(DELIVERY_WEEKS.eu)} in the EU and ${weeks(DELIVERY_WEEKS.world)} elsewhere, customs included. Original artwork timelines are arranged directly with the artist.
+- **Will I pay duties or taxes on delivery?** Not in the EU. Not in the USA either: import duties are included in the total and paid by the artist when shipping. In Switzerland, Norway, the UK and other non-EU countries any duties, VAT and clearance fees are paid by the recipient on delivery.
 - **Are the works signed? Is there a certificate?** Yes — every piece, original or print, is signed and comes with a certificate of authenticity.
-- **Can I return a work?** EU consumers generally have a 14-day right of withdrawal from delivery; made-to-order or personalized items (such as some on-request prints) may be excluded. Contact the artist for any issue.
+- **Can I return a work?** Yes. Consumers can withdraw within 14 days of delivery; the work must come back intact, return shipping is paid by the customer and the refund includes the original shipping. If a print arrives damaged, send a photo within 48 hours and it is reprinted and reshipped free of charge.
 - **Which languages?** Italian, English, Spanish, French, Chinese, Hindi, Arabic.
 - **How do I get in touch?** The contact page, the "Request information" form on each artwork, or Instagram — messages go straight to the artist.
 

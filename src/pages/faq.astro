@@ -1,8 +1,18 @@
 ---
 import Base from '../layouts/Base.astro';
+import settings from '../lib/settings';
+import { DELIVERY_WEEKS, normalizeShippingConfig, type ZoneRate } from '../lib/shipping';
 import { defaultLocale } from '../i18n';
 
 export const prerender = true;
+
+// Tariffe e tempi letti dalle impostazioni (Keystatic → Vendita e stampe →
+// Spedizioni): se cambiano lì, le risposte qui si aggiornano da sole.
+const ship = normalizeShippingConfig((settings as { shipping?: unknown }).shipping);
+const eur = (n: number) =>
+  new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0 }).format(n);
+const rate = (z: ZoneRate) => `${eur(z.price)}${z.freeOver > 0 ? `, gratuita da ${eur(z.freeOver)}` : ''}`;
+const weeks = ([min, max]: [number, number]) => `${min}–${max} settimane`;
 
 // FAQ in italiano, con dati strutturati FAQPage: così Google e le AI
 // (ChatGPT/Copilot/Perplexity) leggono ogni domanda/risposta e possono citarle.
@@ -32,16 +42,24 @@ const faqs: { q: string; a: string }[] = [
     a: 'I pagamenti si effettuano con carta, in modo sicuro tramite Stripe. I dati della carta sono gestiti direttamente da Stripe e non vengono conservati dal sito.',
   },
   {
-    q: 'Spedite in tutto il mondo?',
-    a: 'Sì, Boleòn spedisce in tutto il mondo. Essendo un artista artigiano, prepara e spedisce personalmente ogni opera.',
+    q: 'In quali Paesi spedite?',
+    a: `In Italia, in tutti i Paesi dell'Unione Europea, in Svizzera, Norvegia e Regno Unito (per ordini da ${eur(ship.ukMinOrder)} in su), negli Stati Uniti, in Canada, Giappone, Corea del Sud, Singapore, Australia, Nuova Zelanda ed Emirati Arabi Uniti. Per gli altri Paesi scrivi all'artista e riceverai un preventivo. Boleòn prepara e spedisce personalmente ogni opera, sempre con spedizione tracciata.`,
   },
   {
     q: 'Quanto costa la spedizione?',
-    a: "Il costo della spedizione viene concordato e comunicato via email dopo l'ordine, in base alla destinazione e al tipo di opera: così paghi l'effettivo, senza sovrapprezzi forfettari.",
+    a: `Il costo si vede nel carrello prima di pagare, scegliendo il Paese di spedizione. Italia ${rate(ship.zones.italy)}. Unione Europea ${rate(ship.zones.eu)}. Svizzera, Norvegia e Regno Unito ${rate(ship.zones.europe)}. Resto del mondo ${rate(ship.zones.world)}. Stati Uniti ${rate(ship.zones.usa)}, più i dazi d'importazione già inclusi nel totale. Si paga una sola spedizione per ordine, anche con più stampe.`,
   },
   {
     q: "Quanto tempo ci vuole per ricevere l'opera?",
-    a: 'Le stampe sono preparate su richiesta: in genere servono circa 2–4 settimane tra lavorazione e spedizione. Per le opere originali i tempi si concordano direttamente con l\'artista.',
+    a: `Le stampe sono preparate su richiesta, firmate e spedite personalmente dall'artista. In genere servono ${weeks(DELIVERY_WEEKS.italy)} in Italia, ${weeks(DELIVERY_WEEKS.eu)} nell'Unione Europea e ${weeks(DELIVERY_WEEKS.world)} nel resto del mondo, dogana compresa. Per le opere originali i tempi si concordano direttamente con l'artista.`,
+  },
+  {
+    q: 'Devo pagare dazi o tasse alla consegna?',
+    a: "Nell'Unione Europea no. Negli Stati Uniti nemmeno, perché i dazi d'importazione sono già inclusi nel totale e li versa l'artista al momento della spedizione. In Svizzera, Norvegia, Regno Unito e negli altri Paesi fuori dall'UE eventuali dazi, IVA e spese di sdoganamento sono a carico del destinatario e si pagano alla consegna.",
+  },
+  {
+    q: "La mia opera è arrivata danneggiata, cosa faccio?",
+    a: "Manda all'artista una foto dell'opera e dell'imballo entro 48 ore dalla consegna. L'opera verrà ristampata e rispedita gratuitamente.",
   },
   {
     q: "Le opere sono firmate? C'è un certificato di autenticità?",
@@ -49,7 +67,7 @@ const faqs: { q: string; a: string }[] = [
   },
   {
     q: "Posso restituire un'opera?",
-    a: 'Se sei un consumatore nell\'Unione Europea hai in genere diritto di recesso entro 14 giorni dalla consegna. Fanno eccezione i beni realizzati su misura o personalizzati, come alcune stampe prodotte su richiesta. Per qualsiasi problema con un ordine scrivi all\'artista e troverete una soluzione.',
+    a: "Sì. Se sei un consumatore hai 14 giorni dalla consegna per recedere dall'acquisto, senza dover dare spiegazioni. L'opera deve tornare integra e le spese di reso sono a carico del cliente; il rimborso comprende la spedizione pagata all'acquisto. Per qualsiasi problema con un ordine scrivi all'artista e troverete una soluzione.",
   },
   {
     q: 'In quante lingue è disponibile il sito?',

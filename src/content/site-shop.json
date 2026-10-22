@@ -141,5 +141,29 @@
       "price": 210
     }
   ],
-  "canvasSurchargePercent": 60
+  "canvasSurchargePercent": 60,
+  "shipping": {
+    "italy": {
+      "price": 8,
+      "freeOver": 90
+    },
+    "eu": {
+      "price": 18,
+      "freeOver": 150
+    },
+    "europe": {
+      "price": 25,
+      "freeOver": 300
+    },
+    "world": {
+      "price": 35,
+      "freeOver": 300
+    },
+    "usa": {
+      "price": 35,
+      "freeOver": 300
+    },
+    "usDutiesPercent": 10,
+    "ukMinOrder": 160
+  }
 }

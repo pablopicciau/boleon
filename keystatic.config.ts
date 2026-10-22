@@ -23,6 +23,20 @@ const localizedText = (label: string, multiline = false) =>
     }
   );
 
+// Tariffa di spedizione di una zona (logica in src/lib/shipping.ts)
+const zoneRate = (label: string) =>
+  fields.object(
+    {
+      price: fields.number({ label: 'Spedizione (€)', validation: { min: 0 } }),
+      freeOver: fields.number({
+        label: 'Gratis sopra (€)',
+        description: 'Totale delle opere oltre il quale la spedizione è gratuita. 0 = mai gratuita.',
+        validation: { min: 0 },
+      }),
+    },
+    { label }
+  );
+
 export default config({
   storage: import.meta.env.DEV
     ? { kind: 'local' }
@@ -293,6 +307,36 @@ export default config({
           defaultValue: 60,
           validation: { min: 0, max: 500 },
         }),
+        shipping: fields.object(
+          {
+            italy: zoneRate('Italia'),
+            eu: zoneRate('Unione Europea (27 Paesi)'),
+            europe: zoneRate('Europa extra UE (Svizzera, Norvegia, Regno Unito)'),
+            world: zoneRate(
+              'Resto del mondo (Canada, Giappone, Corea del Sud, Singapore, Australia, Nuova Zelanda, Emirati)'
+            ),
+            usa: zoneRate('Stati Uniti'),
+            usDutiesPercent: fields.number({
+              label: 'Dazi USA stimati (%)',
+              description:
+                'Percentuale del valore delle opere aggiunta al totale dei clienti USA: i dazi li paghi tu alla spedizione con il Servizio Gestione Dazi di Poste, così il cliente non paga nulla alla consegna. Verificala con la loro calcolatrice prima della prima spedizione.',
+              defaultValue: 10,
+              validation: { min: 0, max: 100 },
+            }),
+            ukMinOrder: fields.number({
+              label: 'Ordine minimo Regno Unito (€)',
+              description:
+                'Sotto questa cifra il carrello non accetta ordini dal Regno Unito (sopra 135 £ l’IVA inglese la paga il cliente alla consegna, sotto dovresti registrarti all’IVA inglese). Aggiornala se cambia molto il cambio sterlina/euro.',
+              defaultValue: 160,
+              validation: { min: 0 },
+            }),
+          },
+          {
+            label: 'Spedizioni',
+            description:
+              'Costo per ordine e soglia di spedizione gratuita per ogni zona. Una sola spedizione per ordine, anche con più stampe. Gli originali restano su richiesta (preventivo via email).',
+          }
+        ),
       },
     }),
   },
