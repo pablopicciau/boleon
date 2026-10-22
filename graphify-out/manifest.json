@@ -1,0 +1,542 @@
+{
+  ".claude/settings.json": {
+    "mtime": 1792684882.1074538,
+    "seen": 1792685224.404063,
+    "ast_hash": "3b541b9935fcf0831355da956f897645",
+    "semantic_hash": "3b541b9935fcf0831355da956f897645"
+  },
+  ".vscode/extensions.json": {
+    "mtime": 1792580590.119372,
+    "seen": 1792685224.4040713,
+    "ast_hash": "3adedb22d082dbd1ebb00b75d21403aa",
+    "semantic_hash": "3adedb22d082dbd1ebb00b75d21403aa"
+  },
+  ".vscode/launch.json": {
+    "mtime": 1792580590.1259327,
+    "seen": 1792685224.4040742,
+    "ast_hash": "60493763dcbc2d109e57da86d997602a",
+    "semantic_hash": "60493763dcbc2d109e57da86d997602a"
+  },
+  "astro.config.mjs": {
+    "mtime": 1792580684.2193775,
+    "seen": 1792685224.4040763,
+    "ast_hash": "ee63ef3fab2972589a380c88170fd40d",
+    "semantic_hash": "ee63ef3fab2972589a380c88170fd40d"
+  },
+  "keystatic.config.ts": {
+    "mtime": 1792659332.168469,
+    "seen": 1792685224.4040778,
+    "ast_hash": "7488310cdcf8fa99519dc619463cdaf3",
+    "semantic_hash": "7488310cdcf8fa99519dc619463cdaf3"
+  },
+  "package.json": {
+    "mtime": 1792608407.3511324,
+    "seen": 1792685224.4040792,
+    "ast_hash": "c69c3b7bf382877cfe00af914e7603da",
+    "semantic_hash": "c69c3b7bf382877cfe00af914e7603da"
+  },
+  "scripts/generate-placeholders.mjs": {
+    "mtime": 1792580684.2233775,
+    "seen": 1792685224.4040806,
+    "ast_hash": "5d3ea414fc1902b8c39be22123673c17",
+    "semantic_hash": "5d3ea414fc1902b8c39be22123673c17"
+  },
+  "scripts/translate.mjs": {
+    "mtime": 1792594180.2881818,
+    "seen": 1792685224.4040816,
+    "ast_hash": "cb10fefb67433ee2adbdfc5398099c66",
+    "semantic_hash": "cb10fefb67433ee2adbdfc5398099c66"
+  },
+  "src/components/ArtworkCard.astro": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.404083,
+    "ast_hash": "85d0974480cf765efd3c47c31782de07",
+    "semantic_hash": "85d0974480cf765efd3c47c31782de07"
+  },
+  "src/components/HeroSpotlight.astro": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.4040842,
+    "ast_hash": "90e3817275713fdfa4a393feca8e0cfe",
+    "semantic_hash": "90e3817275713fdfa4a393feca8e0cfe"
+  },
+  "src/components/LanguageSwitcher.astro": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.4040852,
+    "ast_hash": "3ee45e7cc4a1e8d09358ae7a51e5f2f5",
+    "semantic_hash": "3ee45e7cc4a1e8d09358ae7a51e5f2f5"
+  },
+  "src/components/PaintAccents.astro": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.4040868,
+    "ast_hash": "984145c971bb67f6dc06c19ade15cad2",
+    "semantic_hash": "984145c971bb67f6dc06c19ade15cad2"
+  },
+  "src/components/pages/ArtistPage.astro": {
+    "mtime": 1792595777.7322767,
+    "seen": 1792685224.4040885,
+    "ast_hash": "62401889f0216a2c84557bef24632afb",
+    "semantic_hash": "62401889f0216a2c84557bef24632afb"
+  },
+  "src/components/pages/ArtworkDetail.astro": {
+    "mtime": 1792608205.5911205,
+    "seen": 1792685224.40409,
+    "ast_hash": "a53f781d92f7987121c4418ecda58807",
+    "semantic_hash": "a53f781d92f7987121c4418ecda58807"
+  },
+  "src/components/pages/CartPage.astro": {
+    "mtime": 1792659542.2358406,
+    "seen": 1792685224.4040911,
+    "ast_hash": "7f4434bab2e4fb58a82c0e8e24fa3392",
+    "semantic_hash": "7f4434bab2e4fb58a82c0e8e24fa3392"
+  },
+  "src/components/pages/ContactPage.astro": {
+    "mtime": 1792608227.4271216,
+    "seen": 1792685224.404092,
+    "ast_hash": "60bd543e01bca73ba18dbf0d2e88ad43",
+    "semantic_hash": "60bd543e01bca73ba18dbf0d2e88ad43"
+  },
+  "src/components/pages/GalleryPage.astro": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.4040935,
+    "ast_hash": "297a2aa3adcf1b6e4f40a1efb3bab031",
+    "semantic_hash": "297a2aa3adcf1b6e4f40a1efb3bab031"
+  },
+  "src/components/pages/HomePage.astro": {
+    "mtime": 1792595773.0562763,
+    "seen": 1792685224.4040947,
+    "ast_hash": "04e4e01806823423a21616315f8761d2",
+    "semantic_hash": "04e4e01806823423a21616315f8761d2"
+  },
+  "src/components/pages/ResultPage.astro": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.4040956,
+    "ast_hash": "15729763694374aee75a962f0fdaa435",
+    "semantic_hash": "15729763694374aee75a962f0fdaa435"
+  },
+  "src/content.config.ts": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.4040968,
+    "ast_hash": "9baad66adcd0a918ba39131c7d69a326",
+    "semantic_hash": "9baad66adcd0a918ba39131c7d69a326"
+  },
+  "src/content/artworks/night-sea-shooting-star.json": {
+    "mtime": 1792656014.6388755,
+    "seen": 1792685224.404098,
+    "ast_hash": "d968e58bc91abc5f2016a2f31be5d36e",
+    "semantic_hash": "d968e58bc91abc5f2016a2f31be5d36e"
+  },
+  "src/content/artworks/sea-drop.json": {
+    "mtime": 1792656014.6228755,
+    "seen": 1792685224.4040992,
+    "ast_hash": "1ed456f3e90115314ae237d8b75aac1a",
+    "semantic_hash": "1ed456f3e90115314ae237d8b75aac1a"
+  },
+  "src/content/artworks/shy-carnivorous-plant.json": {
+    "mtime": 1792656014.6428754,
+    "seen": 1792685224.404101,
+    "ast_hash": "488d6b3f10f4254bbfdddd857a77e9bf",
+    "semantic_hash": "488d6b3f10f4254bbfdddd857a77e9bf"
+  },
+  "src/content/collections/fiori.json": {
+    "mtime": 1792595594.1682658,
+    "seen": 1792685224.404102,
+    "ast_hash": "532f0c247e9613daf926c26eca77b0ea",
+    "semantic_hash": "532f0c247e9613daf926c26eca77b0ea"
+  },
+  "src/content/collections/ispirazioni.json": {
+    "mtime": 1792595594.1682658,
+    "seen": 1792685224.4041035,
+    "ast_hash": "a3065503c032af6d8c933ca63e81ecba",
+    "semantic_hash": "a3065503c032af6d8c933ca63e81ecba"
+  },
+  "src/content/collections/shades.json": {
+    "mtime": 1792595594.1722658,
+    "seen": 1792685224.4041045,
+    "ast_hash": "b7d98f9b73e77c3fc5809ab2ace8869e",
+    "semantic_hash": "b7d98f9b73e77c3fc5809ab2ace8869e"
+  },
+  "src/content/site-contacts.json": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.4041057,
+    "ast_hash": "736561e1f92f6e2abf5313426be35fc8",
+    "semantic_hash": "736561e1f92f6e2abf5313426be35fc8"
+  },
+  "src/content/site-cover.json": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.4041069,
+    "ast_hash": "8e5d2fba04329b8ed84db3e8f61ae707",
+    "semantic_hash": "8e5d2fba04329b8ed84db3e8f61ae707"
+  },
+  "src/content/site-identity.json": {
+    "mtime": 1792595594.1722658,
+    "seen": 1792685224.404108,
+    "ast_hash": "cb65f6a52cd292cfb706472a35a495f9",
+    "semantic_hash": "cb65f6a52cd292cfb706472a35a495f9"
+  },
+  "src/content/site-shop.json": {
+    "mtime": 1792659311.9004679,
+    "seen": 1792685224.4041092,
+    "ast_hash": "346bf90faf8c3f71c17d589120ec6fd0",
+    "semantic_hash": "346bf90faf8c3f71c17d589120ec6fd0"
+  },
+  "src/i18n/ar.ts": {
+    "mtime": 1792659464.5724769,
+    "seen": 1792685224.4041107,
+    "ast_hash": "bd3573db597be0171deb04c95392e058",
+    "semantic_hash": "bd3573db597be0171deb04c95392e058"
+  },
+  "src/i18n/en.ts": {
+    "mtime": 1792659429.4564748,
+    "seen": 1792685224.4041116,
+    "ast_hash": "02e9a8b69240914613c9180f5749d35c",
+    "semantic_hash": "02e9a8b69240914613c9180f5749d35c"
+  },
+  "src/i18n/es.ts": {
+    "mtime": 1792659436.1084752,
+    "seen": 1792685224.404113,
+    "ast_hash": "6c86b0625fa9406aef2c809e83cf6de0",
+    "semantic_hash": "6c86b0625fa9406aef2c809e83cf6de0"
+  },
+  "src/i18n/fr.ts": {
+    "mtime": 1792659442.9084756,
+    "seen": 1792685224.4041142,
+    "ast_hash": "17de6f1d08d0ecfd3b11f95b615d7b11",
+    "semantic_hash": "17de6f1d08d0ecfd3b11f95b615d7b11"
+  },
+  "src/i18n/hi.ts": {
+    "mtime": 1792659457.0244765,
+    "seen": 1792685224.4041154,
+    "ast_hash": "f4d3d7af3d6da4fa30830f2f359e6be7",
+    "semantic_hash": "f4d3d7af3d6da4fa30830f2f359e6be7"
+  },
+  "src/i18n/index.ts": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.4041166,
+    "ast_hash": "6f1cd3a690c13715f5852dacdcacac67",
+    "semantic_hash": "6f1cd3a690c13715f5852dacdcacac67"
+  },
+  "src/i18n/it.ts": {
+    "mtime": 1792659423.4604745,
+    "seen": 1792685224.4041178,
+    "ast_hash": "05aacda6e26933ee6d6b936bee3d6a81",
+    "semantic_hash": "05aacda6e26933ee6d6b936bee3d6a81"
+  },
+  "src/i18n/zh.ts": {
+    "mtime": 1792659448.708476,
+    "seen": 1792685224.4041188,
+    "ast_hash": "cbb938ba287b2dc03c357b1a89937318",
+    "semantic_hash": "cbb938ba287b2dc03c357b1a89937318"
+  },
+  "src/layouts/Base.astro": {
+    "mtime": 1792660731.9896853,
+    "seen": 1792685224.40412,
+    "ast_hash": "b75b31cf4a6795ee820892eb77461025",
+    "semantic_hash": "b75b31cf4a6795ee820892eb77461025"
+  },
+  "src/lib/artworks.ts": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.4041214,
+    "ast_hash": "00288b778ad992f45078a5b3e62a88cf",
+    "semantic_hash": "00288b778ad992f45078a5b3e62a88cf"
+  },
+  "src/lib/env.ts": {
+    "mtime": 1792580590.1820302,
+    "seen": 1792685224.4041224,
+    "ast_hash": "6e10bc2717a89d36790c0ce4453730cf",
+    "semantic_hash": "6e10bc2717a89d36790c0ce4453730cf"
+  },
+  "src/lib/heroImages.ts": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.4041235,
+    "ast_hash": "34da43125c8d5a0eda3815613eed4178",
+    "semantic_hash": "34da43125c8d5a0eda3815613eed4178"
+  },
+  "src/lib/settings.ts": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.404125,
+    "ast_hash": "aafc96ddf6c17d6169c51c976c7550ce",
+    "semantic_hash": "aafc96ddf6c17d6169c51c976c7550ce"
+  },
+  "src/lib/shipping.ts": {
+    "mtime": 1792659284.7804663,
+    "seen": 1792685224.4041266,
+    "ast_hash": "1e9b73c97159467925062a59fa712fe9",
+    "semantic_hash": "1e9b73c97159467925062a59fa712fe9"
+  },
+  "src/pages/404.astro": {
+    "mtime": 1792598196.8115153,
+    "seen": 1792685224.404128,
+    "ast_hash": "66cabc7b39776182b956c79a066b1ed0",
+    "semantic_hash": "66cabc7b39776182b956c79a066b1ed0"
+  },
+  "src/pages/[lang]/annullato.astro": {
+    "mtime": 1792580590.182478,
+    "seen": 1792685224.404129,
+    "ast_hash": "d47ffbfa1258d3c96f50c69f866c1610",
+    "semantic_hash": "d47ffbfa1258d3c96f50c69f866c1610"
+  },
+  "src/pages/[lang]/artista.astro": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.4041302,
+    "ast_hash": "69be37e58bb87219b0c720a0159287f6",
+    "semantic_hash": "69be37e58bb87219b0c720a0159287f6"
+  },
+  "src/pages/[lang]/carrello.astro": {
+    "mtime": 1792580590.1825352,
+    "seen": 1792685224.4041314,
+    "ast_hash": "d98031e17c3dacaf2267343194f8137e",
+    "semantic_hash": "d98031e17c3dacaf2267343194f8137e"
+  },
+  "src/pages/[lang]/contatto.astro": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.4041326,
+    "ast_hash": "4b6c5a580f7a0b411e1b64b6a42e07a0",
+    "semantic_hash": "4b6c5a580f7a0b411e1b64b6a42e07a0"
+  },
+  "src/pages/[lang]/galleria.astro": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.4041338,
+    "ast_hash": "9018f875fd02abd76652b7e4ec887e32",
+    "semantic_hash": "9018f875fd02abd76652b7e4ec887e32"
+  },
+  "src/pages/[lang]/grazie.astro": {
+    "mtime": 1792580590.1825352,
+    "seen": 1792685224.4041352,
+    "ast_hash": "e8350101b1a10465b955b71b83901e1e",
+    "semantic_hash": "e8350101b1a10465b955b71b83901e1e"
+  },
+  "src/pages/[lang]/index.astro": {
+    "mtime": 1792580590.1825352,
+    "seen": 1792685224.4041362,
+    "ast_hash": "30aae514d82cb6359583fbf40244abb1",
+    "semantic_hash": "30aae514d82cb6359583fbf40244abb1"
+  },
+  "src/pages/[lang]/opere/[slug].astro": {
+    "mtime": 1792580590.1825352,
+    "seen": 1792685224.4041374,
+    "ast_hash": "2756869e8b958b670711e22fe6349825",
+    "semantic_hash": "2756869e8b958b670711e22fe6349825"
+  },
+  "src/pages/annullato.astro": {
+    "mtime": 1792580590.1825352,
+    "seen": 1792685224.4041388,
+    "ast_hash": "df52d09407f001a03323b8359ab75743",
+    "semantic_hash": "df52d09407f001a03323b8359ab75743"
+  },
+  "src/pages/api/checkout.ts": {
+    "mtime": 1792659365.140471,
+    "seen": 1792685224.40414,
+    "ast_hash": "b5558ee076f5c478d4747bfbf59ca148",
+    "semantic_hash": "b5558ee076f5c478d4747bfbf59ca148"
+  },
+  "src/pages/api/debug-keystatic.ts": {
+    "mtime": 1792580684.2507958,
+    "seen": 1792685224.404141,
+    "ast_hash": "0aa748a429bad59391d9c06758448bfb",
+    "semantic_hash": "0aa748a429bad59391d9c06758448bfb"
+  },
+  "src/pages/api/inquiry.ts": {
+    "mtime": 1792608155.6031175,
+    "seen": 1792685224.4041424,
+    "ast_hash": "d3ea50efa294c8ba41fa9512664f7014",
+    "semantic_hash": "d3ea50efa294c8ba41fa9512664f7014"
+  },
+  "src/pages/api/stripe-webhook.ts": {
+    "mtime": 1792659838.2484992,
+    "seen": 1792685224.4041436,
+    "ast_hash": "360466620a0e15fb6b023a86e125aa37",
+    "semantic_hash": "360466620a0e15fb6b023a86e125aa37"
+  },
+  "src/pages/artista.astro": {
+    "mtime": 1792580684.2513776,
+    "seen": 1792685224.4041445,
+    "ast_hash": "6b1aabb5864d7ea792aa1dae65ef74d0",
+    "semantic_hash": "6b1aabb5864d7ea792aa1dae65ef74d0"
+  },
+  "src/pages/carrello.astro": {
+    "mtime": 1792580590.1828623,
+    "seen": 1792685224.404146,
+    "ast_hash": "c9059be947b47ace64560bd120f150a8",
+    "semantic_hash": "c9059be947b47ace64560bd120f150a8"
+  },
+  "src/pages/contatto.astro": {
+    "mtime": 1792580684.2513776,
+    "seen": 1792685224.4041471,
+    "ast_hash": "a0adb74e48a611d11eac4a119858bff0",
+    "semantic_hash": "a0adb74e48a611d11eac4a119858bff0"
+  },
+  "src/pages/faq.astro": {
+    "mtime": 1792659889.6112647,
+    "seen": 1792685224.4041483,
+    "ast_hash": "99fd08963f7c20ae59d8da069e76d907",
+    "semantic_hash": "99fd08963f7c20ae59d8da069e76d907"
+  },
+  "src/pages/galleria.astro": {
+    "mtime": 1792580684.2513776,
+    "seen": 1792685224.4041495,
+    "ast_hash": "2d7c9d777cf51b6efde8bb9bfd65cc93",
+    "semantic_hash": "2d7c9d777cf51b6efde8bb9bfd65cc93"
+  },
+  "src/pages/gestione.astro": {
+    "mtime": 1792580684.2513776,
+    "seen": 1792685224.4041505,
+    "ast_hash": "25f664c889766f289dc7a14a58afe6ca",
+    "semantic_hash": "25f664c889766f289dc7a14a58afe6ca"
+  },
+  "src/pages/grazie.astro": {
+    "mtime": 1792580590.1828623,
+    "seen": 1792685224.404152,
+    "ast_hash": "05b908eddccf879fcbb11a662a8c20d7",
+    "semantic_hash": "05b908eddccf879fcbb11a662a8c20d7"
+  },
+  "src/pages/index.astro": {
+    "mtime": 1792580590.1828623,
+    "seen": 1792685224.4041529,
+    "ast_hash": "25c3111363be1dd50d32ea06b603c0bd",
+    "semantic_hash": "25c3111363be1dd50d32ea06b603c0bd"
+  },
+  "src/pages/llms.txt.ts": {
+    "mtime": 1792659942.2183037,
+    "seen": 1792685224.404154,
+    "ast_hash": "d3c16d40a20c5ed90cd5b208c7e8c079",
+    "semantic_hash": "d3c16d40a20c5ed90cd5b208c7e8c079"
+  },
+  "src/pages/note-legali.astro": {
+    "mtime": 1792659914.7838976,
+    "seen": 1792685224.4041553,
+    "ast_hash": "5c60290ca6e4cac32891c1d72249d93b",
+    "semantic_hash": "5c60290ca6e4cac32891c1d72249d93b"
+  },
+  "src/pages/opere/[slug].astro": {
+    "mtime": 1792580590.1828623,
+    "seen": 1792685224.4041564,
+    "ast_hash": "469a398dfea1ea0cfdd0b89789115af0",
+    "semantic_hash": "469a398dfea1ea0cfdd0b89789115af0"
+  },
+  "src/pages/robots.txt.ts": {
+    "mtime": 1792580684.2513776,
+    "seen": 1792685224.4041574,
+    "ast_hash": "14de7a7fb045b5a4169046caf6534c67",
+    "semantic_hash": "14de7a7fb045b5a4169046caf6534c67"
+  },
+  "src/scripts/analytics.ts": {
+    "mtime": 1792580684.2513776,
+    "seen": 1792685224.4041588,
+    "ast_hash": "233bd9a060b3f26120e99f4fc6422613",
+    "semantic_hash": "233bd9a060b3f26120e99f4fc6422613"
+  },
+  "src/scripts/cart.ts": {
+    "mtime": 1792580684.2513776,
+    "seen": 1792685224.40416,
+    "ast_hash": "3d155ba19c464f4a1316858469ddf921",
+    "semantic_hash": "3d155ba19c464f4a1316858469ddf921"
+  },
+  "tsconfig.json": {
+    "mtime": 1792580590.1835756,
+    "seen": 1792685224.4041612,
+    "ast_hash": "435fd597d730817e9056f006911084dd",
+    "semantic_hash": "435fd597d730817e9056f006911084dd"
+  },
+  ".claude/CLAUDE.md": {
+    "mtime": 1792684882.1062307,
+    "seen": 1792685224.4041626,
+    "ast_hash": "9b31786b637be3c13978bec4c2330752",
+    "semantic_hash": "9b31786b637be3c13978bec4c2330752"
+  },
+  "CLAUDE.md": {
+    "mtime": 1792684882.1070817,
+    "seen": 1792685224.4041636,
+    "ast_hash": "c634be6378f5044b6e39f01a319675f1",
+    "semantic_hash": "c634be6378f5044b6e39f01a319675f1"
+  },
+  "README.md": {
+    "mtime": 1792580684.2168605,
+    "seen": 1792685224.4041648,
+    "ast_hash": "e1c14acfe959bedb44b785dd9383a4ed",
+    "semantic_hash": "e1c14acfe959bedb44b785dd9383a4ed"
+  },
+  "docs/piano-marketing.md": {
+    "mtime": 1792597005.8253706,
+    "seen": 1792685224.404166,
+    "ast_hash": "df1e78ea83536b33ba72c303b8e1c5eb",
+    "semantic_hash": "df1e78ea83536b33ba72c303b8e1c5eb"
+  },
+  "docs/piano-spedizioni.md": {
+    "mtime": 1792658922.6484447,
+    "seen": 1792685224.4041672,
+    "ast_hash": "6fb3ff7e76a50ea4fcac2916c85228dc",
+    "semantic_hash": "6fb3ff7e76a50ea4fcac2916c85228dc"
+  },
+  "public/favicon.svg": {
+    "mtime": 1792580590.1308045,
+    "seen": 1792685224.4041684,
+    "ast_hash": "8c13f40658976ea1dfb8ba37a8be0e8d",
+    "semantic_hash": "8c13f40658976ea1dfb8ba37a8be0e8d"
+  },
+  "public/textures/carta.webp": {
+    "mtime": 1792580684.2233775,
+    "seen": 1792685224.4041698,
+    "ast_hash": "e303a4621d7d25a855be3a097068fefe",
+    "semantic_hash": "e303a4621d7d25a855be3a097068fefe"
+  },
+  "src/assets/artworks/night-sea-shooting-star/cover.jpg": {
+    "mtime": 1792580684.2275288,
+    "seen": 1792685224.4041708,
+    "ast_hash": "ed07715e5009f0bbf2289a4a75091301",
+    "semantic_hash": "ed07715e5009f0bbf2289a4a75091301"
+  },
+  "src/assets/artworks/sea-drop/cover.jpg": {
+    "mtime": 1792580684.2275288,
+    "seen": 1792685224.404172,
+    "ast_hash": "bfad2a73e4c971efc31e722bae5c28b0",
+    "semantic_hash": "bfad2a73e4c971efc31e722bae5c28b0"
+  },
+  "src/assets/artworks/shy-carnivorous-plant/images/0.png": {
+    "mtime": 1792580684.2291212,
+    "seen": 1792685224.4041731,
+    "ast_hash": "ba38540bf3b32fdd9d0cee28c3c1563f",
+    "semantic_hash": "ba38540bf3b32fdd9d0cee28c3c1563f"
+  },
+  "src/assets/artworks/shy-carnivorous-plant/images/1.png": {
+    "mtime": 1792580684.2334905,
+    "seen": 1792685224.4041743,
+    "ast_hash": "52603c6979e2c250f05dab25217bef8d",
+    "semantic_hash": "52603c6979e2c250f05dab25217bef8d"
+  },
+  "src/assets/quadri/hero-spenta.jpg": {
+    "mtime": 1792580684.2353776,
+    "seen": 1792685224.4041753,
+    "ast_hash": "a83269d0a89e2bc23779246fc699ec4d",
+    "semantic_hash": "a83269d0a89e2bc23779246fc699ec4d"
+  },
+  "src/assets/quadri/opera-01.jpg": {
+    "mtime": 1792580684.2353776,
+    "seen": 1792685224.4041767,
+    "ast_hash": "1289b7c3c7776356f46824ebcb051bf0",
+    "semantic_hash": "1289b7c3c7776356f46824ebcb051bf0"
+  },
+  "src/assets/quadri/opera-02.jpg": {
+    "mtime": 1792580684.2353776,
+    "seen": 1792685224.4041786,
+    "ast_hash": "e5afb28b255e170e67481b8259f92628",
+    "semantic_hash": "e5afb28b255e170e67481b8259f92628"
+  },
+  "src/assets/quadri/opera-03.jpg": {
+    "mtime": 1792580684.2353776,
+    "seen": 1792685224.40418,
+    "ast_hash": "bd5751402ded1fa8a7021778c4231054",
+    "semantic_hash": "bd5751402ded1fa8a7021778c4231054"
+  },
+  "src/assets/quadri/opera-04.jpg": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.4041812,
+    "ast_hash": "f10e79a2b66d2cb285b6e1ae7d9dcbc3",
+    "semantic_hash": "f10e79a2b66d2cb285b6e1ae7d9dcbc3"
+  },
+  "src/assets/quadri/opera-05.jpg": {
+    "mtime": 1792580684.2433774,
+    "seen": 1792685224.4041822,
+    "ast_hash": "5812dedd00241f93d150571973e72d0f",
+    "semantic_hash": "5812dedd00241f93d150571973e72d0f"
+  }
+}
