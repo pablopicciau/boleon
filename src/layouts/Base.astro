@@ -1,6 +1,9 @@
 ---
 import '@fontsource-variable/cormorant';
 import '@fontsource/beth-ellen';
+// Il font "a mano" dei titoli va scaricato subito: senza preload il browser lo
+// scopre tardi e alla prima visita mostra per un po' il carattere di riserva.
+import bethEllenWoff2 from '@fontsource/beth-ellen/files/beth-ellen-latin-400-normal.woff2?url';
 import '../styles/global.css';
 import settings from '../lib/settings';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
@@ -67,6 +70,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#f4f0e8" />
+    <link rel="preload" href={bethEllenWoff2} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="description" content={pageDescription} />

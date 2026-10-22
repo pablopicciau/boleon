@@ -79,7 +79,8 @@ Analisi concorrenti, listini reali e motivazioni in `docs/piano-spedizioni.md`.
 - **Carrello** (`CartPage.astro`): menu Paese con optgroup per zona e nomi via `Intl.DisplayNames`, preselezione da `localStorage['boleon-ship-country']` o dalla regione del browser; subtotale/spedizione/dazi/totale, "ti mancano X €", tempi, avvisi dogana/USA/UK; evento Umami `shipping_country`.
 - **Checkout**: payload con `country`; 400 `invalid_country` / `uk_minimum`; Stripe `shipping_options` (fixed_amount + `delivery_estimate`), `allowed_countries: [country]`, riga "Dazi USA" separata, metadata `country/zone/shipping_eur/duties_eur`.
 - **Webhook**: email con indirizzo di spedizione (`collected_information.shipping_details`), spedizione e dazi incassati, istruzioni "come spedire".
-- FAQ e llms.txt leggono le tariffe dalle impostazioni; pagina legale con dazi, danni (ristampa gratis con foto entro 48 h) e resi (14 giorni, reso a carico del cliente). Oggi il checkout NON addebita spedizione (`cart.shippingNote`: "ti contatteremo"); l'utente ha dichiarato: spedizione mondiale, costo concordato dopo l'ordine, 2–4 settimane, opere firmate + certificato.
+- FAQ e llms.txt leggono le tariffe dalle impostazioni; pagina legale con dazi, danni (ristampa gratis con foto entro 48 h) e resi (14 giorni, reso a carico del cliente).
+- **Font**: Beth Ellen è precaricato con `<link rel="preload">` in `Base.astro` (senza, alla prima visita della home si vedeva il font di riserva finché il file non era in cache).
 
 ## Comandi
 
