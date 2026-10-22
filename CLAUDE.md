@@ -13,7 +13,7 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - **Sfondi copertina dalle opere** (`useArtworkImages` in site-cover.json, checkbox in Keystatic → Sfondi della copertina): se attivo (default ora) la hero ruota a caso tra le copertine delle opere in catalogo; se spento usa la lista manuale `heroImages`.
 - Campo **`collectionNumber`** sull'opera: numero manuale mostrato come "N° …"; vuoto = calcolato dall'ordinamento nella collezione.
 - **Stripe, webhook e Resend attivi**. Le chiavi (Stripe, Resend, DeepL, Turnstile, Keystatic) vanno SOLO nelle variabili di Cloudflare (Settings → Variables and Secrets, tipo Secret) — mai nel repo; una chiave incollata in chat va considerata compromessa e rigenerata.
-- Keystatic in produzione: GitHub App `boleoncms` creata e installata sul repo; variabili KEYSTATIC_* su Cloudflare (runtime) + PUBLIC_KEYSTATIC_GITHUB_APP_SLUG (build). Admin: https://boleon.it/keystatic (login con GitHub).
+- Keystatic in produzione: GitHub App `boleon-cms` creata e installata sul repo; segreti KEYSTATIC_* su Cloudflare (runtime), Client ID e slug `boleon-cms` in `wrangler.toml` [vars]. Admin: https://boleon.it/keystatic (login con GitHub).
 - GitHub Pages: disattivato/inerte (source "GitHub Actions" senza workflow) — lasciare così.
 
 ## Stack e decisioni prese

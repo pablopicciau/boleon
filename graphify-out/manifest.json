@@ -1,9 +1,9 @@
 {
   ".claude/settings.json": {
-    "mtime": 1792684882.1074538,
-    "seen": 1792685224.404063,
-    "ast_hash": "3b541b9935fcf0831355da956f897645",
-    "semantic_hash": "3b541b9935fcf0831355da956f897645"
+    "mtime": 1792685990.1244154,
+    "seen": 1792686821.3173985,
+    "ast_hash": "93e23870c9eec8adba2a4dd938e1a754",
+    "semantic_hash": "93e23870c9eec8adba2a4dd938e1a754"
   },
   ".vscode/extensions.json": {
     "mtime": 1792580590.119372,
@@ -35,12 +35,6 @@
     "ast_hash": "c69c3b7bf382877cfe00af914e7603da",
     "semantic_hash": "c69c3b7bf382877cfe00af914e7603da"
   },
-  "scripts/generate-placeholders.mjs": {
-    "mtime": 1792580684.2233775,
-    "seen": 1792685224.4040806,
-    "ast_hash": "5d3ea414fc1902b8c39be22123673c17",
-    "semantic_hash": "5d3ea414fc1902b8c39be22123673c17"
-  },
   "scripts/translate.mjs": {
     "mtime": 1792594180.2881818,
     "seen": 1792685224.4040816,
@@ -64,12 +58,6 @@
     "seen": 1792685224.4040852,
     "ast_hash": "3ee45e7cc4a1e8d09358ae7a51e5f2f5",
     "semantic_hash": "3ee45e7cc4a1e8d09358ae7a51e5f2f5"
-  },
-  "src/components/PaintAccents.astro": {
-    "mtime": 1792580684.2433774,
-    "seen": 1792685224.4040868,
-    "ast_hash": "984145c971bb67f6dc06c19ade15cad2",
-    "semantic_hash": "984145c971bb67f6dc06c19ade15cad2"
   },
   "src/components/pages/ArtistPage.astro": {
     "mtime": 1792595777.7322767,
@@ -228,10 +216,10 @@
     "semantic_hash": "cbb938ba287b2dc03c357b1a89937318"
   },
   "src/layouts/Base.astro": {
-    "mtime": 1792660731.9896853,
-    "seen": 1792685224.40412,
-    "ast_hash": "b75b31cf4a6795ee820892eb77461025",
-    "semantic_hash": "b75b31cf4a6795ee820892eb77461025"
+    "mtime": 1792685566.859311,
+    "seen": 1792686821.3174837,
+    "ast_hash": "f8ba1d3ba5367ac66f4d8396b4fee644",
+    "semantic_hash": "f8ba1d3ba5367ac66f4d8396b4fee644"
   },
   "src/lib/artworks.ts": {
     "mtime": 1792580684.2507958,
@@ -328,12 +316,6 @@
     "seen": 1792685224.40414,
     "ast_hash": "b5558ee076f5c478d4747bfbf59ca148",
     "semantic_hash": "b5558ee076f5c478d4747bfbf59ca148"
-  },
-  "src/pages/api/debug-keystatic.ts": {
-    "mtime": 1792580684.2507958,
-    "seen": 1792685224.404141,
-    "ast_hash": "0aa748a429bad59391d9c06758448bfb",
-    "semantic_hash": "0aa748a429bad59391d9c06758448bfb"
   },
   "src/pages/api/inquiry.ts": {
     "mtime": 1792608155.6031175,
@@ -444,16 +426,16 @@
     "semantic_hash": "9b31786b637be3c13978bec4c2330752"
   },
   "CLAUDE.md": {
-    "mtime": 1792684882.1070817,
-    "seen": 1792685224.4041636,
-    "ast_hash": "c634be6378f5044b6e39f01a319675f1",
-    "semantic_hash": "c634be6378f5044b6e39f01a319675f1"
+    "mtime": 1792686734.8697681,
+    "seen": 1792686821.317541,
+    "ast_hash": "e6efe0b4932ec30156ac7a5d800d2394",
+    "semantic_hash": "e6efe0b4932ec30156ac7a5d800d2394"
   },
   "README.md": {
-    "mtime": 1792580684.2168605,
-    "seen": 1792685224.4041648,
-    "ast_hash": "e1c14acfe959bedb44b785dd9383a4ed",
-    "semantic_hash": "e1c14acfe959bedb44b785dd9383a4ed"
+    "mtime": 1792685665.435309,
+    "seen": 1792686821.3175418,
+    "ast_hash": "dbfdb958312674723017642ac491fa6d",
+    "semantic_hash": "dbfdb958312674723017642ac491fa6d"
   },
   "docs/piano-marketing.md": {
     "mtime": 1792597005.8253706,
@@ -468,10 +450,10 @@
     "semantic_hash": "6fb3ff7e76a50ea4fcac2916c85228dc"
   },
   "public/favicon.svg": {
-    "mtime": 1792580590.1308045,
-    "seen": 1792685224.4041684,
-    "ast_hash": "8c13f40658976ea1dfb8ba37a8be0e8d",
-    "semantic_hash": "8c13f40658976ea1dfb8ba37a8be0e8d"
+    "mtime": 1792685551.0661721,
+    "seen": 1792686821.3175488,
+    "ast_hash": "92de138ff8138d8cf92125abab132cad",
+    "semantic_hash": "92de138ff8138d8cf92125abab132cad"
   },
   "public/textures/carta.webp": {
     "mtime": 1792580684.2233775,
@@ -503,12 +485,6 @@
     "ast_hash": "52603c6979e2c250f05dab25217bef8d",
     "semantic_hash": "52603c6979e2c250f05dab25217bef8d"
   },
-  "src/assets/quadri/hero-spenta.jpg": {
-    "mtime": 1792580684.2353776,
-    "seen": 1792685224.4041753,
-    "ast_hash": "a83269d0a89e2bc23779246fc699ec4d",
-    "semantic_hash": "a83269d0a89e2bc23779246fc699ec4d"
-  },
   "src/assets/quadri/opera-01.jpg": {
     "mtime": 1792580684.2353776,
     "seen": 1792685224.4041767,
@@ -538,5 +514,29 @@
     "seen": 1792685224.4041822,
     "ast_hash": "5812dedd00241f93d150571973e72d0f",
     "semantic_hash": "5812dedd00241f93d150571973e72d0f"
+  },
+  "scripts/generate-favicons.mjs": {
+    "mtime": 1792685560.4473112,
+    "seen": 1792686821.3174238,
+    "ast_hash": "42beb7ac13044c6f7b78d84ce8aeccda",
+    "semantic_hash": "42beb7ac13044c6f7b78d84ce8aeccda"
+  },
+  "public/apple-touch-icon.png": {
+    "mtime": 1792685561.5913112,
+    "seen": 1792686821.3175473,
+    "ast_hash": "96fd4ab9f7d03ad74a2e4c8ebdcc054c",
+    "semantic_hash": "96fd4ab9f7d03ad74a2e4c8ebdcc054c"
+  },
+  "public/icon-192.png": {
+    "mtime": 1792685561.5953112,
+    "seen": 1792686821.3175497,
+    "ast_hash": "a77485378b23b8da00916f11f8174071",
+    "semantic_hash": "a77485378b23b8da00916f11f8174071"
+  },
+  "public/icon-512.png": {
+    "mtime": 1792685561.6033113,
+    "seen": 1792686821.3175514,
+    "ast_hash": "a43aae0f9763d4ffc3cc8c7790686adb",
+    "semantic_hash": "a43aae0f9763d4ffc3cc8c7790686adb"
   }
 }

@@ -6,6 +6,13 @@
       "output_tokens": 0,
       "files": 90,
       "note": "semantic extraction by 4 host subagents, ~348k subagent tokens total"
+    },
+    {
+      "date": "2026-10-22T16:33:41.322398+00:00",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "files": 90,
+      "note": "rebuild: 1 host subagent for CLAUDE.md+README (~163k subagent tokens), icons by hand, broken edges repaired"
     }
   ],
   "total_input_tokens": 0,
