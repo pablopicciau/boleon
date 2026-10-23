@@ -91,7 +91,7 @@ export const en: Dict = {
   'cart.unavailable': 'Some works in your cart are no longer available and have been removed.',
   'cart.shippingNote': 'Every artwork is prepared, signed and shipped personally by the artist, with tracked delivery.',
   'success.title': 'Thank you!',
-  'success.message': 'Your order has been received. You will get an email confirmation and we will contact you shortly about shipping.',
+  'success.message': "Your order has been received. You will get the payment receipt by email and, as soon as your artwork ships, I will write to you with the tracking number.",
   'success.back': 'Back to the gallery',
   'cancelled.title': 'Payment cancelled',
   'cancelled.message': 'The payment did not go through or was cancelled. The works are still in your cart.',

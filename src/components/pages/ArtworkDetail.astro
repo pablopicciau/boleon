@@ -89,13 +89,14 @@ const printData = {
 const defaultFormat = [...printData.formats].sort((a, b) => a.prices.paper - b.prices.paper)[0];
 
 // "N° 2 · C. Notturni": numero dell'opera nella sua prima collezione
+// (solo se le collezioni sono visibili, Keystatic → Impostazioni galleria)
 const firstCollection = artwork.data.collections[0];
 const [allArtworks, allCollections] = await Promise.all([
   getCollection('artworks'),
   getCollection('collections'),
 ]);
 let collectionLine: string | null = null;
-if (firstCollection) {
+if (settings.showCollections && firstCollection) {
   const collectionEntry = allCollections.find((c) => c.id === firstCollection);
   const n = collectionNumber(allArtworks, artwork, firstCollection);
   if (collectionEntry && n) {

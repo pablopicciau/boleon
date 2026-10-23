@@ -89,7 +89,7 @@ export const it = {
   'cart.unavailable': 'Alcune opere nel carrello non sono più disponibili e sono state rimosse.',
   'cart.shippingNote': 'Ogni opera è preparata, firmata e spedita personalmente dall’artista, con spedizione tracciata.',
   'success.title': 'Grazie!',
-  'success.message': 'Il tuo ordine è stato ricevuto. Riceverai una conferma via email e ti contatteremo a breve per la spedizione.',
+  'success.message': "Il tuo ordine è stato ricevuto. Riceverai la ricevuta del pagamento via email e, appena l’opera parte, ti scriverò con il numero per seguire la spedizione.",
   'success.back': 'Torna alla galleria',
   'cancelled.title': 'Pagamento annullato',
   'cancelled.message': 'Il pagamento non è andato a buon fine o è stato annullato. Le opere sono ancora nel tuo carrello.',

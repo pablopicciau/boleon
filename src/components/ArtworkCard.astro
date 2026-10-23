@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import settings from '../lib/settings';
 import {
   collectionNumber,
   isAvailable,
@@ -29,9 +30,10 @@ const href = localizePath(locale, `/opere/${artwork.id}`);
 const displayTitle = pickLocalized(artwork.data.titles, locale) || artwork.data.title;
 
 // "N° 2 · C. Notturni": numero dell'opera nella sua prima collezione
+// (solo se le collezioni sono visibili, Keystatic → Impostazioni galleria)
 const firstCollection = artwork.data.collections[0];
 let collectionLine: string | null = null;
-if (firstCollection) {
+if (settings.showCollections && firstCollection) {
   const [allArtworks, allCollections] = await Promise.all([
     getCollection('artworks'),
     getCollection('collections'),

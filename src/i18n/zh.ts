@@ -90,7 +90,7 @@ export const zh: Dict = {
   'cart.unavailable': '购物车中的部分作品已不可购买,已被移除。',
   'cart.shippingNote': '每件作品都由艺术家亲自准备、签名并寄出，全程可追踪。',
   'success.title': '谢谢!',
-  'success.message': '我们已收到您的订单。您将收到确认邮件,我们会尽快与您联系安排配送。',
+  'success.message': "我们已收到您的订单。您将通过邮件收到付款收据；作品寄出后，我会把物流追踪号码发给您。",
   'success.back': '返回画廊',
   'cancelled.title': '支付已取消',
   'cancelled.message': '支付未完成或已取消。作品仍在您的购物车中。',

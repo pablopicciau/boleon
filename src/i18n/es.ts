@@ -91,7 +91,7 @@ export const es: Dict = {
   'cart.unavailable': 'Algunas obras de tu carrito ya no están disponibles y se han eliminado.',
   'cart.shippingNote': 'Cada obra la prepara, firma y envía personalmente el artista, con envío con seguimiento.',
   'success.title': '¡Gracias!',
-  'success.message': 'Hemos recibido tu pedido. Recibirás una confirmación por correo y te contactaremos pronto para el envío.',
+  'success.message': "Hemos recibido tu pedido. Recibirás el recibo del pago por correo y, en cuanto la obra salga, te escribiré con el número de seguimiento.",
   'success.back': 'Volver a la galería',
   'cancelled.title': 'Pago cancelado',
   'cancelled.message': 'El pago no se completó o fue cancelado. Las obras siguen en tu carrito.',

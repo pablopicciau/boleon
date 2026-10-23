@@ -44,7 +44,7 @@ export default config({
   ui: {
     brand: { name: 'Boleon' },
     navigation: {
-      Galleria: ['artworks', 'collections'],
+      Galleria: ['artworks', 'collections', 'gallery'],
       Sito: ['identity', 'cover', 'contacts', 'shop'],
     },
   },
@@ -191,6 +191,18 @@ export default config({
     }),
   },
   singletons: {
+    gallery: singleton({
+      label: 'Impostazioni galleria',
+      path: 'src/content/site-gallery',
+      format: { data: 'json' },
+      schema: {
+        showCollections: fields.checkbox({
+          label: 'Mostra le collezioni sul sito',
+          description:
+            'Se spento, le collezioni restano salvate qui ma il sito non le nomina da nessuna parte: niente linguette in galleria, niente "N° … · C. …" sotto i titoli. Riaccendilo quando vuoi tornare a usarle.',
+        }),
+      },
+    }),
     identity: singleton({
       label: 'Nome e testi',
       path: 'src/content/site-identity',

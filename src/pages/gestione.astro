@@ -44,8 +44,10 @@ const rows = artworks.map((a) => {
   if (a.data.bestseller) {
     badges.push({ text: '★ Più venduti', tone: 'muted' });
   }
-  for (const c of a.data.collections) {
-    badges.push({ text: collectionName.get(c) ?? c, tone: 'muted' });
+  if (settings.showCollections) {
+    for (const c of a.data.collections) {
+      badges.push({ text: collectionName.get(c) ?? c, tone: 'muted' });
+    }
   }
   const kindFilter = a.data.kind === 'original' && printFormats.length > 0 ? 'both' : a.data.kind;
   return { artwork: a, kindFilter, available: isAvailable(a), badges };
@@ -140,6 +142,14 @@ const toneClass = {
         }
       </div>
 
+      {!settings.showCollections && (
+        <p class="mt-16 border-t border-neutral-200 pt-10 text-sm leading-relaxed opacity-70">
+          Le collezioni sono <strong>nascoste</strong> dal sito. Per tornare a mostrarle:
+          <a href="/keystatic/singleton/gallery" class="underline underline-offset-4">Impostazioni galleria</a>
+          → «Mostra le collezioni sul sito».
+        </p>
+      )}
+      {settings.showCollections && (<>
       <div class="mt-16 flex flex-wrap items-baseline justify-between gap-4 border-t border-neutral-200 pt-10">
         <h2 class="text-xs font-semibold tracking-[0.25em] uppercase opacity-60">Collezioni</h2>
         <a
@@ -172,6 +182,7 @@ const toneClass = {
           ))
         }
       </div>
+      </>)}
 
       <h2 class="mt-16 border-t border-neutral-200 pt-10 text-xs font-semibold tracking-[0.25em] uppercase opacity-60">
         Il resto del sito
@@ -197,7 +208,12 @@ const toneClass = {
             {
               href: '/keystatic/singleton/shop',
               title: 'Vendita e stampe',
-              desc: 'Il testo sui materiali mostrato sotto i formati di stampa.',
+              desc: 'Formati e prezzi delle stampe, testo sui materiali, tariffe di spedizione.',
+            },
+            {
+              href: '/keystatic/singleton/gallery',
+              title: 'Impostazioni galleria',
+              desc: 'Mostrare o nascondere le collezioni sul sito.',
             },
           ].map((s) => (
             <a

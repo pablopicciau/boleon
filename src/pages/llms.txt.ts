@@ -17,9 +17,10 @@ export const prerender = true;
 export const GET: APIRoute = async ({ site }) => {
   const base = site ?? new URL('https://boleon.it');
   const artworks = sortArtworks(await getCollection('artworks'));
-  const artCollections = (await getCollection('collections')).sort(
-    (a, b) => a.data.sortOrder - b.data.sortOrder
-  );
+  // Collezioni solo se visibili sul sito (Keystatic → Impostazioni galleria)
+  const artCollections = settings.showCollections
+    ? (await getCollection('collections')).sort((a, b) => a.data.sortOrder - b.data.sortOrder)
+    : [];
   const collectionName = new Map(artCollections.map((c) => [c.id, c.data.name]));
 
   const lines = artworks.map((a) => {
@@ -41,7 +42,8 @@ export const GET: APIRoute = async ({ site }) => {
       : baseStatus;
     const desc = a.data.descriptions.en || a.data.descriptions.it || '';
     const coll = a.data.collections
-      .map((c) => collectionName.get(c) ?? c)
+      .map((c) => collectionName.get(c))
+      .filter(Boolean)
       .join(', ');
     const details = [
       a.data.dimensions,
@@ -90,11 +92,7 @@ Instagram: ${settings.instagram || '—'}
 
 ${lines.join('\n')}
 
-## Collections
-
-${collectionLines.join('\n')}
-
-## FAQ
+${collectionLines.length ? `## Collections\n\n${collectionLines.join('\n')}\n\n` : ''}## FAQ
 
 - **Who is Boleòn?** An anonymous watercolor artist who prefers the works to speak rather than the name behind them.
 - **What can I buy?** Original one-of-a-kind watercolors (available on request via the contact form, not sold directly online) and museum-grade fine art prints of the works, in many sizes.
@@ -113,7 +111,7 @@ ${collectionLines.join('\n')}
 ## Pages
 
 - [Home](${base.href}): featured artworks with prices and availability
-- [Gallery](${new URL('/galleria', base).href}): all artworks by collection (best sellers, Shades, Inspirations, Flowers)
+- [Gallery](${new URL('/galleria', base).href}): ${settings.showCollections ? `all artworks by collection (best sellers, ${artCollections.map((c) => c.data.names?.en || c.data.name).join(', ')})` : 'all artworks and best sellers'}
 - [The artist](${new URL('/artista', base).href}): who Boleòn is
 - [Contact](${new URL('/contatto', base).href}): contact form for inquiries and original requests
 - [FAQ](${new URL('/faq', base).href}): frequently asked questions — originals, prints, shipping, payment, returns, authenticity

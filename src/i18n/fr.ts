@@ -91,7 +91,7 @@ export const fr: Dict = {
   'cart.unavailable': 'Certaines œuvres de votre panier ne sont plus disponibles et ont été retirées.',
   'cart.shippingNote': 'Chaque œuvre est préparée, signée et expédiée personnellement par l’artiste, avec suivi de livraison.',
   'success.title': 'Merci !',
-  'success.message': 'Votre commande a bien été reçue. Vous recevrez une confirmation par e-mail et nous vous contacterons bientôt pour la livraison.',
+  'success.message': "Votre commande a bien été reçue. Vous recevrez le reçu de paiement par e-mail et, dès que l’œuvre sera expédiée, je vous écrirai avec le numéro de suivi.",
   'success.back': 'Retour à la galerie',
   'cancelled.title': 'Paiement annulé',
   'cancelled.message': 'Le paiement n’a pas abouti ou a été annulé. Les œuvres sont toujours dans votre panier.',
