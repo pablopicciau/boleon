@@ -1,11 +1,12 @@
 {
   "0": "Catalogo opere, stampe e prezzi",
-  "1": "Layout, lingue e font",
+  "1": "Dizionari delle 7 lingue",
   "2": "Impostazioni Keystatic e pagina artista",
   "3": "Dipendenze del progetto",
   "4": "Carrello, spedizioni e Stripe",
-  "5": "Dizionari i18n e rotte",
+  "5": "Rotte per lingua e contatti",
   "6": "Identità visiva, icone e graphify",
+  "7": "Layout, SEO e font",
   "8": "Marketing, SEO e visibilità AI",
   "9": "Galleria e collezioni",
   "10": "Piano spedizioni e concorrenti",
@@ -14,5 +15,12 @@
   "13": "Carrello locale e statistiche Umami",
   "14": "Configurazione TypeScript",
   "15": "API: contatti, newsletter, ordini",
-  "16": "Configurazione, script e build"
+  "16": "Configurazione Astro e dipendenze",
+  "17": "Pagine esito ordine",
+  "18": "Hosting Cloudflare e architettura",
+  "19": "Script npm, build e deploy",
+  "20": "Note legali multilingua",
+  "21": "Selettore lingua e 404",
+  "22": "Pagine FAQ e legali (italiano)",
+  "23": "Zoom PhotoSwipe"
 }

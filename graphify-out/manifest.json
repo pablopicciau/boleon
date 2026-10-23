@@ -54,10 +54,10 @@
     "semantic_hash": ""
   },
   "src/components/LanguageSwitcher.astro": {
-    "mtime": 1792580684.2433774,
-    "seen": 1792685224.4040852,
-    "ast_hash": "3ee45e7cc4a1e8d09358ae7a51e5f2f5",
-    "semantic_hash": "3ee45e7cc4a1e8d09358ae7a51e5f2f5"
+    "mtime": 1792780835.7252514,
+    "seen": 1792780979.077297,
+    "ast_hash": "e7958263bbdc7098fad646d68666ca2c",
+    "semantic_hash": ""
   },
   "src/components/pages/ArtistPage.astro": {
     "mtime": 1792595777.7322767,
@@ -168,33 +168,33 @@
     "semantic_hash": "346bf90faf8c3f71c17d589120ec6fd0"
   },
   "src/i18n/ar.ts": {
-    "mtime": 1792779813.605878,
-    "seen": 1792779908.5516906,
-    "ast_hash": "08195408bb34ab6799a7a9b10228c185",
+    "mtime": 1792780835.7389479,
+    "seen": 1792780979.0773373,
+    "ast_hash": "74bb57a6de4d1229d2d2d3b035c973b6",
     "semantic_hash": ""
   },
   "src/i18n/en.ts": {
-    "mtime": 1792779813.6035254,
-    "seen": 1792779908.551694,
-    "ast_hash": "2d72f232f2f973138616e577f568eb43",
+    "mtime": 1792780835.7366376,
+    "seen": 1792780979.0773392,
+    "ast_hash": "8f0a18533af5966df4406e15a0de514b",
     "semantic_hash": ""
   },
   "src/i18n/es.ts": {
-    "mtime": 1792779813.60409,
-    "seen": 1792779908.5516963,
-    "ast_hash": "a69f3fa705510064fa3d7ec8bfd9d439",
+    "mtime": 1792780835.7370846,
+    "seen": 1792780979.0773408,
+    "ast_hash": "34c5da55baa2626967537d19fcab81da",
     "semantic_hash": ""
   },
   "src/i18n/fr.ts": {
-    "mtime": 1792779813.6047356,
-    "seen": 1792779908.5516994,
-    "ast_hash": "45bad8a5bf48ea0284fd1a09aa3f6d7b",
+    "mtime": 1792780835.737761,
+    "seen": 1792780979.0773437,
+    "ast_hash": "47c52c1540ad5ed91cace70c46af9194",
     "semantic_hash": ""
   },
   "src/i18n/hi.ts": {
-    "mtime": 1792779813.605506,
-    "seen": 1792779908.5517023,
-    "ast_hash": "3b636b1b044240cb995cfbf2bf235445",
+    "mtime": 1792780835.7385302,
+    "seen": 1792780979.0773451,
+    "ast_hash": "1217a6e8517200a20478a6e3cd31ca81",
     "semantic_hash": ""
   },
   "src/i18n/index.ts": {
@@ -204,21 +204,21 @@
     "semantic_hash": "6f1cd3a690c13715f5852dacdcacac67"
   },
   "src/i18n/it.ts": {
-    "mtime": 1792779813.602737,
-    "seen": 1792779908.5517087,
-    "ast_hash": "92c4455da3df4ea68c38d98d1929dfed",
+    "mtime": 1792780835.7361646,
+    "seen": 1792780979.077348,
+    "ast_hash": "96562313e03608a6844c46c599737f0c",
     "semantic_hash": ""
   },
   "src/i18n/zh.ts": {
-    "mtime": 1792779813.6051357,
-    "seen": 1792779908.5517113,
-    "ast_hash": "52ccbf749e0c1b7fb00b4815ee0f45e6",
+    "mtime": 1792780835.7381911,
+    "seen": 1792780979.0773506,
+    "ast_hash": "2cea01a6c27f27c6651a32edc0c04aba",
     "semantic_hash": ""
   },
   "src/layouts/Base.astro": {
-    "mtime": 1792777679.930439,
-    "seen": 1792777976.5435903,
-    "ast_hash": "3b8fdbaa76114d0965dcadc4eef05486",
+    "mtime": 1792780835.724716,
+    "seen": 1792780979.077352,
+    "ast_hash": "31ca4f140f41b47384f0b3756e32376e",
     "semantic_hash": ""
   },
   "src/lib/artworks.ts": {
@@ -252,10 +252,10 @@
     "semantic_hash": "1e9b73c97159467925062a59fa712fe9"
   },
   "src/pages/404.astro": {
-    "mtime": 1792598196.8115153,
-    "seen": 1792685224.404128,
-    "ast_hash": "66cabc7b39776182b956c79a066b1ed0",
-    "semantic_hash": "66cabc7b39776182b956c79a066b1ed0"
+    "mtime": 1792780835.725521,
+    "seen": 1792780979.0773625,
+    "ast_hash": "2f435f1d36adf9df204822d601e79d0f",
+    "semantic_hash": ""
   },
   "src/pages/[lang]/annullato.astro": {
     "mtime": 1792580590.182478,
@@ -348,10 +348,10 @@
     "semantic_hash": "a0adb74e48a611d11eac4a119858bff0"
   },
   "src/pages/faq.astro": {
-    "mtime": 1792659889.6112647,
-    "seen": 1792685224.4041483,
-    "ast_hash": "99fd08963f7c20ae59d8da069e76d907",
-    "semantic_hash": "99fd08963f7c20ae59d8da069e76d907"
+    "mtime": 1792780641.9533412,
+    "seen": 1792780979.0773897,
+    "ast_hash": "5377a82c4c0845dea529cbe087fa6c10",
+    "semantic_hash": ""
   },
   "src/pages/galleria.astro": {
     "mtime": 1792580684.2513776,
@@ -378,15 +378,15 @@
     "semantic_hash": "25c3111363be1dd50d32ea06b603c0bd"
   },
   "src/pages/llms.txt.ts": {
-    "mtime": 1792779737.9858105,
-    "seen": 1792779908.5518088,
-    "ast_hash": "9c0be1ce4f799134aca6226be536354e",
+    "mtime": 1792780865.8538525,
+    "seen": 1792780979.077397,
+    "ast_hash": "ca8ecd54ee004f6c38dd276be894b36d",
     "semantic_hash": ""
   },
   "src/pages/note-legali.astro": {
-    "mtime": 1792777701.4562995,
-    "seen": 1792777976.5437129,
-    "ast_hash": "78086e8b30e6e2163d54358097eaa4a0",
+    "mtime": 1792780797.0613377,
+    "seen": 1792780979.0773985,
+    "ast_hash": "255c40d250afbd0f7b4e25e424d8f827",
     "semantic_hash": ""
   },
   "src/pages/opere/[slug].astro": {
@@ -426,9 +426,9 @@
     "semantic_hash": "9b31786b637be3c13978bec4c2330752"
   },
   "CLAUDE.md": {
-    "mtime": 1792779898.3515193,
-    "seen": 1792779908.5518363,
-    "ast_hash": "b72c553ae3b1472a35c3257b00bde2c6",
+    "mtime": 1792780970.0997167,
+    "seen": 1792780979.0774102,
+    "ast_hash": "8f90cbb029708e51dd444788bbcdc863",
     "semantic_hash": ""
   },
   "README.md": {
@@ -561,6 +561,42 @@
     "mtime": 1792779882.3992157,
     "seen": 1792779908.5516806,
     "ast_hash": "f68b2ebc57d32d225e0ecbd6fc62dd6d",
+    "semantic_hash": ""
+  },
+  "src/components/pages/FaqPage.astro": {
+    "mtime": 1792780640.9453413,
+    "seen": 1792780979.0773091,
+    "ast_hash": "ad9db3c9711e5b571f740c0a427af2af",
+    "semantic_hash": ""
+  },
+  "src/components/pages/LegalPage.astro": {
+    "mtime": 1792780796.117338,
+    "seen": 1792780979.0773146,
+    "ast_hash": "a783292f9c28114fea5d3884b05dda48",
+    "semantic_hash": ""
+  },
+  "src/i18n/faq.ts": {
+    "mtime": 1792780631.2261019,
+    "seen": 1792780979.0773423,
+    "ast_hash": "b284a666f316bde214e2f55339086ea3",
+    "semantic_hash": ""
+  },
+  "src/i18n/legal.ts": {
+    "mtime": 1792780785.073338,
+    "seen": 1792780979.0773494,
+    "ast_hash": "868744df3a30e140ae20f58d4960655e",
+    "semantic_hash": ""
+  },
+  "src/pages/[lang]/faq.astro": {
+    "mtime": 1792780643.3013413,
+    "seen": 1792780979.0773695,
+    "ast_hash": "ca589fe2d4352b780de475296f214c88",
+    "semantic_hash": ""
+  },
+  "src/pages/[lang]/note-legali.astro": {
+    "mtime": 1792780798.5213377,
+    "seen": 1792780979.077375,
+    "ast_hash": "8d1297953c74705e83a332a19b3e1e66",
     "semantic_hash": ""
   }
 }
