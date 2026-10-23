@@ -251,6 +251,57 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     </main>
 
     <footer class="relative z-10 border-t border-neutral-300/50">
+      <section class="mx-auto max-w-xl px-5 pt-12 text-center" aria-labelledby="newsletter-title">
+        <h2 id="newsletter-title" class="font-hand text-2xl">{t('newsletter.title')}</h2>
+        <p class="mt-2 text-sm leading-relaxed opacity-70">{t('newsletter.intro')}</p>
+        <form
+          data-newsletter
+          data-locale={locale}
+          data-sitekey={turnstileSiteKey ?? ''}
+          data-label-submit={t('newsletter.submit')}
+          data-label-sending={t('newsletter.sending')}
+          data-label-success={t('newsletter.success')}
+          data-label-error={t('newsletter.error')}
+          data-label-invalid={t('newsletter.invalid')}
+          data-label-unavailable={t('newsletter.unavailable')}
+          class="mt-5"
+        >
+          <div data-nl-row class="flex flex-col gap-2 sm:flex-row">
+            <input
+              data-nl-email
+              type="email"
+              name="email"
+              required
+              autocomplete="email"
+              placeholder={t('newsletter.placeholder')}
+              aria-label={t('newsletter.placeholder')}
+              class="min-w-0 flex-1 border border-neutral-300 bg-white/70 px-3 py-2.5 text-sm"
+            />
+            <button
+              type="submit"
+              data-nl-submit
+              class="paper-btn px-6 py-2.5 text-sm tracking-widest text-white uppercase disabled:cursor-wait disabled:opacity-50"
+            >
+              {t('newsletter.submit')}
+            </button>
+          </div>
+          {/* Campo trappola per i bot: nascosto alle persone */}
+          <input
+            name="website"
+            data-nl-trap
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+            class="sr-only"
+          />
+          <div data-nl-captcha class="mt-3 flex justify-center empty:hidden"></div>
+          <p data-nl-status class="mt-3 hidden text-sm" role="status"></p>
+          <p class="mt-3 text-xs leading-relaxed opacity-50">
+            {t('newsletter.consent')}
+            <a href="/note-legali" class="underline underline-offset-4">{t('newsletter.privacy')}</a>
+          </p>
+        </form>
+      </section>
       <div class="mx-auto grid max-w-6xl gap-10 px-5 py-12 sm:grid-cols-3">
         <div>
           <p class="font-serif text-lg tracking-[0.3em] uppercase">{settings.artistName}</p>
@@ -289,6 +340,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
     <script>
       import { cartCount } from '../scripts/cart';
+      import { initNewsletter } from '../scripts/newsletter';
 
       function render(count: number) {
         document.querySelectorAll('[data-cart-count]').forEach((el) => {
@@ -309,6 +361,8 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
         toggle.querySelector('[data-menu-icon-open]')?.classList.toggle('hidden', open);
         toggle.querySelector('[data-menu-icon-close]')?.classList.toggle('hidden', !open);
       });
+
+      initNewsletter();
     </script>
   </body>
 </html>

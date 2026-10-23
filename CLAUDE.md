@@ -39,7 +39,7 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 - **Icone del sito**: `public/favicon.svg` = "B" di Beth Ellen (convertita in tracciato) color carta su bordeaux con puntino ocra. `favicon.ico`, `apple-touch-icon.png`, `icon-192/512.png` si rigenerano con `node scripts/generate-favicons.mjs`; `site.webmanifest` per Android.
 - **Sfondi hero a rotazione**: scelti da Keystatic (Impostazioni → "Sfondi della copertina", salvati in `src/assets/hero/`, elenco in `settings.heroImages`). Uno a caso all'apertura, poi cambio casuale ogni 10 s con dissolvenza (doppio buffer). La versione "spenta" è ottenuta con filtro CSS grayscale, quindi funziona con qualsiasi immagine. Risoluzione nomi-file in `src/lib/heroImages.ts` (ATTENZIONE: `import.meta.glob` va messo in file .ts, dentro i .astro genera errori di compilazione).
 - **Palette dai dipinti** in `global.css`: accent #8f2b45 (bordeaux), ochre #c08430, olive #74803a, leaf #3e7a4e, sun #dfb43c. Prezzi: originale in bordeaux con bottone "Acquista l'originale"; stampe in riquadro oliva col prezzo che segue il formato selezionato.
-- **Hero spotlight** (`src/components/HeroSpotlight.astro`): hero a schermo intero in home, tema chiaro, con maschera radiale che segue il cursore (stile ispirato a motionsites.ai/Lithos, adattato: vanilla JS + maschera CSS). Usa le copertine delle opere (fallback `opera-03.jpg`): base desaturata via filtro CSS grayscale + versione a colori pieni rivelata dallo spotlight. Animazioni in `global.css` con `prefers-reduced-motion`.
+- **Hero spotlight** (`src/components/HeroSpotlight.astro`): hero a schermo intero in home, tema chiaro, con maschera radiale che segue il cursore (stile ispirato a motionsites.ai/Lithos, adattato: vanilla JS + maschera CSS). Usa le copertine delle opere (fallback `opera-03.jpg`): base desaturata via filtro CSS grayscale + versione a colori pieni rivelata dallo spotlight. Larghezza piena con `w-screen mx-[calc(50%-50vw)]` (NON `left-1/2 -translate-x-1/2`: in arabo/RTL spostava la hero di 40px e la pagina scorreva di lato). Animazioni in `global.css` con `prefers-reduced-motion`.
 - **Quadri reali**: 5 foto migliorate (livelli, saturazione, nitidezza via sharp) in `src/assets/quadri/opera-01..05.jpg`, caricate dall'utente il 2026-07-02. Non ancora nel catalogo: mancano titoli/prezzi/dimensioni — quando l'utente li fornisce, creare le voci in `src/content/artworks/`. Il colore `--color-accent` (#8f2b45, bordeaux) è campionato dalle pennellate di questi quadri.
 - Gestione vendite **manuale**: dopo la notifica email l'artista aggiorna venduta/copie da Keystatic.
 
@@ -64,9 +64,16 @@ L'utente non è uno sviluppatore: rispondere in italiano, con istruzioni semplic
 
 1. ~~Email (Resend)~~ e ~~Statistiche (Umami)~~: FATTI. Resta consigliato verificare il dominio boleon.it in Resend (record DNS su Cloudflare) per inviare da es. info@boleon.it: con `onboarding@resend.dev` si può inviare SOLO all'email dell'account Resend.
 2. **Turnstile**: codice pronto, mancano le chiavi (`PUBLIC_TURNSTILE_SITE_KEY` build + `TURNSTILE_SECRET_KEY` runtime).
-3. **Newsletter**: Resend Audiences (gratis fino a 1.000 contatti). Da fare: modulo iscrizione sul sito (7 lingue) → endpoint `/api/subscribe` che aggiunge il contatto all'Audience + riga privacy; l'invio degli annunci si fa dal pannello Resend (Broadcasts), senza codice.
+3. ~~Newsletter~~: FATTA (2026-10-23), vedi sezione Newsletter. Da verificare dall'utente: che `RESEND_API_KEY` sia "Full access" (iscriversi con la propria email e controllare Resend → Contacts) e, per inviare gli annunci, il dominio verificato.
 4. **Commenti con verifica email**: Cloudflare D1 (database gratuito) + `/api/comments` + codice di verifica a 6 cifre via Resend + Turnstile anti-spam + moderazione (pending finché l'artista non approva da /gestione). 2–3 sessioni di lavoro.
 5. **Catalogare** le 5 foto in `src/assets/quadri/` (servono titolo, dimensioni, collezione).
+
+## Newsletter (ATTIVA dal 2026-10-23)
+
+- **Modulo nel footer** di ogni pagina (`Base.astro`, script `src/scripts/newsletter.ts`, testi `newsletter.*` nei 7 dizionari): email + "Iscriviti", campo trappola `website` per i bot, Turnstile renderizzato solo al focus del campo (se c'è `PUBLIC_TURNSTILE_SITE_KEY`), evento Umami `newsletter_signup`. Iscrizione semplice (niente doppia conferma: le email di conferma richiederebbero il dominio verificato su Resend).
+- **Endpoint** `src/pages/api/subscribe.ts`: crea il contatto su Resend (modello 2025+: contatti globali + **segmenti**, le vecchie Audiences sono deprecate) nel segmento `Newsletter – italiano` (locale it) o `Newsletter – international` (tutte le altre lingue); i segmenti si trovano/creano da soli per nome. Contatto già esistente → `contacts.update({unsubscribed:false})` + aggiunta al segmento. Chiave senza permessi sui contatti (`restricted_api_key`, cioè "Sending access") → 503 "non ancora attiva".
+- Helper condivisi degli endpoint (`json`, `clean`, `EMAIL_RE`, `verifyTurnstile`) in `src/lib/api.ts`.
+- Invio annunci: Resend → Broadcasts → scegli il segmento (link da /gestione, sezione Newsletter). Privacy aggiornata in `note-legali.astro`.
 
 ## Marketing e visibilità
 
