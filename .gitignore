@@ -29,3 +29,4 @@ pnpm-debug.log*
 # graphify: stato locale degli hook (per sessione)
 graphify-out/cache/hook_sessions/
 graphify-out/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/
+graphify-out/cache/last_query_stamp
