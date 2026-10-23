@@ -27,9 +27,25 @@ interface Props {
   ogType?: 'website' | 'article' | 'product';
   /** Dati strutturati schema.org (JSON-LD) per motori di ricerca e AI. */
   schema?: Record<string, unknown> | Record<string, unknown>[];
+  /**
+   * false = pagina senza versioni nelle altre lingue (es. la 404): niente
+   * hreflang, niente salto automatico di lingua, lo switcher porta alle home.
+   */
+  localized?: boolean;
+  /** Chiede ai motori di ricerca di non indicizzare la pagina. */
+  noindex?: boolean;
 }
 
-const { locale, title, description, ogImage, ogType = 'website', schema } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  ogImage,
+  ogType = 'website',
+  schema,
+  localized = true,
+  noindex = false,
+} = Astro.props;
 const t = useTranslations(locale);
 const meta = localeMeta[locale];
 const tagline = pickLocalized(settings.taglines, locale);
@@ -45,7 +61,7 @@ const year = new Date().getFullYear();
 const site = Astro.site ?? new URL('https://boleon.it');
 const currentPath = Astro.url.pathname;
 const canonical = new URL(currentPath, site);
-const alternates = locales.map((l) => ({
+const alternates = (localized ? locales : []).map((l) => ({
   locale: l,
   hreflang: localeMeta[l].lang,
   href: new URL(switchLocalePath(currentPath, locale, l), site),
@@ -81,7 +97,8 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 
     <link rel="canonical" href={canonical} />
     {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
-    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    {localized && <link rel="alternate" hreflang="x-default" href={xDefault} />}
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
     <meta property="og:site_name" content={settings.artistName} />
@@ -124,12 +141,13 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       )
     }
 
-    <script is:inline define:vars={{ currentLocale: locale, allLocales: locales, defaultLocale }}>
+    <script is:inline define:vars={{ currentLocale: locale, allLocales: localized ? locales : [], defaultLocale }}>
       // Primo accesso della sessione: rispetta la lingua scelta in precedenza
       // (localStorage, impostata dallo switcher) o quella del browser, saltando
       // sulla stessa pagina nella lingua giusta. Guardia anti-loop in sessionStorage.
       try {
-        if (!sessionStorage.getItem('boleon-lang-checked')) {
+        // (allLocales vuoto = pagina senza traduzioni, es. la 404: nessun salto)
+        if (allLocales.length && !sessionStorage.getItem('boleon-lang-checked')) {
           sessionStorage.setItem('boleon-lang-checked', '1');
           var target = localStorage.getItem('boleon-lang');
           if (allLocales.indexOf(target) < 0) {
@@ -204,7 +222,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
               class="absolute -top-2 -end-2 hidden size-4.5 items-center justify-center rounded-full bg-accent text-[0.65rem] font-semibold text-white sm:static sm:size-auto sm:rounded-none sm:bg-transparent sm:text-ink"
             ></span>
           </a>
-          <LanguageSwitcher locale={locale} />
+          <LanguageSwitcher locale={locale} path={localized ? undefined : '/'} />
           <button
             type="button"
             data-menu-toggle
@@ -298,7 +316,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
           <p data-nl-status class="mt-3 hidden text-sm" role="status"></p>
           <p class="mt-3 text-xs leading-relaxed opacity-50">
             {t('newsletter.consent')}
-            <a href="/note-legali" class="underline underline-offset-4">{t('newsletter.privacy')}</a>
+            <a href={localizePath(locale, '/note-legali')} class="underline underline-offset-4">{t('newsletter.privacy')}</a>
           </p>
         </form>
       </section>
@@ -333,8 +351,8 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       </div>
       <div class="border-t border-neutral-100 py-4 text-center text-xs opacity-50">
         © {year} {settings.artistName} · {t('footer.rights')} ·
-        <a href="/faq" class="underline-offset-4 hover:underline">FAQ</a> ·
-        <a href="/note-legali" class="underline-offset-4 hover:underline">{t('footer.legal')}</a>
+        <a href={localizePath(locale, '/faq')} class="underline-offset-4 hover:underline">{t('footer.faq')}</a> ·
+        <a href={localizePath(locale, '/note-legali')} class="underline-offset-4 hover:underline">{t('footer.legal')}</a>
       </div>
     </footer>
 

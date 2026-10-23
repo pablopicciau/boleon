@@ -34,6 +34,7 @@ export const hi: Dict = {
   'checkout.dutiesName': 'अमेरिकी आयात शुल्क (पहले से भुगतान)',
   'checkout.dutiesDesc': 'कलाकार भेजते समय चुकाते हैं: डिलीवरी पर कुछ भी नहीं चुकाना है।',
   'footer.legal': 'कानूनी सूचना',
+  'footer.faq': "सामान्य प्रश्न",
   'notFound.title': 'पृष्ठ नहीं मिला',
   'notFound.text': 'आप जिस पृष्ठ को खोज रहे हैं वह मौजूद नहीं है या हटा दिया गया है।',
   'notFound.home': 'होम पर वापस जाएँ',

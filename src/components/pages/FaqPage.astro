@@ -1,0 +1,47 @@
+---
+import Base from '../../layouts/Base.astro';
+import settings from '../../lib/settings';
+import { DELIVERY_WEEKS, normalizeShippingConfig } from '../../lib/shipping';
+import { useTranslations, type Locale } from '../../i18n';
+import { getFaq } from '../../i18n/faq';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const ship = normalizeShippingConfig((settings as { shipping?: unknown }).shipping);
+const faq = getFaq(locale, ship, DELIVERY_WEEKS, t('artwork.requestOriginal'));
+
+// Dati strutturati FAQPage nella lingua della pagina: così Google e le AI
+// (ChatGPT/Copilot/Perplexity) leggono ogni domanda/risposta e possono citarle.
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: locale,
+  mainEntity: faq.items.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<Base locale={locale} title={faq.metaTitle} description={faq.description} schema={schema}>
+  <section class="mx-auto max-w-2xl py-14 sm:py-20">
+    <h1 class="font-hand text-3xl sm:text-4xl">{faq.title}</h1>
+    <p class="mt-6 leading-relaxed opacity-80">{faq.intro}</p>
+
+    <dl class="mt-10 divide-y divide-neutral-200/70">
+      {
+        faq.items.map((f) => (
+          <div class="py-6">
+            <dt class="font-hand text-xl sm:text-2xl">{f.q}</dt>
+            <dd class="mt-2 leading-relaxed opacity-80">{f.a}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</Base>

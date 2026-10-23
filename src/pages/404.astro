@@ -9,7 +9,13 @@ export const prerender = true;
 const t = useTranslations(defaultLocale);
 ---
 
-<Base locale={defaultLocale} title={t('notFound.title')} description={t('notFound.text')}>
+<Base
+  locale={defaultLocale}
+  title={t('notFound.title')}
+  description={t('notFound.text')}
+  localized={false}
+  noindex
+>
   <section class="mx-auto flex max-w-xl flex-col items-center py-20 text-center sm:py-28">
     <p class="font-hand text-7xl text-accent sm:text-8xl">404</p>
     <h1 class="mt-4 font-hand text-3xl sm:text-4xl">{t('notFound.title')}</h1>

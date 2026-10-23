@@ -32,6 +32,7 @@ export const it = {
   'checkout.dutiesName': 'Dazi d’importazione USA (prepagati)',
   'checkout.dutiesDesc': 'Versati dall’artista alla spedizione: alla consegna non paghi nulla.',
   'footer.legal': 'Note legali',
+  'footer.faq': "FAQ",
   'notFound.title': 'Pagina non trovata',
   'notFound.text': 'La pagina che cerchi non esiste o è stata spostata.',
   'notFound.home': 'Torna alla home',

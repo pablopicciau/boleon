@@ -34,6 +34,7 @@ export const es: Dict = {
   'checkout.dutiesName': 'Aranceles de importación EE. UU. (prepagados)',
   'checkout.dutiesDesc': 'Pagados por el artista al enviar: no pagas nada en la entrega.',
   'footer.legal': 'Aviso legal',
+  'footer.faq': "FAQ",
   'notFound.title': 'Página no encontrada',
   'notFound.text': 'La página que buscas no existe o ha sido movida.',
   'notFound.home': 'Volver al inicio',

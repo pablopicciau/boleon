@@ -34,6 +34,7 @@ export const ar: Dict = {
   'checkout.dutiesName': 'رسوم الاستيراد الأمريكية (مدفوعة مسبقًا)',
   'checkout.dutiesDesc': 'يدفعها الفنان عند الشحن: لا تدفع شيئًا عند الاستلام.',
   'footer.legal': 'إشعار قانوني',
+  'footer.faq': "الأسئلة الشائعة",
   'notFound.title': 'الصفحة غير موجودة',
   'notFound.text': 'الصفحة التي تبحث عنها غير موجودة أو تم نقلها.',
   'notFound.home': 'العودة إلى الصفحة الرئيسية',

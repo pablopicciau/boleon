@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import settings from '../../lib/settings';
+import { localeMeta, type Locale } from '../../i18n';
+import { legal, LEGAL_UPDATED } from '../../i18n/legal';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const page = legal[locale];
+const email = settings.contactEmail || 'boleon.art@gmail.com';
+const updated = new Intl.DateTimeFormat(localeMeta[locale].lang, { dateStyle: 'long' }).format(
+  new Date(`${LEGAL_UPDATED}T12:00:00Z`)
+);
+
+// I testi sono nostri ma passano da set:html: prima si neutralizza l'HTML,
+// poi si applicano solo i tre segnaposto previsti (**grassetto**, {email}, {date})
+const escapeHtml = (s: string) =>
+  s.replace(/[<>&"]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' })[c]!);
+const emailLink = `<a class="underline underline-offset-4" href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>`;
+const render = (text: string) =>
+  escapeHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replaceAll('{email}', emailLink)
+    .replaceAll('{date}', escapeHtml(updated));
+---
+
+<Base locale={locale} title={page.title} description={page.description}>
+  <article class="mx-auto max-w-2xl py-14 sm:py-20">
+    <h1 class="font-hand text-3xl sm:text-4xl">{page.title}</h1>
+    <p class="mt-6 leading-relaxed opacity-80">{page.intro}</p>
+
+    {
+      page.sections.map((section) => (
+        <>
+          <h2 class="mt-10 font-hand text-2xl">{section.h}</h2>
+          {section.blocks.map((block) =>
+            Array.isArray(block) ? (
+              <ul class="mt-3 list-disc space-y-2 ps-5 leading-relaxed opacity-80">
+                {block.map((item) => (
+                  <li set:html={render(item)} />
+                ))}
+              </ul>
+            ) : (
+              <p class="mt-3 leading-relaxed opacity-80" set:html={render(block)} />
+            )
+          )}
+        </>
+      ))
+    }
+
+    <p class="mt-10 text-xs leading-relaxed opacity-50">{page.footnote}</p>
+  </article>
+</Base>

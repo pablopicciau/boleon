@@ -34,6 +34,7 @@ export const en: Dict = {
   'checkout.dutiesName': 'US import duties (prepaid)',
   'checkout.dutiesDesc': 'Paid by the artist when shipping: nothing to pay on delivery.',
   'footer.legal': 'Legal notice',
+  'footer.faq': "FAQ",
   'notFound.title': 'Page not found',
   'notFound.text': "The page you're looking for doesn't exist or has been moved.",
   'notFound.home': 'Back to home',

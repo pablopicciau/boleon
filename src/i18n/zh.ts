@@ -34,6 +34,7 @@ export const zh: Dict = {
   'checkout.dutiesName': '美国进口关税（已预付）',
   'checkout.dutiesDesc': '由艺术家在寄出时支付：收货时无需另付任何费用。',
   'footer.legal': '法律声明',
+  'footer.faq': "常见问题",
   'notFound.title': '页面未找到',
   'notFound.text': '您访问的页面不存在或已被移动。',
   'notFound.home': '返回首页',

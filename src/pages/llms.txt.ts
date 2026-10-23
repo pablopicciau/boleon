@@ -106,7 +106,8 @@ ${collectionLines.length ? `## Collections\n\n${collectionLines.join('\n')}\n\n`
 - **Are the works signed? Is there a certificate?** Yes — every piece, original or print, is signed and comes with a certificate of authenticity.
 - **Can I return a work?** Yes. Consumers can withdraw within 14 days of delivery; the work must come back intact, return shipping is paid by the customer and the refund includes the original shipping. If a print arrives damaged, send a photo within 48 hours and it is reprinted and reshipped free of charge.
 - **Which languages?** Italian, English, Spanish, French, Chinese, Hindi, Arabic.
-- **How do I get in touch?** The contact page, the "Request information" form on each artwork, or Instagram — messages go straight to the artist.
+- **How do I get in touch?** The contact page or Instagram; for an original, the "Original on request" button on its page — messages go straight to the artist.
+- **How do I hear about new works?** Subscribe to the newsletter at the bottom of every page (a few emails, only for new works and prints; one-click unsubscribe).
 
 ## Pages
 
@@ -114,7 +115,8 @@ ${collectionLines.length ? `## Collections\n\n${collectionLines.join('\n')}\n\n`
 - [Gallery](${new URL('/galleria', base).href}): ${settings.showCollections ? `all artworks by collection (best sellers, ${artCollections.map((c) => c.data.names?.en || c.data.name).join(', ')})` : 'all artworks and best sellers'}
 - [The artist](${new URL('/artista', base).href}): who Boleòn is
 - [Contact](${new URL('/contatto', base).href}): contact form for inquiries and original requests
-- [FAQ](${new URL('/faq', base).href}): frequently asked questions — originals, prints, shipping, payment, returns, authenticity
+- [FAQ](${new URL('/en/faq', base).href}): frequently asked questions — originals, prints, shipping, payment, returns, authenticity (also in Italian at ${new URL('/faq', base).href} and in the other site languages)
+- [Legal notice and privacy](${new URL('/en/note-legali', base).href}): privacy, cookies, shipping, duties, damaged items, returns
 - [Cart](${new URL('/carrello', base).href}): shopping cart and Stripe checkout
 - [Sitemap](${new URL('/sitemap-index.xml', base).href})
 `;

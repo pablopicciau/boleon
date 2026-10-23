@@ -34,6 +34,7 @@ export const fr: Dict = {
   'checkout.dutiesName': 'Droits d’importation États-Unis (prépayés)',
   'checkout.dutiesDesc': 'Payés par l’artiste à l’expédition : rien à payer à la livraison.',
   'footer.legal': 'Mentions légales',
+  'footer.faq': "FAQ",
   'notFound.title': 'Page introuvable',
   'notFound.text': "La page que vous cherchez n'existe pas ou a été déplacée.",
   'notFound.home': "Retour à l'accueil",
