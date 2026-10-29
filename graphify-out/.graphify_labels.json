@@ -6,7 +6,7 @@
   "4": "Carrello, spedizioni e Stripe",
   "5": "Rotte per lingua e contatti",
   "6": "Identità visiva, icone e graphify",
-  "7": "Layout, SEO e font",
+  "7": "Layout, lingue e selettore",
   "8": "Marketing, SEO e visibilità AI",
   "9": "Galleria e collezioni",
   "10": "Piano spedizioni e concorrenti",
@@ -15,12 +15,9 @@
   "13": "Carrello locale e statistiche Umami",
   "14": "Configurazione TypeScript",
   "15": "API: contatti, newsletter, ordini",
-  "16": "Configurazione Astro e dipendenze",
+  "16": "Configurazione, dipendenze e build",
   "17": "Pagine esito ordine",
-  "18": "Hosting Cloudflare e architettura",
-  "19": "Script npm, build e deploy",
+  "18": "Pagina contatti",
   "20": "Note legali multilingua",
-  "21": "Selettore lingua e 404",
-  "22": "Pagine FAQ e legali (italiano)",
-  "23": "Zoom PhotoSwipe"
+  "22": "Pagine FAQ e legali (italiano)"
 }

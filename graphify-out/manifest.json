@@ -30,10 +30,10 @@
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1792608407.3511324,
-    "seen": 1792685224.4040792,
-    "ast_hash": "c69c3b7bf382877cfe00af914e7603da",
-    "semantic_hash": "c69c3b7bf382877cfe00af914e7603da"
+    "mtime": 1793264676.1610396,
+    "seen": 1793264845.5996938,
+    "ast_hash": "04d7898a61c062c96bbca036aa2df376",
+    "semantic_hash": ""
   },
   "scripts/translate.mjs": {
     "mtime": 1792594180.2881818,
@@ -216,9 +216,9 @@
     "semantic_hash": ""
   },
   "src/layouts/Base.astro": {
-    "mtime": 1792780835.724716,
-    "seen": 1792780979.077352,
-    "ast_hash": "31ca4f140f41b47384f0b3756e32376e",
+    "mtime": 1793264703.9255345,
+    "seen": 1793264845.5997837,
+    "ast_hash": "92700be3f77894a279f3689152cd0bd2",
     "semantic_hash": ""
   },
   "src/lib/artworks.ts": {
@@ -360,9 +360,9 @@
     "semantic_hash": "2d7c9d777cf51b6efde8bb9bfd65cc93"
   },
   "src/pages/gestione.astro": {
-    "mtime": 1792779778.6578095,
-    "seen": 1792779908.5517998,
-    "ast_hash": "3aee24816c8e6f484322149ba5b80fdb",
+    "mtime": 1793264703.9260666,
+    "seen": 1793264845.5998402,
+    "ast_hash": "c2b327cb200d8ba3305f4e8430a1eb34",
     "semantic_hash": ""
   },
   "src/pages/grazie.astro": {
@@ -426,9 +426,9 @@
     "semantic_hash": "9b31786b637be3c13978bec4c2330752"
   },
   "CLAUDE.md": {
-    "mtime": 1792780970.0997167,
-    "seen": 1792780979.0774102,
-    "ast_hash": "8f90cbb029708e51dd444788bbcdc863",
+    "mtime": 1793264833.4651935,
+    "seen": 1793264845.5998638,
+    "ast_hash": "4631b1f35b5c3168e8c2bb2335358c6f",
     "semantic_hash": ""
   },
   "README.md": {
@@ -597,6 +597,12 @@
     "mtime": 1792780798.5213377,
     "seen": 1792780979.077375,
     "ast_hash": "8d1297953c74705e83a332a19b3e1e66",
+    "semantic_hash": ""
+  },
+  "src/components/HandFont.astro": {
+    "mtime": 1793264699.609039,
+    "seen": 1793264845.599707,
+    "ast_hash": "c6c873fe93b05b690028fa62d6eb79a2",
     "semantic_hash": ""
   }
 }
