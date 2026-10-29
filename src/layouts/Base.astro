@@ -143,7 +143,15 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
       // sulla stessa pagina nella lingua giusta. Guardia anti-loop in sessionStorage.
       try {
         // (allLocales vuoto = pagina senza traduzioni, es. la 404: nessun salto)
-        if (allLocales.length && !sessionStorage.getItem('boleon-lang-checked')) {
+        // Mai per motori di ricerca e anteprime: Googlebot visita col browser in
+        // inglese, quindi veniva spostato su /en/… da OGNI pagina e Google non
+        // indicizzava le versioni italiane (o le vedeva come duplicati).
+        var isBot =
+          navigator.webdriver ||
+          /bot|crawl|spider|slurp|Google-InspectionTool|Mediapartners|APIs-Google|Lighthouse|HeadlessChrome|facebookexternalhit|embedly|preview/i.test(
+            navigator.userAgent
+          );
+        if (!isBot && allLocales.length && !sessionStorage.getItem('boleon-lang-checked')) {
           sessionStorage.setItem('boleon-lang-checked', '1');
           var target = localStorage.getItem('boleon-lang');
           if (allLocales.indexOf(target) < 0) {
