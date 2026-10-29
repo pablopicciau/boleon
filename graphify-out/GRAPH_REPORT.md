@@ -1,7 +1,7 @@
 # Graph Report - boleon  (2026-10-29)
 
 ## Corpus Check
-- 87 files · ~274,501 words
+- 87 files · ~274,589 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 9 file(s) not represented in the graph (top: (none) 3, .example 1, .xml 1)
 
@@ -11,7 +11,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `3756d1f2`
+- Built from commit: `28220f5f`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
