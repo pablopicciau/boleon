@@ -1,58 +1,53 @@
 # Graph Report - boleon  (2026-10-29)
 
 ## Corpus Check
-- 87 files · ~274,589 words
+- 88 files · ~275,224 words
 - Verdict: corpus is large enough that graph structure adds value.
 - Unclassified: 9 file(s) not represented in the graph (top: (none) 3, .example 1, .xml 1)
 
 ## Summary
-- 558 nodes · 1194 edges · 21 communities
-- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 210 edges (avg confidence: 0.85)
+- 549 nodes · 1183 edges · 16 communities
+- Extraction: 82% EXTRACTED · 18% INFERRED · 0% AMBIGUOUS · INFERRED: 208 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `28220f5f`
+- Built from commit: `f21cc4f5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Catalogo opere, stampe e prezzi
-- Dizionari delle 7 lingue
+- index.ts
 - Impostazioni Keystatic e pagina artista
-- Dipendenze del progetto
+- translate.mjs
 - Carrello, spedizioni e Stripe
-- Rotte per lingua e contatti
+- Locale
 - Identità visiva, icone e graphify
-- Layout, lingue e selettore
 - Marketing, SEO e visibilità AI
 - Galleria e collezioni
 - Piano spedizioni e concorrenti
-- Home, hero e pagina artista
+- CartPage.astro
 - Quadri e collezioni (immagini)
 - Carrello locale e statistiche Umami
 - Configurazione TypeScript
 - API: contatti, newsletter, ordini
 - Configurazione, dipendenze e build
-- Pagine esito ordine
-- Pagina contatti
-- Note legali multilingua
-- Pagine FAQ e legali (italiano)
 
 ## God Nodes (most connected - your core abstractions)
 1. `Locale` - 27 edges
 2. `Struttura del progetto` - 24 edges
-3. `useTranslations()` - 17 edges
+3. `useTranslations()` - 19 edges
 4. `7 lingue (it default, en, es, fr, zh, hi, ar RTL)` - 16 edges
 5. `Keystatic CMS` - 16 edges
 6. `Piano Marketing & Visibilita` - 15 edges
-7. `SEO/AI (sitemap, robots.txt, llms.txt, JSON-LD, hreflang)` - 14 edges
-8. `Spedizioni: logica unica in shipping.ts` - 13 edges
+7. `Spedizioni: logica unica in shipping.ts` - 13 edges
+8. `SEO/AI (sitemap, robots.txt, llms.txt, JSON-LD, hreflang)` - 13 edges
 9. `Galleria con collezioni (linguette)` - 13 edges
 10. `astro` - 12 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Galleria con collezioni (linguette)` --references--> `artCollections`  [INFERRED]
-  CLAUDE.md → src/content.config.ts
+- `Originale su richiesta (originalInquiryOnly)` --references--> `inquiryOnly`  [INFERRED]
+  CLAUDE.md → src/components/pages/ArtworkDetail.astro
 - `Originali: preventivo via email` --semantically_similar_to--> `Originale su richiesta (originalInquiryOnly)`  [INFERRED] [semantically similar]
   docs/piano-spedizioni.md → CLAUDE.md
 - `Icone del sito (favicon B su bordeaux)` --references--> `sizes`  [INFERRED]
@@ -75,110 +70,90 @@
 - **Pipeline multilingua (dizionari UI, DeepL in build, campi localized, redirect lingua)** — claude_i18n_seven_languages, claude_deepl_build_translation, claude_localized_titles, claude_collection_stories, claude_ui_strings_convention, claude_auto_language [INFERRED 0.85]
 - **Flusso ordine stampa: carrello, prezzi server-side, spedizione, Stripe, webhook ed email** — claude_local_storage_cart, claude_catalog_entries_source_of_truth, claude_shipping, claude_stripe_checkout, claude_stripe_webhook, claude_resend, claude_manual_sales [INFERRED 0.85]
 
-## Communities (21 total, 0 thin omitted)
+## Communities (16 total, 0 thin omitted)
 
 ### Community 0 - "Catalogo opere, stampe e prezzi"
 Cohesion: 0.05
-Nodes (62): Tipi di opera: originale o stampa/edizione, Pagina opera (carosello, Potrebbero piacerti anche), Supporto carta o tela (canvasSurchargePercent), Campo collectionNumber (N°), Id carrello stampe (slug::formatId::support), 17 formati in 3 gruppi (serie A, standard EU, pollici USA-CA), Sistema stampe (formati e prezzi standard), showAvailability (copie rimaste del pezzo base) (+54 more)
+Nodes (66): Tipi di opera: originale o stampa/edizione, Pagina opera (carosello, Potrebbero piacerti anche), Supporto carta o tela (canvasSurchargePercent), Campo collectionNumber (N°), Pannello privato /gestione, PhotoSwipe 5 (zoom alta definizione), Id carrello stampe (slug::formatId::support), 17 formati in 3 gruppi (serie A, standard EU, pollici USA-CA) (+58 more)
 
-### Community 1 - "Dizionari delle 7 lingue"
-Cohesion: 0.22
-Nodes (13): Lingua automatica (redirect al primo accesso), 7 lingue (it default, en, es, fr, zh, hi, ar RTL), Lingue (7, arabo RTL, DeepL in build), ar, en, es, fr, hi (+5 more)
+### Community 1 - "index.ts"
+Cohesion: 0.08
+Nodes (36): Lingua automatica (redirect al primo accesso), 7 lingue (it default, en, es, fr, zh, hi, ar RTL), FAQ e pagina legale (dazi, danni, resi), Titoli traducibili (titles), Menu mobile hamburger, Lingue (7, arabo RTL, DeepL in build), Props, t (+28 more)
 
 ### Community 2 - "Impostazioni Keystatic e pagina artista"
-Cohesion: 0.07
-Nodes (29): Pagina L'artista /artista, Pannello privato /gestione, Keystatic CMS, GitHub App boleon-cms, Impostazioni in 4 singleton (identity, cover, contacts, shop), Gestione vendite manuale, site-shop.json (Vendita e stampe), Descrizioni opere uniche (+21 more)
+Cohesion: 0.09
+Nodes (26): Pagina L'artista /artista, Keystatic CMS, GitHub App boleon-cms, Impostazioni in 4 singleton (identity, cover, contacts, shop), site-shop.json (Vendita e stampe), Descrizioni opere uniche, allPrintFormatIds, printFormatOptions (+18 more)
 
-### Community 3 - "Dipendenze del progetto"
-Cohesion: 0.12
-Nodes (16): dependencies, astro, @astrojs/cloudflare, @astrojs/markdoc, @astrojs/react, @astrojs/sitemap, @fontsource/beth-ellen, @keystatic/astro (+8 more)
+### Community 3 - "translate.mjs"
+Cohesion: 0.11
+Nodes (24): graphify skill (/graphify), Dominio boleon.it (IONOS, DNS su Cloudflare), Progetto Boleon (sito galleria/shop), Cloudflare Workers (hosting con custom domain), Commenti con verifica email su Cloudflare D1 (pianificati), Traduzione DeepL in build, GitHub Pages (disattivato), Knowledge graph graphify (graphify-out) (+16 more)
 
 ### Community 4 - "Carrello, spedizioni e Stripe"
 Cohesion: 0.07
-Nodes (41): docs/piano-spedizioni.md, Spedizioni: logica unica in shipping.ts, Tariffe di spedizione in Keystatic (campo shipping), Zone di spedizione (italy, eu, europe, world, usa), Stripe Checkout, Minimo d'ordine UK (ukMinOrder 160 €), Dazi USA prepagati (usDutiesPercent), Tempi da comunicare (2-6 settimane) (+33 more)
+Nodes (42): docs/piano-spedizioni.md, Spedizioni: logica unica in shipping.ts, Tariffe di spedizione in Keystatic (campo shipping), Zone di spedizione (italy, eu, europe, world, usa), Stripe Checkout, Minimo d'ordine UK (ukMinOrder 160 €), Dazi USA prepagati (usDutiesPercent), Tempi da comunicare (2-6 settimane) (+34 more)
 
-### Community 5 - "Rotte per lingua e contatti"
-Cohesion: 0.13
-Nodes (8): Locale, secondaryLocales, lang, lang, lang, lang, lang, lang
+### Community 5 - "Locale"
+Cohesion: 0.06
+Nodes (27): Pagina contatti /contatto, form, Props, t, escapeHtml(), Props, render(), updated (+19 more)
 
 ### Community 6 - "Identità visiva, icone e graphify"
-Cohesion: 0.07
-Nodes (29): Traduzione DeepL in build, Palette dai dipinti (bordeaux, ocra, oliva, foglia, sole), Estetica carta (texture carta.webp, paper-btn, paper-panel), Icone del sito (favicon B su bordeaux), Tipografia Beth Ellen (Cormorant di riserva), Apple touch icon 180px (B di Boleòn, quadrato pieno), Favicon Boleòn: B in Beth Ellen color carta su bordeaux #8f2b45 con puntino ocra #dfb43c, Icona Android 192px (B di Boleòn) (+21 more)
-
-### Community 7 - "Layout, lingue e selettore"
-Cohesion: 0.13
-Nodes (19): Menu mobile hamburger, Props, t, locales, localizePath(), switchLocalePath(), useTranslations(), alternates (+11 more)
+Cohesion: 0.08
+Nodes (18): Home essenziale, Palette dai dipinti (bordeaux, ocra, oliva, foglia, sole), Estetica carta (texture carta.webp, paper-btn, paper-panel), Icone del sito (favicon B su bordeaux), Tipografia Beth Ellen (Cormorant di riserva), Apple touch icon 180px (B di Boleòn, quadrato pieno), Favicon Boleòn: B in Beth Ellen color carta su bordeaux #8f2b45 con puntino ocra #dfb43c, Icona Android 192px (B di Boleòn) (+10 more)
 
 ### Community 8 - "Marketing, SEO e visibilità AI"
-Cohesion: 0.12
-Nodes (19): llms.txt arricchito, Newsletter con Resend Audiences (pianificata), docs/piano-marketing.md, SEO/AI (sitemap, robots.txt, llms.txt, JSON-LD, hreflang), Backlink buoni, Portfolio Behance (backlink), Bing Webmaster Tools, Google Search Console (+11 more)
+Cohesion: 0.11
+Nodes (20): llms.txt arricchito, Newsletter con Resend Audiences (pianificata), docs/piano-marketing.md, SEO/AI (sitemap, robots.txt, llms.txt, JSON-LD, hreflang), Backlink buoni, Portfolio Behance (backlink), Bing Webmaster Tools, Google Search Console (+12 more)
 
 ### Community 9 - "Galleria e collezioni"
-Cohesion: 0.11
-Nodes (20): Flag bestseller (I più venduti), Storie collezioni (descriptions), Galleria con collezioni (linguette), Collezione Ispirazioni (ancora senza opere), Titoli traducibili (titles), activate(), artworks, buttons (+12 more)
+Cohesion: 0.09
+Nodes (22): Flag bestseller (I più venduti), Storie collezioni (descriptions), Galleria con collezioni (linguette), Collezione Ispirazioni (ancora senza opere), activate(), artworks, buttons, cards (+14 more)
 
 ### Community 10 - "Piano spedizioni e concorrenti"
 Cohesion: 0.11
 Nodes (18): Analisi concorrenti (Desenio, Juniqe, INPRNT, Saatchi Art), Gelato (stampa e spedizione delegata), Paesi su richiesta (BR, MX, IN, CN, SA), Originali: preventivo via email, Packlink / Spedire.com (aggregatori), Piano Spedizioni (v2, 22 ottobre 2026), Poste Delivery International Standard, Esempi pratici (Milano, Berlino, Londra, New York...) (+10 more)
 
-### Community 11 - "Home, hero e pagina artista"
-Cohesion: 0.10
-Nodes (19): Sfondi copertina dalle opere (useArtworkImages), Sfondi hero a rotazione, Hero spotlight (maschera radiale che segue il cursore), Home essenziale, urls, altName, artworkCovers, artworks (+11 more)
+### Community 11 - "CartPage.astro"
+Cohesion: 0.11
+Nodes (17): Carrello con selezione Paese e preventivo spedizione, Sfondi copertina dalle opere (useArtworkImages), Sfondi hero a rotazione, Hero spotlight (maschera radiale che segue il cursore), Props, t, urls, catalog (+9 more)
 
 ### Community 12 - "Quadri e collezioni (immagini)"
 Cohesion: 0.17
 Nodes (21): Organic biomorphic abstraction on white watercolor paper, Painting palette: bordeaux/magenta, ochre-yellow, olive and leaf green, Motif: thin stalks/lines ending in dots or eye-pods, Catalogo attuale (3 opere reali), Collezione Fiori, Night Sea Shooting Star (Shades n.2), Quadri reali da catalogare (opera-01..05), Sea Drop (Shades n.1) (+13 more)
 
 ### Community 13 - "Carrello locale e statistiche Umami"
-Cohesion: 0.13
-Nodes (25): Carrello con selezione Paese e preventivo spedizione, Carrello in localStorage, Statistiche Umami (senza cookie), Bordo bianco extra (border), catalog, clientData, countryGroups, Props (+17 more)
+Cohesion: 0.22
+Nodes (17): Carrello in localStorage, Statistiche Umami (senza cookie), Bordo bianco extra (border), EventData, track(), addToCart(), cartCount(), CartItem (+9 more)
 
 ### Community 14 - "Configurazione TypeScript"
 Cohesion: 0.25
 Nodes (7): astro/tsconfigs/strict, compilerOptions, jsx, jsxImportSource, exclude, extends, include
 
 ### Community 15 - "API: contatti, newsletter, ordini"
-Cohesion: 0.10
-Nodes (34): Commenti con verifica email su Cloudflare D1 (pianificati), Contatti (boleon.art@gmail.com, Instagram boleon.art), Modale richiesta originale/informazioni, Originale su richiesta (originalInquiryOnly), Resend (email), Webhook Stripe (checkout.session.completed), Cloudflare Turnstile (anti-spam), Configurazione Resend (+26 more)
+Cohesion: 0.11
+Nodes (32): Contatti (boleon.art@gmail.com, Instagram boleon.art), Modale richiesta originale/informazioni, Gestione vendite manuale, Originale su richiesta (originalInquiryOnly), Resend (email), Webhook Stripe (checkout.session.completed), Configurazione Resend, Variabili runtime (Secret: Stripe, Resend, Keystatic, Turnstile) (+24 more)
 
 ### Community 16 - "Configurazione, dipendenze e build"
-Cohesion: 0.07
-Nodes (37): graphify skill (/graphify), Astro 5 + adapter Cloudflare, Dominio boleon.it (IONOS, DNS su Cloudflare), Progetto Boleon (sito galleria/shop), Cloudflare Workers (hosting con custom domain), GitHub Pages (disattivato), Knowledge graph graphify (graphify-out), Sviluppo locale e prova con wrangler dev (+29 more)
-
-### Community 17 - "Pagine esito ordine"
-Cohesion: 0.22
-Nodes (6): backHref, backLabel, message, Props, t, title
-
-### Community 18 - "Pagina contatti"
-Cohesion: 0.31
-Nodes (5): Pagina contatti /contatto, form, Props, t, lang
-
-### Community 20 - "Note legali multilingua"
-Cohesion: 0.21
-Nodes (10): escapeHtml(), Props, render(), updated, localeMeta, legal, LEGAL_UPDATED, LegalBlock (+2 more)
-
-### Community 22 - "Pagine FAQ e legali (italiano)"
-Cohesion: 0.40
-Nodes (4): FAQ e pagina legale (dazi, danni, resi), defaultLocale, prerender, prerender
+Cohesion: 0.06
+Nodes (40): Astro 5 + adapter Cloudflare, Sviluppo locale e prova con wrangler dev, Tailwind CSS 4, Workers Builds (production branch main), dependencies, astro, @astrojs/cloudflare, @astrojs/markdoc (+32 more)
 
 ## Knowledge Gaps
 - **16 isolated node(s):** `react`, `astro/tsconfigs/strict`, `Shy Carnivorous Plant - interior mockup: the painting in a large green frame on a wall in a sunlit modern living room with green velvet sofa and marble table`, `Gelato (stampa e spedizione delegata)`, `Checklist prima della prima spedizione USA` (+11 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 193 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 180 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Struttura del progetto` connect `Identità visiva, icone e graphify` to `Catalogo opere, stampe e prezzi`, `Dizionari delle 7 lingue`, `Impostazioni Keystatic e pagina artista`, `Carrello, spedizioni e Stripe`, `Layout, lingue e selettore`, `Marketing, SEO e visibilità AI`, `Galleria e collezioni`, `Home, hero e pagina artista`, `Carrello locale e statistiche Umami`, `API: contatti, newsletter, ordini`, `Configurazione, dipendenze e build`, `Pagina contatti`, `Pagine FAQ e legali (italiano)`?**
-  _High betweenness centrality (0.136) - this node is a cross-community bridge._
+- **Why does `Struttura del progetto` connect `Identità visiva, icone e graphify` to `Catalogo opere, stampe e prezzi`, `index.ts`, `Impostazioni Keystatic e pagina artista`, `translate.mjs`, `Carrello, spedizioni e Stripe`, `Locale`, `Marketing, SEO e visibilità AI`, `Galleria e collezioni`, `Carrello locale e statistiche Umami`, `API: contatti, newsletter, ordini`?**
+  _High betweenness centrality (0.143) - this node is a cross-community bridge._
 - **Are the 7 inferred relationships involving `Struttura del progetto` (e.g. with `Knowledge graph graphify (graphify-out)` and `docs/piano-marketing.md`) actually correct?**
   _`Struttura del progetto` has 7 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `react`, `astro/tsconfigs/strict`, `Shy Carnivorous Plant - interior mockup: the painting in a large green frame on a wall in a sunlit modern living room with green velvet sofa and marble table` to the rest of the system?**
   _16 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Catalogo opere, stampe e prezzi` be split into smaller, more focused modules?**
-  _Cohesion score 0.05331510594668489 - nodes in this community are weakly interconnected._
-- **Why does `astro` connect `API: contatti, newsletter, ordini` to `Catalogo opere, stampe e prezzi`, `Impostazioni Keystatic e pagina artista`, `Carrello, spedizioni e Stripe`, `Marketing, SEO e visibilità AI`, `Home, hero e pagina artista`, `Configurazione, dipendenze e build`?**
-  _High betweenness centrality (0.070) - this node is a cross-community bridge._
+  _Cohesion score 0.050957481337228175 - nodes in this community are weakly interconnected._
+- **Why does `astro` connect `API: contatti, newsletter, ordini` to `Catalogo opere, stampe e prezzi`, `Carrello, spedizioni e Stripe`, `Marketing, SEO e visibilità AI`, `Galleria e collezioni`, `CartPage.astro`, `Configurazione, dipendenze e build`?**
+  _High betweenness centrality (0.073) - this node is a cross-community bridge._
 - **Are the 13 inferred relationships involving `7 lingue (it default, en, es, fr, zh, hi, ar RTL)` (e.g. with `Lingua automatica (redirect al primo accesso)` and `ar.ts`) actually correct?**
   _`7 lingue (it default, en, es, fr, zh, hi, ar RTL)` has 13 INFERRED edges - model-reasoned connections that need verification._
-- **Should `Impostazioni Keystatic e pagina artista` be split into smaller, more focused modules?**
-  _Cohesion score 0.06707317073170732 - nodes in this community are weakly interconnected._
+- **Should `index.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.08244897959183674 - nodes in this community are weakly interconnected._
