@@ -1,6 +1,7 @@
 ---
 import { getImage } from 'astro:assets';
 import settings from '../lib/settings';
+import Wordmark from './Wordmark.astro';
 import { localizePath, useTranslations, type Locale } from '../i18n';
 
 /**
@@ -76,9 +77,9 @@ const initialMask =
     <h1 class="leading-[0.95] text-ink">
       <span
         class="hero-anim hero-reveal font-hand block text-5xl sm:text-7xl"
-        style="letter-spacing: 0.02em; animation-delay: 0.25s;"
+        style="animation-delay: 0.25s;"
       >
-        {settings.artistName}
+        <Wordmark />
       </span>
     </h1>
   </div>

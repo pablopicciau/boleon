@@ -1,0 +1,37 @@
+---
+// Il nome dell'artista disegnato (tracciato SVG generato da Beth Ellen con
+// scripts/generate-wordmark.py). Si usa al posto del testo nei punti più in
+// vista: compare nel suo carattere fin dal primo istante, senza aspettare il
+// download del font. La grandezza segue il font-size del contenitore (classi
+// text-4xl ecc.), come farebbe una scritta normale. Per Google e i lettori di
+// schermo resta il testo, nascosto alla vista.
+import settings from '../lib/settings';
+import { wordmark } from '../lib/wordmark';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+// Se in Keystatic il nome cambia, finché non si rigenera il disegno si mostra il testo
+const drawn = settings.artistName === wordmark.text;
+---
+
+{
+  drawn ? (
+    <span class:list={['inline-block max-w-full', className]}>
+      <span class="sr-only">{wordmark.text}</span>
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        viewBox={wordmark.viewBox}
+        fill="currentColor"
+        style={`display:block;height:${wordmark.heightEm}em;width:auto;max-width:100%`}
+      >
+        <path d={wordmark.path} />
+      </svg>
+    </span>
+  ) : (
+    <span class={className}>{settings.artistName}</span>
+  )
+}

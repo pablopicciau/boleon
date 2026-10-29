@@ -1,5 +1,6 @@
 ---
 import HandFont from '../components/HandFont.astro';
+import Wordmark from '../components/Wordmark.astro';
 import '../styles/global.css';
 import settings from '../lib/settings';
 import LanguageSwitcher from '../components/LanguageSwitcher.astro';
@@ -187,7 +188,7 @@ const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
           href={localizePath(locale, '/')}
           class="font-serif text-4xl leading-none"
         >
-          {settings.artistName}
+          <Wordmark />
         </a>
         <nav class="flex items-center gap-5 sm:gap-7">
           <a

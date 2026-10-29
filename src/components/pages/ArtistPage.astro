@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import settings from '../../lib/settings';
+import Wordmark from '../Wordmark.astro';
 import { artistPerson, artistSummary } from '../../lib/artistSchema';
 import { pickLocalized, useTranslations, type Locale } from '../../i18n';
 
@@ -45,7 +46,7 @@ const schema = {
 
 <Base locale={locale} title={t('nav.artist')} description={description} schema={schema}>
   <section class="mx-auto max-w-2xl py-14 sm:py-20">
-    <h1 class="text-center font-hand text-5xl sm:text-6xl">{settings.artistName}</h1>
+    <h1 class="text-center font-hand text-5xl sm:text-6xl"><Wordmark /></h1>
     {
       blocks.length > 0 && (
         <div class="mt-14">
