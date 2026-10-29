@@ -15,7 +15,8 @@ const backLabel = t(kind === 'success' ? 'success.back' : 'cancelled.back');
 const backHref = localizePath(locale, kind === 'success' ? '/' : '/carrello');
 ---
 
-<Base locale={locale} title={title}>
+<!-- Pagine di servizio (grazie / pagamento annullato): niente indicizzazione -->
+<Base locale={locale} title={title} noindex>
   <div class="mx-auto max-w-xl py-16 text-center">
     <h1 class="font-serif text-4xl">{title}</h1>
     <p class="mt-6 leading-relaxed opacity-70">{message}</p>

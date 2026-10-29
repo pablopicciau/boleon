@@ -24,9 +24,13 @@ export default defineConfig({
     markdoc(),
     keystatic(),
     sitemap({
-      // /gestione è il pannello privato: mai pubblicizzarlo nella sitemap
+      // /gestione è il pannello privato: mai pubblicizzarlo nella sitemap.
+      // Carrello, "grazie" e "pagamento annullato" sono pagine di servizio quasi
+      // vuote: Google le segnalava come "Soft 404", quindi restano fuori (e noindex).
       filter: (page) =>
-        !page.includes('/keystatic') && !page.includes('/api/') && !page.includes('/gestione'),
+        !['/keystatic', '/api/', '/gestione', '/carrello/', '/grazie/', '/annullato/'].some((p) =>
+          page.includes(p)
+        ),
       i18n: {
         defaultLocale: 'it',
         locales: {

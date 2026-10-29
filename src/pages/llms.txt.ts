@@ -24,7 +24,7 @@ export const GET: APIRoute = async ({ site }) => {
   const collectionName = new Map(artCollections.map((c) => [c.id, c.data.name]));
 
   const lines = artworks.map((a) => {
-    const url = new URL(`/opere/${a.id}`, base).href;
+    const url = new URL(`/opere/${a.id}/`, base).href;
     const baseStatus = isBaseAvailable(a)
       ? a.data.kind === 'original'
         ? `original available, €${a.data.price}`
@@ -112,12 +112,12 @@ ${collectionLines.length ? `## Collections\n\n${collectionLines.join('\n')}\n\n`
 ## Pages
 
 - [Home](${base.href}): featured artworks with prices and availability
-- [Gallery](${new URL('/galleria', base).href}): ${settings.showCollections ? `all artworks by collection (best sellers, ${artCollections.map((c) => c.data.names?.en || c.data.name).join(', ')})` : 'all artworks and best sellers'}
-- [The artist](${new URL('/artista', base).href}): who Boleòn is
-- [Contact](${new URL('/contatto', base).href}): contact form for inquiries and original requests
-- [FAQ](${new URL('/en/faq', base).href}): frequently asked questions — originals, prints, shipping, payment, returns, authenticity (also in Italian at ${new URL('/faq', base).href} and in the other site languages)
-- [Legal notice and privacy](${new URL('/en/note-legali', base).href}): privacy, cookies, shipping, duties, damaged items, returns
-- [Cart](${new URL('/carrello', base).href}): shopping cart and Stripe checkout
+- [Gallery](${new URL('/galleria/', base).href}): ${settings.showCollections ? `all artworks by collection (best sellers, ${artCollections.map((c) => c.data.names?.en || c.data.name).join(', ')})` : 'all artworks and best sellers'}
+- [The artist](${new URL('/artista/', base).href}): who Boleòn is
+- [Contact](${new URL('/contatto/', base).href}): contact form for inquiries and original requests
+- [FAQ](${new URL('/en/faq/', base).href}): frequently asked questions — originals, prints, shipping, payment, returns, authenticity (also in Italian at ${new URL('/faq/', base).href} and in the other site languages)
+- [Legal notice and privacy](${new URL('/en/note-legali/', base).href}): privacy, cookies, shipping, duties, damaged items, returns
+- [Cart](${new URL('/carrello/', base).href}): shopping cart and Stripe checkout
 - [Sitemap](${new URL('/sitemap-index.xml', base).href})
 `;
 

@@ -80,7 +80,8 @@ const clientData = {
 };
 ---
 
-<Base locale={locale} title={t('cart.title')}>
+<!-- Il carrello è vuoto per Google: niente indicizzazione (evita i "Soft 404") -->
+<Base locale={locale} title={t('cart.title')} noindex>
   <h1 class="font-serif text-3xl sm:text-4xl">{t('cart.title')}</h1>
 
   <p data-cart-notice class="mt-6 hidden border border-amber-300 bg-amber-50 px-4 py-3 text-sm"></p>

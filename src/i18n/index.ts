@@ -44,7 +44,11 @@ export function useTranslations(locale: Locale) {
 
 /** Prefixes a root-relative path with the locale (default locale has no prefix). */
 export function localizePath(locale: Locale, path: string): string {
-  const clean = path.startsWith('/') ? path : `/${path}`;
+  let clean = path.startsWith('/') ? path : `/${path}`;
+  // Le pagine stanno in cartelle (/faq/index.html → /faq/): un link senza barra
+  // finale fa rimbalzare Cloudflare con un redirect, che Google segnala come
+  // "Pagina con reindirizzamento". Quindi la barra va sempre messa.
+  if (!clean.endsWith('/') && !/\.[a-z0-9]+$/i.test(clean)) clean += '/';
   return locale === defaultLocale ? clean : `/${locale}${clean}`;
 }
 
