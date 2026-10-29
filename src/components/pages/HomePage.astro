@@ -7,6 +7,7 @@ import settings from '../../lib/settings';
 import heroFallback from '../../assets/quadri/opera-03.jpg';
 import { heroImagesByName } from '../../lib/heroImages';
 import { sortArtworks } from '../../lib/artworks';
+import { artistId, artistAltName, artistPerson, artistSummary } from '../../lib/artistSchema';
 import { localizePath, pickLocalized, useTranslations, type Locale } from '../../i18n';
 
 interface Props {
@@ -35,14 +36,11 @@ const heroImages =
 const featured = artworks.filter((a) => a.data.featured);
 const tagline = pickLocalized(settings.taglines, locale);
 const bio = pickLocalized(settings.bios, locale);
-const description = [tagline, bio].filter(Boolean).join(' — ');
+const description = [tagline, bio].filter(Boolean).join(' — ') || artistSummary(locale);
 
 const site = Astro.site ?? new URL('https://boleon.it');
-const sameAs = [settings.instagram, settings.facebook].filter(Boolean);
-// Variante del nome senza accento ("Boleon"): così Google collega anche chi
-// cerca senza l'accento al nome ufficiale "Boleòn".
-const altName = settings.artistName.normalize('NFD').replace(/[̀-ͯ]/g, '');
-const alternateName = altName && altName !== settings.artistName ? altName : undefined;
+const alternateName = artistAltName();
+const firstCover = artworks[0]?.data.images[0];
 const schema = [
   {
     '@context': 'https://schema.org',
@@ -50,22 +48,12 @@ const schema = [
     name: settings.artistName,
     ...(alternateName ? { alternateName } : {}),
     url: site.href,
-    description: tagline,
+    description: artistSummary(locale),
+    publisher: { '@id': artistId(site) },
     inLanguage: ['it', 'en', 'es', 'fr', 'zh-Hans', 'hi', 'ar'],
   },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: settings.artistName,
-    ...(alternateName ? { alternateName } : {}),
-    url: site.href,
-    description: bio || tagline,
-    jobTitle: 'Artist',
-    ...(settings.contactEmail ? { email: `mailto:${settings.contactEmail}` } : {}),
-    ...(sameAs.length ? { sameAs } : {}),
-  },
-];
----
+  artistPerson(locale, site, firstCover ? new URL(firstCover.src, site).href : undefined),
+];---
 
 <Base locale={locale} description={description} schema={schema}>
   <HeroSpotlight locale={locale} images={heroImages} />

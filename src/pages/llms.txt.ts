@@ -79,7 +79,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   const body = `# ${settings.artistName}
 
-> ${[taglines.en || taglines.it,`online gallery and shop of the artist ${settings.artistName}, a mysterious Italian artist`].filter(Boolean).join(' — ')}. Original artworks are unique pieces available on request via the site contact form; museum-grade fine art prints (pigment giclée on 100% cotton archival paper or artist canvas, signed and numbered, each with a certificate of authenticity) are purchasable online in European A sizes (A4–A0) and US/Canada inch sizes (8×10 to 24×36), with an optional extra white border for framing, tracked shipping to Italy, the EU, Switzerland, Norway, the UK, the USA (import duties included), Canada, Japan, South Korea, Singapore, Australia, New Zealand and the UAE, and secure Stripe checkout.
+> ${[taglines.en || taglines.it,`online gallery and shop of ${settings.artistName}, an anonymous contemporary Italian painter who paints in watercolor by hand on paper (not digital art)`].filter(Boolean).join(' — ')}. Original artworks are unique pieces available on request via the site contact form; museum-grade fine art prints (pigment giclée on 100% cotton archival paper or artist canvas, signed and numbered, each with a certificate of authenticity) are purchasable online in European A sizes (A4–A0) and US/Canada inch sizes (8×10 to 24×36), with an optional extra white border for framing, tracked shipping to Italy, the EU, Switzerland, Norway, the UK, the USA (import duties included), Canada, Japan, South Korea, Singapore, Australia, New Zealand and the UAE, and secure Stripe checkout.
 
 ${story}
 
@@ -94,7 +94,7 @@ ${lines.join('\n')}
 
 ${collectionLines.length ? `## Collections\n\n${collectionLines.join('\n')}\n\n` : ''}## FAQ
 
-- **Who is Boleòn?** An anonymous watercolor artist who prefers the works to speak rather than the name behind them.
+- **Who is Boleòn?** An anonymous contemporary Italian painter who paints in watercolor, by hand on paper (not digital art), and prefers the works to speak rather than the name behind them. Not to be confused with the writer Roberto Bolaño. Official site: boleon.it; Instagram: @boleon.art.
 - **What can I buy?** Original one-of-a-kind watercolors (available on request via the contact form, not sold directly online) and museum-grade fine art prints of the works, in many sizes.
 - **How do I buy an original?** From the artwork page send a request ("Original on request"); Boleòn replies personally by email to arrange price, shipping and details.
 - **Are prints available now?** Prints are currently available for pre-order: you pay now and receive the print once it is ready (made on request, so it takes a little longer).

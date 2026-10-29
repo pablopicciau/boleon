@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import settings from '../../lib/settings';
+import { artistPerson, artistSummary } from '../../lib/artistSchema';
 import { pickLocalized, useTranslations, type Locale } from '../../i18n';
 
 interface Props {
@@ -31,23 +32,14 @@ const blocks: Block[] = story
     return { kind: 'paragraph', text };
   });
 
-const firstParagraph = blocks.find((b) => b.kind === 'paragraph')?.text ?? '';
-const description = firstParagraph.slice(0, 300) || pickLocalized(settings.bios, locale);
+// Per Google la descrizione è la frase "chi è" (pittore italiano, acquerello):
+// l'inizio della storia è bello ma non dice cosa fa l'artista
+const description = artistSummary(locale);
 
 const site = Astro.site ?? new URL('https://boleon.it');
-const sameAs = [settings.instagram, settings.facebook].filter(Boolean);
-const altName = settings.artistName.normalize('NFD').replace(/[̀-ͯ]/g, '');
 const schema = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: settings.artistName,
-  ...(altName && altName !== settings.artistName ? { alternateName: altName } : {}),
-  url: new URL(Astro.url.pathname, site).href,
-  description,
-  jobTitle: 'Artist',
-  nationality: 'Italian',
-  ...(settings.contactEmail ? { email: `mailto:${settings.contactEmail}` } : {}),
-  ...(sameAs.length ? { sameAs } : {}),
+  ...artistPerson(locale, site),
+  mainEntityOfPage: new URL(Astro.url.pathname, site).href,
 };
 ---
 

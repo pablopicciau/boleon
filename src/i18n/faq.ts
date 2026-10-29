@@ -35,7 +35,7 @@ const content: Record<Locale, (c: Ctx) => FaqContent> = {
     items: [
       {
         q: 'Chi è Boleòn?',
-        a: 'Boleòn è un artista che dipinge ad acquerello e sceglie di restare anonimo: preferisce che a parlare siano le opere, non il nome di chi le firma. Crea pezzi unici e ne propone anche stampe fine art.',
+        a: 'Boleòn è un pittore italiano contemporaneo che dipinge ad acquerello, a mano su carta, e sceglie di restare anonimo: preferisce che a parlare siano le opere, non il nome di chi le firma. Crea pezzi unici e ne propone anche stampe fine art.',
       },
       {
         q: 'Che cosa posso acquistare su boleon.it?',
@@ -114,7 +114,7 @@ const content: Record<Locale, (c: Ctx) => FaqContent> = {
     items: [
       {
         q: 'Who is Boleòn?',
-        a: 'Boleòn is a watercolor artist who chooses to remain anonymous, preferring the works to speak rather than the name behind them. Boleòn creates one-of-a-kind pieces and also offers fine art prints of them.',
+        a: 'Boleòn is a contemporary Italian painter who works in watercolor, by hand on paper, and chooses to remain anonymous, preferring the works to speak rather than the name behind them. Boleòn creates one-of-a-kind pieces and also offers fine art prints of them.',
       },
       {
         q: 'What can I buy on boleon.it?',
@@ -193,7 +193,7 @@ const content: Record<Locale, (c: Ctx) => FaqContent> = {
     items: [
       {
         q: '¿Quién es Boleòn?',
-        a: 'Boleòn es un artista que pinta con acuarela y elige permanecer en el anonimato: prefiere que hablen las obras y no el nombre de quien las firma. Crea piezas únicas y también ofrece láminas fine art de ellas.',
+        a: 'Boleòn es un pintor italiano contemporáneo que pinta a la acuarela, a mano sobre papel, y elige permanecer en el anonimato: prefiere que hablen las obras y no el nombre de quien las firma. Crea piezas únicas y también ofrece láminas fine art de ellas.',
       },
       {
         q: '¿Qué puedo comprar en boleon.it?',
@@ -272,7 +272,7 @@ const content: Record<Locale, (c: Ctx) => FaqContent> = {
     items: [
       {
         q: 'Qui est Boleòn ?',
-        a: 'Boleòn est un artiste qui peint à l’aquarelle et choisit de rester anonyme : il préfère que ce soient les œuvres qui parlent, et non le nom de celui qui les signe. Il crée des pièces uniques et en propose aussi des tirages d’art.',
+        a: 'Boleòn est un peintre italien contemporain qui peint à l’aquarelle, à la main sur papier, et choisit de rester anonyme : il préfère que ce soient les œuvres qui parlent, et non le nom de celui qui les signe. Il crée des pièces uniques et en propose aussi des tirages d’art.',
       },
       {
         q: 'Que puis-je acheter sur boleon.it ?',
@@ -349,7 +349,7 @@ const content: Record<Locale, (c: Ctx) => FaqContent> = {
     items: [
       {
         q: 'Boleòn 是谁？',
-        a: 'Boleòn 是一位水彩艺术家，选择保持匿名：他更希望由作品本身说话，而不是签名者的名字。他创作独一无二的原作，也提供这些作品的艺术微喷版画。',
+        a: 'Boleòn 是一位意大利当代画家，在纸上手绘水彩，选择保持匿名：他更希望由作品本身说话，而不是签名者的名字。他创作独一无二的原作，也提供这些作品的艺术微喷版画。',
       },
       {
         q: '在 boleon.it 上可以买到什么？',
@@ -428,7 +428,7 @@ const content: Record<Locale, (c: Ctx) => FaqContent> = {
     items: [
       {
         q: 'Boleòn कौन है?',
-        a: 'Boleòn एक जलरंग कलाकार हैं जो गुमनाम रहना पसंद करते हैं: वे चाहते हैं कि बात कलाकृतियाँ करें, उन पर हस्ताक्षर करने वाले का नाम नहीं। वे अनोखी मूल कलाकृतियाँ बनाते हैं और उनके फ़ाइन आर्ट प्रिंट भी उपलब्ध कराते हैं।',
+        a: 'Boleòn एक समकालीन इतालवी चित्रकार हैं जो काग़ज़ पर हाथ से जलरंग चित्र बनाते हैं और गुमनाम रहना पसंद करते हैं: वे चाहते हैं कि बात कलाकृतियाँ करें, उन पर हस्ताक्षर करने वाले का नाम नहीं। वे अनोखी मूल कलाकृतियाँ बनाते हैं और उनके फ़ाइन आर्ट प्रिंट भी उपलब्ध कराते हैं।',
       },
       {
         q: 'boleon.it पर मैं क्या ख़रीद सकता हूँ?',
@@ -507,7 +507,7 @@ const content: Record<Locale, (c: Ctx) => FaqContent> = {
     items: [
       {
         q: 'من هو Boleòn؟',
-        a: 'Boleòn فنان يرسم بالألوان المائية ويختار أن يبقى مجهول الهوية: يفضّل أن تتحدث الأعمال لا اسم من يوقّعها. يبدع قطعًا فريدة ويقدّم أيضًا مطبوعات فنية منها.',
+        a: 'Boleòn رسام إيطالي معاصر يرسم بالألوان المائية يدويًا على الورق، ويختار أن يبقى مجهول الهوية: يفضّل أن تتحدث الأعمال لا اسم من يوقّعها. يبدع قطعًا فريدة ويقدّم أيضًا مطبوعات فنية منها.',
       },
       {
         q: 'ماذا يمكنني أن أشتري من boleon.it؟',

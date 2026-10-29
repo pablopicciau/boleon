@@ -44,13 +44,15 @@ const {
 } = Astro.props;
 const t = useTranslations(locale);
 const meta = localeMeta[locale];
-const tagline = pickLocalized(settings.taglines, locale);
-const pageTitle = title
-  ? `${title} — ${settings.artistName}`
-  : tagline
-    ? `${settings.artistName} — ${tagline}`
-    : settings.artistName;
-const pageDescription = description || pickLocalized(settings.taglines, locale);
+// Se in Keystatic la tagline è vuota, per Google si usa comunque una frase
+// che dice chi è l'artista (titolo "Boleòn — Pittore italiano · …" e
+// descrizione): un titolo di sole due parole lasciava indovinare le AI.
+const tagline = pickLocalized(settings.taglines, locale) || t('seo.homeTitle');
+const pageTitle = title ? `${title} — ${settings.artistName}` : `${settings.artistName} — ${tagline}`;
+const pageDescription =
+  description ||
+  pickLocalized(settings.taglines, locale) ||
+  t('seo.artistSummary', { name: settings.artistName });
 const bio = pickLocalized(settings.bios, locale);
 const year = new Date().getFullYear();
 

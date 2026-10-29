@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import settings from '../../lib/settings';
+import { artistRef } from '../../lib/artistSchema';
 import {
   catalogEntries,
   collectionNumber,
@@ -125,7 +126,8 @@ const schema = {
   url: canonical.href,
   image: artwork.data.images.map((img) => new URL(img.src, site).href),
   ...(description ? { description } : {}),
-  creator: { '@type': 'Person', name: settings.artistName },
+  creator: artistRef(site),
+  artMedium: 'Watercolor',
   ...(artwork.data.dimensions ? { size: artwork.data.dimensions } : {}),
   offers: entries.length
     ? entries.map((e) => ({
