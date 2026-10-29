@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "src/components/HeroSpotlight.astro": {
-    "mtime": 1792777881.7791688,
-    "seen": 1792777976.5435152,
-    "ast_hash": "5e9fd99f1fa8ac7025140ed107f8433a",
+    "mtime": 1793294198.2636783,
+    "seen": 1793294291.8228655,
+    "ast_hash": "5b88fa0468a31e89151cc7dddf31107e",
     "semantic_hash": ""
   },
   "src/components/LanguageSwitcher.astro": {
@@ -60,9 +60,9 @@
     "semantic_hash": ""
   },
   "src/components/pages/ArtistPage.astro": {
-    "mtime": 1793266913.3303232,
-    "seen": 1793266997.4398,
-    "ast_hash": "62a9daeb3361717d0aae028ec3963a7a",
+    "mtime": 1793294198.2654378,
+    "seen": 1793294291.8228722,
+    "ast_hash": "31aba03bb98405a35ef1fd0441ab5a2f",
     "semantic_hash": ""
   },
   "src/components/pages/ArtworkDetail.astro": {
@@ -216,9 +216,9 @@
     "semantic_hash": ""
   },
   "src/layouts/Base.astro": {
-    "mtime": 1793266913.3280554,
-    "seen": 1793266997.4398952,
-    "ast_hash": "75b5dae39146b77e12d94adb0d584df5",
+    "mtime": 1793294198.2646594,
+    "seen": 1793294291.8229318,
+    "ast_hash": "fef21de46c64be4e937aa319634cf700",
     "semantic_hash": ""
   },
   "src/lib/artworks.ts": {
@@ -426,9 +426,9 @@
     "semantic_hash": "9b31786b637be3c13978bec4c2330752"
   },
   "CLAUDE.md": {
-    "mtime": 1793266992.8469653,
-    "seen": 1793266997.4400136,
-    "ast_hash": "799816e8b45f07e5ba481926872c02e4",
+    "mtime": 1793294283.8350315,
+    "seen": 1793294291.8229969,
+    "ast_hash": "c2ec3516ae255d3f601958c3d7da8146",
     "semantic_hash": ""
   },
   "README.md": {
@@ -609,6 +609,24 @@
     "mtime": 1793266893.8699925,
     "seen": 1793266997.4399023,
     "ast_hash": "92de4b78419834c0b498b87dd486d93f",
+    "semantic_hash": ""
+  },
+  "scripts/generate-wordmark.py": {
+    "mtime": 1793294144.5398965,
+    "seen": 1793294291.8228528,
+    "ast_hash": "8b86c4eae63733da1d4e4905b5964ee6",
+    "semantic_hash": ""
+  },
+  "src/components/Wordmark.astro": {
+    "mtime": 1793294186.6315892,
+    "seen": 1793294291.8228695,
+    "ast_hash": "31c2fc06687b81d1004a8d502c90b6d6",
+    "semantic_hash": ""
+  },
+  "src/lib/wordmark.ts": {
+    "mtime": 1793294144.7534907,
+    "seen": 1793294291.8229449,
+    "ast_hash": "88f3756ae2f731c883abaae7af2da826",
     "semantic_hash": ""
   }
 }
