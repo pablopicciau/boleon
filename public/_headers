@@ -7,3 +7,13 @@
   Strict-Transport-Security: max-age=31536000
   X-XSS-Protection: 0
   Content-Security-Policy: base-uri 'self'; object-src 'none'; frame-ancestors 'self'; upgrade-insecure-requests
+
+# File con l'impronta nel nome (font, CSS, JS, immagini ottimizzate da Astro):
+# cambiano nome a ogni modifica, quindi il browser può tenerli per un anno
+# senza ricontrollarli. Senza questa regola Cloudflare li fa ricontrollare a ogni
+# visita e nel frattempo il titolo restava senza il suo font.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/textures/*
+  Cache-Control: public, max-age=604800

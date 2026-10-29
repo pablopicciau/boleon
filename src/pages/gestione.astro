@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import '../styles/global.css';
+import HandFont from '../components/HandFont.astro';
 import { isAvailable, isBaseAvailable, printFormatsFor, sortArtworks } from '../lib/artworks';
 import settings from '../lib/settings';
 
@@ -67,6 +68,7 @@ const toneClass = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <HandFont />
     <title>Gestione opere — {settings.artistName}</title>
   </head>
   <body class="min-h-screen antialiased">

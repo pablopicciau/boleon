@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import '@fontsource/beth-ellen';
 
 @theme {
   --color-ink: #2a2622;
@@ -11,8 +10,8 @@
   --color-leaf: #3e7a4e;
   --color-sun: #dfb43c;
   /* Font "caratteristico" (quello grande della home) applicato a tutti i titoli */
-  --font-serif: 'Beth Ellen', 'Cormorant Variable', ui-serif, Georgia, serif;
-  --font-hand: 'Beth Ellen', 'Cormorant Variable', cursive;
+  --font-serif: 'Beth Ellen', ui-serif, Georgia, serif;
+  --font-hand: 'Beth Ellen', ui-serif, Georgia, serif;
 }
 
 /* Texture di carta ruvida bianca, generata (nessuna immagine da scaricare) */
